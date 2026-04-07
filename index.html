@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revmatics CRO — Fit-for-Purpose Experience</title>
+<style>
+  :root {
+    --primary: #2E5090;
+    --primary-light: #4A7BC7;
+    --primary-dark: #1E3A6E;
+    --accent: #00B4D8;
+    --accent2: #F77F00;
+    --success: #06D6A0;
+    --warning: #FFD166;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --text-light: #64748B;
+    --border: #E2E8F0;
+    --awareness: #4A7BC7;
+    --differentiation: #F77F00;
+    --conversion: #06D6A0;
+    --loyalty: #9B5DE5;
+    --nordic-blue: #003B5C;
+    --nordic-gold: #C8A951;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+    --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+  .screen { display:none; min-height:100vh; animation: fadeIn 0.5s ease; }
+  .screen.active { display:flex; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes spin { to{transform:rotate(360deg)} }
+  @keyframes checkPop { 0%{transform:scale(0)} 50%{transform:scale(1.3)} 100%{transform:scale(1)} }
+
+  /* ── Top Nav ── */
+  .topnav { position:fixed; top:0; left:0; right:0; height:56px; background:white; border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+  .topnav .logo { font-weight:700; font-size:18px; color:var(--primary); letter-spacing:-0.5px; }
+  .topnav .logo span { color:var(--text-light); font-weight:400; margin-left:8px; font-size:14px; }
+  .topnav .step-indicator { margin-left:auto; display:flex; gap:8px; align-items:center; }
+  .topnav .step-dot { width:8px; height:8px; border-radius:50%; background:var(--border); transition:all 0.3s; }
+  .topnav .step-dot.active { background:var(--primary); width:24px; border-radius:4px; }
+  .topnav .step-dot.done { background:var(--success); }
+
+  /* ── Screen 1: URL ── */
+  #screen-url { flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); padding-top:56px; }
+  .url-card { background:white; border-radius:20px; padding:56px 48px; max-width:600px; width:90%; box-shadow:var(--shadow-lg); text-align:center; }
+  .url-card h1 { font-size:28px; color:var(--primary-dark); margin-bottom:8px; }
+  .url-card p { color:var(--text-light); font-size:16px; margin-bottom:32px; line-height:1.6; }
+  .url-input-wrap { display:flex; border:2px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:border-color 0.2s; }
+  .url-input-wrap:focus-within { border-color:var(--primary); }
+  .url-input-wrap .prefix { background:var(--bg); padding:14px 16px; color:var(--text-light); font-size:14px; white-space:nowrap; border-right:1px solid var(--border); display:flex; align-items:center; }
+  .url-input-wrap input { flex:1; border:none; outline:none; padding:14px 16px; font-size:15px; min-width:0; }
+  .url-btn { margin-top:24px; background:var(--primary); color:white; border:none; padding:16px 48px; border-radius:var(--radius); font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .url-btn:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(46,80,144,0.3); }
+  .url-features { display:flex; gap:24px; margin-top:32px; justify-content:center; }
+  .url-features .feat { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-light); }
+
+  /* ── Screen 2: Extract ── */
+  #screen-extract { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
+  .extract-card { background:white; border-radius:20px; padding:48px; max-width:520px; width:90%; box-shadow:var(--shadow-lg); text-align:center; }
+  .spinner { width:56px; height:56px; border:4px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 24px; }
+  .extract-card h2 { font-size:22px; color:var(--primary-dark); margin-bottom:8px; }
+  .extract-card .url-display { color:var(--text-light); font-size:14px; margin-bottom:32px; word-break:break-all; }
+  .extract-steps { text-align:left; }
+  .extract-step { display:flex; align-items:center; gap:12px; padding:10px 0; font-size:14px; color:var(--text-light); transition:all 0.3s; }
+  .extract-step.active { color:var(--text); font-weight:500; }
+  .extract-step.done { color:var(--success); }
+  .extract-step .icon { width:24px; height:24px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; transition:all 0.3s; }
+  .extract-step.active .icon { border-color:var(--primary); background:var(--primary); color:white; }
+  .extract-step.done .icon { border-color:var(--success); background:var(--success); color:white; animation:checkPop 0.3s ease; }
+
+  /* ── Screen 3: Preview ── */
+  #screen-preview { flex-direction:column; align-items:center; padding-top:80px; padding-bottom:40px; background:var(--bg); }
+  .preview-container { max-width:800px; width:92%; }
+  .preview-container h2 { font-size:24px; color:var(--primary-dark); margin-bottom:4px; }
+  .preview-container .subtitle { color:var(--text-light); margin-bottom:32px; font-size:15px; }
+  .brand-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:32px; }
+  .brand-card { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); }
+  .brand-card h3 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:16px; }
+  .color-swatches { display:flex; gap:12px; }
+  .swatch { width:48px; height:48px; border-radius:8px; border:2px solid var(--border); position:relative; }
+  .swatch .label { position:absolute; top:54px; left:50%; transform:translateX(-50%); font-size:10px; color:var(--text-light); white-space:nowrap; }
+  .font-preview { font-size:24px; color:var(--nordic-blue); }
+  .font-name { font-size:13px; color:var(--text-light); margin-top:4px; }
+  .brand-logo-box { width:120px; height:60px; background:var(--nordic-blue); border-radius:8px; display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:14px; letter-spacing:1px; }
+  .product-tags { display:flex; flex-wrap:wrap; gap:8px; }
+  .product-tags span { background:var(--bg); padding:6px 14px; border-radius:20px; font-size:13px; color:var(--text); border:1px solid var(--border); }
+  .preview-actions { display:flex; gap:12px; justify-content:flex-end; }
+  .btn-secondary { background:white; border:2px solid var(--border); padding:12px 28px; border-radius:var(--radius); font-size:14px; font-weight:600; cursor:pointer; color:var(--text); transition:all 0.2s; }
+  .btn-secondary:hover { border-color:var(--primary); color:var(--primary); }
+  .btn-primary { background:var(--primary); color:white; border:none; padding:14px 32px; border-radius:var(--radius); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
+
+  /* ── Screen 4: Generate ── */
+  #screen-generate { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
+  .gen-container { max-width:640px; width:92%; text-align:center; }
+  .gen-container h2 { font-size:24px; color:var(--primary-dark); margin-bottom:8px; }
+  .gen-container .sub { color:var(--text-light); margin-bottom:40px; }
+  .gen-pages { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:32px; }
+  .gen-page-card { background:white; border-radius:var(--radius); padding:24px 20px; box-shadow:var(--shadow); text-align:left; position:relative; overflow:hidden; transition:all 0.3s; border:2px solid transparent; }
+  .gen-page-card.generating { border-color:var(--primary-light); }
+  .gen-page-card.done { border-color:var(--success); }
+  .gen-page-card .page-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:12px; }
+  .gen-page-card h4 { font-size:15px; margin-bottom:4px; }
+  .gen-page-card p { font-size:12px; color:var(--text-light); }
+  .gen-page-card .gen-bar { position:absolute; bottom:0; left:0; height:3px; background:var(--primary); transition:width 0.3s ease; }
+  .gen-page-card .gen-check { position:absolute; top:12px; right:12px; width:24px; height:24px; border-radius:50%; background:var(--success); color:white; display:none; align-items:center; justify-content:center; font-size:14px; animation:checkPop 0.3s ease; }
+  .gen-page-card.done .gen-check { display:flex; }
+  .gen-timer { font-size:14px; color:var(--text-light); }
+
+  /* ── Screen 5: Funnel Education ── */
+  #screen-funnel-edu { flex-direction:column; align-items:center; padding-top:80px; padding-bottom:40px; background:linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%); }
+  .funnel-edu { max-width:900px; width:94%; }
+  .funnel-edu h2 { font-size:26px; color:var(--primary-dark); margin-bottom:4px; text-align:center; }
+  .funnel-edu .sub { color:var(--text-light); text-align:center; margin-bottom:36px; font-size:15px; }
+  .funnel-timer-bar { width:100%; height:4px; background:var(--border); border-radius:2px; margin-bottom:36px; overflow:hidden; }
+  .funnel-timer-bar .fill { height:100%; background:linear-gradient(90deg, var(--awareness), var(--differentiation), var(--conversion), var(--loyalty)); border-radius:2px; transition:width 1s linear; }
+  .funnel-timer-text { text-align:center; font-size:13px; color:var(--text-light); margin-bottom:24px; }
+  .funnel-visual { display:flex; flex-direction:column; margin-bottom:32px; }
+  .funnel-stage { display:flex; align-items:stretch; gap:20px; position:relative; }
+  .funnel-stage .connector { width:3px; background:var(--border); position:absolute; left:28px; top:58px; bottom:-20px; }
+  .funnel-stage:last-child .connector { display:none; }
+  .funnel-stage .stage-dot { width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0; z-index:1; transition:all 0.5s; opacity:0; transform:scale(0.5); }
+  .funnel-stage.visible .stage-dot { opacity:1; transform:scale(1); }
+  .funnel-stage .stage-content { flex:1; background:white; border-radius:var(--radius); padding:20px 24px; box-shadow:var(--shadow); margin-bottom:20px; opacity:0; transform:translateX(20px); transition:all 0.5s 0.2s; border-left:4px solid transparent; position:relative; }
+  .funnel-stage.visible .stage-content { opacity:1; transform:translateX(0); }
+  .funnel-stage .stage-content h3 { font-size:17px; margin-bottom:4px; }
+  .funnel-stage .stage-content p { font-size:14px; color:var(--text-light); line-height:1.6; }
+  .funnel-stage .stage-content .campaign-tag { display:inline-block; margin-top:8px; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:600; }
+  .stage-status { position:absolute; top:16px; right:16px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; }
+  .stage-spinner { width:24px; height:24px; border:3px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; }
+  .stage-check { width:28px; height:28px; border-radius:50%; background:var(--success); color:white; display:none; align-items:center; justify-content:center; font-size:16px; animation:checkPop 0.3s ease; }
+  .stage-content.generated .stage-spinner { display:none; }
+  .stage-content.generated .stage-check { display:flex; }
+
+  .skip-btn { display:block; margin:0 auto; background:none; border:2px solid var(--border); padding:10px 28px; border-radius:var(--radius); font-size:14px; color:var(--text-light); cursor:pointer; transition:all 0.2s; }
+  .skip-btn:hover { border-color:var(--primary); color:var(--primary); }
+
+  /* ── Screen 6: Dashboard ── */
+  #screen-dashboard { flex-direction:column; padding-top:56px; background:var(--bg); }
+  .dash-sidebar { position:fixed; left:0; top:56px; bottom:0; width:240px; background:white; border-right:1px solid var(--border); padding:24px 16px; z-index:50; }
+  .dash-sidebar .nav-section { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:8px; margin-top:20px; }
+  .dash-sidebar .nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; font-size:14px; color:var(--text); cursor:pointer; transition:all 0.15s; margin-bottom:2px; }
+  .dash-sidebar .nav-item:hover { background:var(--bg); }
+  .dash-sidebar .nav-item.active { background:#EEF2FF; color:var(--primary); font-weight:600; }
+  .dash-sidebar .nav-item .dot { width:8px; height:8px; border-radius:50%; }
+  .dash-main { margin-left:240px; padding:32px; min-height:calc(100vh - 56px); }
+  .dash-header { margin-bottom:28px; }
+  .dash-header h1 { font-size:24px; color:var(--primary-dark); }
+  .dash-header p { color:var(--text-light); font-size:14px; }
+  .funnel-viz { display:flex; gap:16px; margin-bottom:32px; }
+  .funnel-viz-card { flex:1; background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; border-top:4px solid transparent; position:relative; }
+  .funnel-viz-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .funnel-viz-card .fv-tooltip { position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%); background:var(--text); color:white; font-size:12px; line-height:1.5; padding:10px 14px; border-radius:8px; width:220px; text-align:left; opacity:0; pointer-events:none; transition:opacity 0.2s; z-index:10; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+  .funnel-viz-card .fv-tooltip::after { content:''; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-bottom-color:var(--text); }
+  .funnel-viz-card:hover .fv-tooltip { opacity:1; }
+  .fv-use { font-size:11px; color:var(--text-light); margin-top:6px; line-height:1.4; }
+  .box-bar { display:flex; gap:3px; margin-top:6px; }
+  .box-bar .box { width:100%; height:8px; border-radius:2px; background:var(--border); }
+  .box-bar .box.filled { }
+  .funnel-viz-card .fv-icon { font-size:28px; margin-bottom:8px; }
+  .funnel-viz-card h4 { font-size:15px; margin-bottom:2px; }
+  .funnel-viz-card .fv-desc { font-size:12px; color:var(--text-light); margin-bottom:12px; }
+  .funnel-viz-card .readiness { font-size:12px; color:var(--text-light); margin-bottom:6px; }
+  .readiness-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
+  .readiness-bar .fill { height:100%; border-radius:3px; }
+  .funnel-arrow { display:flex; align-items:center; color:var(--border); font-size:20px; flex-shrink:0; }
+  .checklist-panel { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .checklist-panel h3 { font-size:16px; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .checklist-panel .cl-tag { font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600; }
+  .checklist-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); font-size:14px; }
+  .checklist-item:last-child { border-bottom:none; }
+  .ch-icon { width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; flex-shrink:0; }
+  .ch-icon.done { background:var(--success); color:white; }
+  .ch-icon.pending { background:var(--border); color:var(--text-light); }
+  .ch-label { flex:1; }
+  .ch-action { font-size:12px; color:var(--primary); cursor:pointer; font-weight:600; }
+  .ch-action:hover { text-decoration:underline; }
+
+  /* ── Screen 7: Editor ── */
+  #screen-editor { flex-direction:column; padding-top:56px; background:var(--bg); }
+  .editor-topbar { position:fixed; top:56px; left:0; right:0; height:48px; background:white; border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; z-index:90; gap:12px; }
+  .editor-topbar .back-btn { background:none; border:none; font-size:14px; color:var(--primary); cursor:pointer; font-weight:600; display:flex; align-items:center; gap:4px; }
+  .editor-topbar .page-title { font-weight:600; font-size:15px; }
+  .editor-topbar .page-badge { font-size:11px; padding:3px 10px; border-radius:12px; font-weight:600; color:white; }
+  .editor-topbar .device-toggle { margin-left:auto; display:flex; border:1px solid var(--border); border-radius:6px; overflow:hidden; }
+  .editor-topbar .device-toggle button { background:white; border:none; padding:6px 14px; font-size:13px; cursor:pointer; color:var(--text-light); transition:all 0.15s; }
+  .editor-topbar .device-toggle button.active { background:var(--primary); color:white; }
+  .editor-topbar .publish-btn { background:var(--success); color:white; border:none; padding:8px 20px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+
+  .editor-body { display:flex; margin-top:48px; min-height:calc(100vh - 104px); }
+  .editor-canvas { flex:1; padding:32px; display:flex; justify-content:center; overflow-y:auto; }
+  .editor-canvas .page-frame { background:white; border-radius:var(--radius); box-shadow:var(--shadow-lg); width:100%; max-width:800px; overflow:hidden; transition:max-width 0.3s; }
+  .editor-canvas .page-frame.mobile { max-width:375px; }
+
+  .editor-sidebar-right { width:300px; background:white; border-left:1px solid var(--border); padding:20px; flex-shrink:0; }
+  .editor-sidebar-right h4 { font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:12px; }
+  .hint-card { background:var(--bg); border-radius:8px; padding:14px; margin-bottom:12px; border-left:3px solid var(--primary-light); }
+  .hint-card .hint-title { font-size:13px; font-weight:600; margin-bottom:4px; }
+  .hint-card .hint-text { font-size:12px; color:var(--text-light); line-height:1.5; }
+  .suggestion-card { background:#FFF8E6; border-radius:8px; padding:14px; margin-bottom:12px; border-left:3px solid var(--accent2); }
+  .suggestion-card .sug-title { font-size:13px; font-weight:600; color:var(--accent2); margin-bottom:4px; }
+  .suggestion-card .sug-text { font-size:12px; color:var(--text-light); line-height:1.5; }
+
+  /* ── Page Sections ── */
+  .page-section { position:relative; padding:40px 32px; border-bottom:1px solid var(--border); cursor:pointer; transition:all 0.15s; }
+  .page-section:hover { background:#FAFBFF; }
+  .page-section:hover .section-hint-icon { opacity:1; }
+  .section-hint-icon { position:absolute; top:12px; right:12px; width:28px; height:28px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:14px; opacity:0; transition:opacity 0.2s; cursor:help; }
+  .page-section.hero-section { color:white; padding:60px 32px; }
+  .page-section.hero-section:hover { filter:brightness(1.05); }
+  .page-section.hero-section .section-hint-icon { background:white; color:var(--primary); }
+  .page-section h2 { font-size:28px; margin-bottom:8px; }
+  .page-section h3 { font-size:20px; margin-bottom:6px; }
+  .page-section p { font-size:14px; line-height:1.7; color:var(--text-light); }
+  .page-section.hero-section p { color:rgba(255,255,255,0.8); }
+  .cta-button { display:inline-block; padding:12px 28px; border-radius:8px; font-weight:600; font-size:14px; margin-top:16px; cursor:pointer; }
+  .benefits-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; margin-top:16px; }
+  .benefit-item { text-align:center; }
+  .benefit-item .b-icon { font-size:32px; margin-bottom:8px; }
+  .benefit-item h4 { font-size:14px; margin-bottom:4px; }
+  .benefit-item p { font-size:12px; color:var(--text-light); }
+  .testimonial-box { background:var(--bg); border-radius:var(--radius); padding:20px; margin-top:12px; font-style:italic; font-size:14px; color:var(--text); border-left:3px solid var(--nordic-gold); }
+  .empty-section { border:2px dashed var(--border); border-radius:var(--radius); padding:32px; text-align:center; color:var(--text-light); margin-top:12px; }
+  .empty-section .add-btn { display:inline-block; margin-top:8px; padding:8px 20px; background:var(--primary); color:white; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+
+  /* Comparison table */
+  .comparison-table { width:100%; border-collapse:collapse; margin-top:16px; font-size:13px; }
+  .comparison-table th { background:var(--nordic-blue); color:white; padding:12px 16px; text-align:left; font-weight:600; }
+  .comparison-table td { padding:12px 16px; border-bottom:1px solid var(--border); }
+  .comparison-table tr:nth-child(even) td { background:#F8FAFC; }
+  .comparison-table .check { color:var(--success); font-weight:bold; font-size:16px; }
+  .comparison-table .cross { color:#ccc; font-size:16px; }
+
+  /* Urgency banner */
+  .urgency-banner { background:linear-gradient(90deg, #FF6B6B, #EE5A24); color:white; padding:16px 24px; text-align:center; font-weight:600; font-size:15px; display:flex; align-items:center; justify-content:center; gap:12px; }
+  .countdown { display:flex; gap:6px; }
+  .countdown .cd-block { background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:6px; font-size:18px; font-weight:700; min-width:40px; text-align:center; }
+  .countdown .cd-label { font-size:9px; font-weight:400; display:block; }
+
+  /* Pricing card */
+  .pricing-card { background:white; border:2px solid var(--nordic-gold); border-radius:var(--radius); padding:28px; text-align:center; max-width:360px; margin:16px auto; }
+  .pricing-card .price { font-size:42px; font-weight:700; color:var(--nordic-blue); }
+  .pricing-card .price-orig { font-size:18px; color:var(--text-light); text-decoration:line-through; margin-right:8px; }
+  .pricing-card .price-sub { font-size:13px; color:var(--text-light); margin-top:4px; }
+
+  /* Trust badges */
+  .trust-row { display:flex; gap:24px; justify-content:center; margin-top:16px; flex-wrap:wrap; }
+  .trust-badge { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text); }
+  .trust-badge .t-icon { width:36px; height:36px; border-radius:50%; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:18px; border:1px solid var(--border); }
+
+  /* Loyalty welcome */
+  .welcome-banner { background:linear-gradient(135deg, var(--nordic-blue), #005577); padding:40px 32px; color:white; text-align:center; border-radius:0; }
+  .welcome-banner h2 { font-size:26px; margin-bottom:8px; color:white; }
+  .welcome-banner p { color:rgba(255,255,255,0.8); font-size:15px; }
+
+  /* Reward cards */
+  .reward-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px; }
+  .reward-card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:20px; text-align:center; }
+  .reward-card .r-icon { font-size:32px; margin-bottom:8px; }
+  .reward-card h4 { font-size:15px; margin-bottom:4px; }
+  .reward-card p { font-size:12px; color:var(--text-light); }
+  .reward-card .reward-code { margin-top:8px; background:var(--bg); padding:6px 16px; border-radius:6px; font-family:monospace; font-size:14px; font-weight:700; color:var(--nordic-blue); display:inline-block; border:1px dashed var(--nordic-gold); }
+
+  /* Referral section */
+  .referral-box { background:linear-gradient(135deg, #F3EAFF, #EEF2FF); border-radius:var(--radius); padding:28px; text-align:center; margin-top:12px; }
+  .referral-box h3 { color:var(--loyalty); }
+  .share-buttons { display:flex; gap:10px; justify-content:center; margin-top:12px; }
+  .share-buttons button { padding:8px 20px; border-radius:6px; border:none; font-size:13px; font-weight:600; cursor:pointer; color:white; }
+
+  /* Product showcase */
+  .product-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:16px; }
+  .product-card { background:white; border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; }
+  .product-card .p-image { width:80px; height:80px; border-radius:8px; background:var(--bg); margin:0 auto 8px; display:flex; align-items:center; justify-content:center; font-size:36px; }
+  .product-card h4 { font-size:13px; margin-bottom:4px; }
+  .product-card .p-tag { display:inline-block; background:#E8FFF5; color:var(--success); font-size:11px; padding:2px 8px; border-radius:10px; font-weight:600; }
+
+  /* ── Screen 8: Subscription ── */
+  #screen-subscribe { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); min-height:100vh; }
+  .subscribe-container { max-width:720px; width:92%; text-align:center; }
+  .subscribe-container h2 { font-size:28px; color:var(--primary-dark); margin-bottom:8px; }
+  .subscribe-container .sub { color:var(--text-light); font-size:15px; margin-bottom:36px; line-height:1.6; }
+  .plan-toggle { display:inline-flex; background:white; border-radius:30px; padding:4px; box-shadow:var(--shadow); margin-bottom:32px; }
+  .plan-toggle button { padding:10px 28px; border:none; border-radius:26px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; background:transparent; color:var(--text-light); }
+  .plan-toggle button.active { background:var(--primary); color:white; }
+  .plans-row { display:flex; gap:24px; justify-content:center; }
+  .plan-card { flex:1; max-width:320px; background:white; border-radius:16px; padding:36px 28px; box-shadow:var(--shadow); position:relative; border:2px solid var(--border); transition:all 0.2s; text-align:center; }
+  .plan-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .plan-card.featured { border-color:var(--primary); }
+  .plan-card .popular-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--primary); color:white; font-size:11px; font-weight:700; padding:4px 16px; border-radius:20px; text-transform:uppercase; letter-spacing:0.5px; }
+  .plan-card .plan-name { font-size:16px; font-weight:600; color:var(--text); margin-bottom:4px; }
+  .plan-card .plan-price { font-size:48px; font-weight:700; color:var(--primary-dark); margin:16px 0 4px; line-height:1; }
+  .plan-card .plan-price .currency { font-size:22px; vertical-align:super; margin-right:2px; }
+  .plan-card .plan-price .period { font-size:16px; font-weight:400; color:var(--text-light); }
+  .plan-card .plan-billed { font-size:13px; color:var(--text-light); margin-bottom:20px; min-height:20px; }
+  .plan-card .plan-savings { display:inline-block; background:#E8FFF5; color:var(--success); font-size:12px; font-weight:700; padding:4px 12px; border-radius:20px; margin-bottom:16px; }
+  .plan-card .plan-features { text-align:left; margin:20px 0; }
+  .plan-card .plan-features .pf-item { display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--text); padding:6px 0; }
+  .plan-card .plan-features .pf-check { color:var(--success); font-weight:bold; flex-shrink:0; margin-top:1px; }
+  .plan-card .plan-cta { display:block; width:100%; padding:14px; border-radius:var(--radius); font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; text-align:center; border:none; }
+  .plan-card .plan-cta.primary { background:var(--primary); color:white; }
+  .plan-card .plan-cta.primary:hover { background:var(--primary-dark); }
+  .plan-card .plan-cta.outline { background:white; color:var(--primary); border:2px solid var(--primary); }
+  .plan-card .plan-cta.outline:hover { background:#EEF2FF; }
+  .plan-card .orig-price { font-size:18px; color:var(--text-light); text-decoration:line-through; }
+  .subscribe-footer { margin-top:32px; font-size:13px; color:var(--text-light); }
+  .subscribe-footer a { color:var(--primary); text-decoration:none; }
+  .subscribe-guarantee { display:inline-flex; align-items:center; gap:8px; background:white; padding:10px 20px; border-radius:30px; box-shadow:var(--shadow); margin-top:16px; font-size:13px; color:var(--text); }
+
+  /* ── Scaffold Walkthrough ── */
+  .scaffold-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.6); z-index:200; display:none; transition:opacity 0.3s; }
+  .scaffold-overlay.active { display:block; }
+  .scaffold-highlight { position:absolute; z-index:201; box-shadow:0 0 0 4000px rgba(15,23,42,0.6); border-radius:var(--radius); transition:all 0.4s ease; pointer-events:none; }
+  .scaffold-tooltip { position:absolute; z-index:202; background:white; border-radius:16px; padding:24px 28px; max-width:360px; box-shadow:0 12px 48px rgba(0,0,0,0.2); animation:fadeIn 0.4s ease; }
+  .scaffold-tooltip .st-step { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--primary); font-weight:700; margin-bottom:8px; }
+  .scaffold-tooltip h3 { font-size:17px; color:var(--primary-dark); margin-bottom:8px; line-height:1.4; }
+  .scaffold-tooltip p { font-size:14px; color:var(--text-light); line-height:1.6; margin-bottom:16px; }
+  .scaffold-tooltip .st-actions { display:flex; gap:10px; align-items:center; }
+  .scaffold-tooltip .st-next { background:var(--primary); color:white; border:none; padding:10px 24px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .scaffold-tooltip .st-next:hover { background:var(--primary-dark); }
+  .scaffold-tooltip .st-skip { background:none; border:none; font-size:13px; color:var(--text-light); cursor:pointer; padding:8px 12px; }
+  .scaffold-tooltip .st-skip:hover { color:var(--text); }
+  .scaffold-tooltip .st-dots { display:flex; gap:6px; margin-left:auto; }
+  .scaffold-tooltip .st-dot { width:8px; height:8px; border-radius:50%; background:var(--border); }
+  .scaffold-tooltip .st-dot.active { background:var(--primary); }
+  .scaffold-tooltip .st-arrow { position:absolute; width:16px; height:16px; background:white; transform:rotate(45deg); }
+
+  @media (max-width:768px) {
+    .brand-grid, .gen-pages, .reward-grid { grid-template-columns:1fr; }
+    .funnel-viz { flex-direction:column; }
+    .funnel-arrow { transform:rotate(90deg); justify-content:center; }
+    .dash-sidebar { display:none; }
+    .dash-main { margin-left:0; }
+    .editor-sidebar-right { display:none; }
+    .benefits-grid, .product-grid { grid-template-columns:1fr; }
+    .comparison-table { font-size:11px; }
+    .plans-row { flex-direction:column; align-items:center; }
+    .plan-card { max-width:100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── TOP NAV ── -->
+<div class="topnav">
+  <div class="logo">Revmatics <span>CRO</span></div>
+  <div class="step-indicator">
+    <div class="step-dot active" id="dot-0"></div>
+    <div class="step-dot" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+    <div class="step-dot" id="dot-3"></div>
+    <div class="step-dot" id="dot-4"></div>
+    <div class="step-dot" id="dot-5"></div>
+    <div class="step-dot" id="dot-6"></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 1 — URL SUBMISSION ══ -->
+<div class="screen active" id="screen-url">
+  <div class="url-card">
+    <h1>Welcome to Revmatics CRO</h1>
+    <p>Enter your product URL and we'll build you four landing pages — each designed for a different stage of your consumer's buying journey.</p>
+    <div class="url-input-wrap">
+      <div class="prefix">https://</div>
+      <input type="text" id="url-input" value="www.nordic.com/products/ultimate-omega-2x/" placeholder="yoursite.com">
+    </div>
+    <button class="url-btn" onclick="startExtraction()">Generate My Pages</button>
+    <div class="url-features">
+      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> Your product, analyzed in seconds</div>
+      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> Your brand, your rules</div>
+      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> 4 campaign pages, zero effort</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2 — BRAND EXTRACTION ══ -->
+<div class="screen" id="screen-extract">
+  <div class="extract-card">
+    <div class="spinner"></div>
+    <h2>Analyzing Your Website</h2>
+    <div class="url-display" id="extract-url"></div>
+    <div class="extract-steps">
+      <div class="extract-step" id="es-1"><div class="icon"></div> Connecting to your website...</div>
+      <div class="extract-step" id="es-2"><div class="icon"></div> Extracting brand colors and logo...</div>
+      <div class="extract-step" id="es-3"><div class="icon"></div> Detecting fonts and visual style...</div>
+      <div class="extract-step" id="es-4"><div class="icon"></div> Reading product information...</div>
+      <div class="extract-step" id="es-5"><div class="icon"></div> Analyzing content and messaging...</div>
+    </div>
+    <div id="extract-status-text" style="margin-top:24px;font-size:13px;color:var(--text-light);transition:all 0.3s"></div>
+    <button class="btn-primary" id="extract-next-btn" style="margin-top:20px;display:none;width:100%" onclick="showScreen(2)">Review Brand Assets &#x2192;</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3 — BRAND PREVIEW ══ -->
+<div class="screen" id="screen-preview">
+  <div class="preview-container">
+    <h2>We found your brand</h2>
+    <p class="subtitle">Review what we extracted from your site. Adjust anything before we build your pages.</p>
+    <div class="brand-grid">
+      <div class="brand-card" style="display:flex;flex-direction:column">
+        <h3>Brand Colors</h3>
+        <div class="color-swatches">
+          <div class="swatch" style="background:#003B5C"><div class="label">Navy</div></div>
+          <div class="swatch" style="background:#C8A951"><div class="label">Gold</div></div>
+          <div class="swatch" style="background:#4A90A4"><div class="label">Teal</div></div>
+          <div class="swatch" style="background:#F5F1E8"><div class="label">Cream</div></div>
+        </div>
+        <button class="btn-secondary" style="margin-top:auto;padding-top:24px;width:100%;font-size:13px;padding:8px 16px">Adjust Colors</button>
+      </div>
+      <div class="brand-card" style="display:flex;flex-direction:column">
+        <h3>Logo</h3>
+        <div style="width:160px;height:80px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 200 100" width="160" height="80" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="115" cy="18" r="8" fill="#D4A843" opacity="0.9"/>
+            <path d="M107 18 L115 6 L123 18" fill="none" stroke="#D4A843" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M104 14 L115 3 L126 14" fill="none" stroke="#D4A843" stroke-width="1" stroke-linecap="round" opacity="0.6"/>
+            <text x="100" y="48" text-anchor="middle" font-family="Georgia, serif" font-size="26" font-weight="bold" fill="#003B5C" letter-spacing="2">NORDIC</text>
+            <text x="100" y="68" text-anchor="middle" font-family="Georgia, serif" font-size="14" fill="#003B5C" letter-spacing="4">NATURALS</text>
+            <text x="148" y="62" font-family="Arial" font-size="7" fill="#003B5C">®</text>
+            <path d="M30 80 Q55 70 80 78 Q105 86 130 76 Q155 66 180 78" fill="none" stroke="#1B6B93" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M25 88 Q55 78 85 86 Q115 94 140 84 Q160 76 175 82" fill="none" stroke="#4A9BBF" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+          </svg>
+        </div>
+        <p style="font-size:12px;color:var(--text-light);margin-top:8px">Detected from header</p>
+        <button class="btn-secondary" style="margin-top:auto;width:100%;font-size:13px;padding:8px 16px">Upload Different Logo</button>
+      </div>
+      <div class="brand-card">
+        <h3>Typography</h3>
+        <div class="font-preview" style="font-family:Georgia,serif">Ultimate Omega 2X</div>
+        <div class="font-name">Primary: Georgia / Serif</div>
+      </div>
+      <div class="brand-card">
+        <h3>Products Detected</h3>
+        <div style="display:flex;align-items:center;gap:16px;margin-top:8px">
+          <div style="width:80px;height:110px;flex-shrink:0">
+            <svg viewBox="0 0 80 110" width="80" height="110" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="76" height="106" rx="4" fill="#F0F6F9" stroke="#D0DDE5" stroke-width="1"/>
+              <rect x="6" y="6" width="68" height="98" rx="2" fill="white"/>
+              <circle cx="40" cy="14" r="4" fill="#D4A843" opacity="0.8"/>
+              <path d="M36 14 L40 8 L44 14" fill="none" stroke="#D4A843" stroke-width="0.8"/>
+              <text x="40" y="24" text-anchor="middle" font-family="Georgia,serif" font-size="7" font-weight="bold" fill="#003B5C">NORDIC</text>
+              <text x="40" y="30" text-anchor="middle" font-family="Georgia,serif" font-size="4" fill="#003B5C" letter-spacing="1">NATURALS</text>
+              <text x="40" y="46" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="#003B5C">ULTIMATE</text>
+              <text x="40" y="57" text-anchor="middle" font-family="Georgia,serif" font-size="11" fill="#003B5C" font-style="italic">omega</text>
+              <text x="40" y="70" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="bold" fill="#1B6B93">2X</text>
+              <path d="M6 78 Q25 72 40 76 Q55 80 74 74" fill="#1B6B93" opacity="0.15"/>
+              <path d="M6 82 Q30 76 50 80 Q65 84 74 78" fill="#4A9BBF" opacity="0.12"/>
+              <text x="40" y="90" text-anchor="middle" font-family="Arial,sans-serif" font-size="4" fill="#003B5C">2150 mg Omega-3s</text>
+              <text x="40" y="98" text-anchor="middle" font-family="Arial,sans-serif" font-size="4" fill="#666">180 SOFT GELS</text>
+              <circle cx="20" cy="76" r="7" fill="none" stroke="#888" stroke-width="0.5"/>
+              <text x="20" y="75" text-anchor="middle" font-family="Arial" font-size="4" font-weight="bold" fill="#003B5C">#1</text>
+              <text x="20" y="80" text-anchor="middle" font-family="Arial" font-size="2.5" fill="#666">FISH OIL</text>
+              <circle cx="62" cy="76" r="8" fill="#FFF3C4" stroke="#F0D060" stroke-width="0.5" opacity="0.8"/>
+              <text x="62" y="78" text-anchor="middle" font-family="Arial" font-size="3" fill="#B8860B">LEMON</text>
+            </svg>
+          </div>
+          <div>
+            <div style="font-size:15px;font-weight:600;color:var(--nordic-blue);margin-bottom:4px">Ultimate Omega 2X Soft Gels</div>
+            <div style="font-size:12px;color:var(--text-light);line-height:1.5">180ct · 2150mg Omega-3s<br>Fish Oil Supplement · Lemon</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:white;border-radius:var(--radius);padding:20px 24px;box-shadow:var(--shadow);margin-bottom:24px">
+      <h3 style="font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--text-light);margin-bottom:12px">Extracted Brand Voice</h3>
+      <p style="font-size:14px;line-height:1.6">"Premium, science-backed health and wellness. Clean, trustworthy, and nature-inspired. Speaks to health-conscious consumers who value quality and transparency."</p>
+    </div>
+    <div class="preview-actions">
+      <button class="btn-primary" onclick="startGeneration()">Looks Good — Build My Pages</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 4 — FUNNEL EDUCATION + GENERATION ══ -->
+<div class="screen" id="screen-funnel-edu">
+  <div class="funnel-edu">
+    <h2>Building Your Pages</h2>
+    <p class="sub">While we generate your landing pages, here's a quick look at what each one does and how you'll use them in your marketing campaigns.</p>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:#EEF2FF;padding:8px 20px;border-radius:8px;font-size:13px;color:var(--primary);font-weight:600;margin-bottom:32px">&#x1F4D6; Quick Guide — 1 minute read</div>
+    <div class="funnel-visual">
+      <div class="funnel-stage" id="fs-1">
+        <div class="connector"></div>
+        <div class="stage-dot" style="background:#EEF2FF;color:var(--awareness)">&#x1F50D;</div>
+        <div class="stage-content" id="sc-1" style="border-left-color:var(--awareness)">
+          <div class="stage-status"><div class="stage-spinner"></div><div class="stage-check">&#x2713;</div></div>
+          <h3 style="color:var(--awareness)">1. Awareness Page</h3>
+          <p>This is the first page people see when they've never heard of Nordic Naturals. It introduces your brand, explains what you sell, and builds curiosity. Use this with social media ads or display campaigns to reach new audiences.</p>
+          <div class="campaign-tag" style="background:#EEF2FF;color:var(--awareness)">Best for: Social Ads, Display Ads, Content Marketing</div>
+        </div>
+      </div>
+      <div class="funnel-stage" id="fs-2">
+        <div class="connector"></div>
+        <div class="stage-dot" style="background:#FFF3E0;color:var(--differentiation)">&#x2694;</div>
+        <div class="stage-content" id="sc-2" style="border-left-color:var(--differentiation)">
+          <div class="stage-status"><div class="stage-spinner"></div><div class="stage-check">&#x2713;</div></div>
+          <h3 style="color:var(--differentiation)">2. Differentiation Page</h3>
+          <p>Visitors here are already shopping around. This page shows them why Ultimate Omega 2X is the better choice — purity standards, third-party testing, and what sets you apart from every other fish oil on the shelf.</p>
+          <div class="campaign-tag" style="background:#FFF3E0;color:var(--differentiation)">Best for: Search Ads, Comparison Shopping, Review Sites</div>
+        </div>
+      </div>
+      <div class="funnel-stage" id="fs-3">
+        <div class="connector"></div>
+        <div class="stage-dot" style="background:#E8FFF5;color:var(--conversion)">&#x1F4B0;</div>
+        <div class="stage-content" id="sc-3" style="border-left-color:var(--conversion)">
+          <div class="stage-status"><div class="stage-spinner"></div><div class="stage-check">&#x2713;</div></div>
+          <h3 style="color:var(--conversion)">3. Conversion Page</h3>
+          <p>This is your "sell now" page. Visitors here are ready to buy — they need a final push. Features your offer, clear pricing, trust signals, and a prominent buy button. Use it with retargeting ads and email campaigns.</p>
+          <div class="campaign-tag" style="background:#E8FFF5;color:var(--conversion)">Best for: Retargeting Ads, Email Campaigns, Direct Search</div>
+        </div>
+      </div>
+      <div class="funnel-stage" id="fs-4">
+        <div class="stage-dot" style="background:#F3EAFF;color:var(--loyalty)">&#x1F49C;</div>
+        <div class="stage-content" id="sc-4" style="border-left-color:var(--loyalty)">
+          <div class="stage-status"><div class="stage-spinner"></div><div class="stage-check">&#x2713;</div></div>
+          <h3 style="color:var(--loyalty)">4. Loyalty Page</h3>
+          <p>Someone already bought from you — great! This page welcomes them back with exclusive offers, new product highlights, and a referral program. Use it in post-purchase email sequences to drive repeat orders.</p>
+          <div class="campaign-tag" style="background:#F3EAFF;color:var(--loyalty)">Best for: Post-Purchase Email, Loyalty Programs, Referrals</div>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" id="edu-next-btn" onclick="goToDashboard()" style="display:none;margin:0 auto;padding:16px 48px;font-size:16px">Go to My Dashboard &#x2192;</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 6 — DASHBOARD ══ -->
+<div class="screen" id="screen-dashboard">
+  <div class="dash-sidebar">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item active"><span>&#x1F3AF;</span> My Funnel</div>
+    <div class="nav-item"><span>&#x1F4CA;</span> Performance</div>
+    <div class="nav-section">Pages</div>
+    <div class="nav-item" onclick="openEditor('awareness')"><div class="dot" style="background:var(--awareness)"></div> Awareness</div>
+    <div class="nav-item" onclick="openEditor('differentiation')"><div class="dot" style="background:var(--differentiation)"></div> Differentiation</div>
+    <div class="nav-item" onclick="openEditor('conversion')"><div class="dot" style="background:var(--conversion)"></div> Conversion</div>
+    <div class="nav-item" onclick="openEditor('loyalty')"><div class="dot" style="background:var(--loyalty)"></div> Loyalty</div>
+    <div class="nav-section">Tools</div>
+    <div class="nav-item"><span>&#x1F9EA;</span> A/B Testing</div>
+    <div class="nav-item"><span>&#x2699;</span> Settings</div>
+  </div>
+  <div class="dash-main">
+    <div class="dash-header">
+      <h1>Nordic Naturals — Campaign Funnel</h1>
+      <p>Your four landing pages are ready. Click any stage to edit, or review the checklists below.</p>
+    </div>
+    <div class="funnel-viz">
+      <div class="funnel-viz-card" id="fv-awareness" style="border-top-color:var(--awareness)" onclick="openEditor('awareness')">
+        <div class="fv-tooltip">The Awareness page introduces your brand to people who have never heard of you. It's your first impression — designed to spark curiosity and build trust.</div>
+        <div class="fv-icon">&#x1F50D;</div>
+        <h4>Awareness</h4>
+        <div class="fv-desc">Discover your brand</div>
+        <div class="fv-use">Use with social ads, display campaigns, and content marketing</div>
+        <div class="readiness" style="margin-top:10px">Readiness: 8/10</div>
+        <div class="box-bar"><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box filled" style="background:var(--awareness)"></div><div class="box"></div><div class="box"></div></div>
+      </div>
+      <div class="funnel-arrow">&#x27A1;</div>
+      <div class="funnel-viz-card" style="border-top-color:var(--differentiation)" onclick="openEditor('differentiation')">
+        <div class="fv-tooltip">The Differentiation page shows visitors why you're the better choice. Targets mid-funnel shoppers who are comparing options and evaluating alternatives.</div>
+        <div class="fv-icon">&#x2694;</div>
+        <h4>Differentiation</h4>
+        <div class="fv-desc">Why choose you</div>
+        <div class="fv-use">Use with search ads, comparison shopping, and review sites</div>
+        <div class="readiness" style="margin-top:10px">Readiness: 7/10</div>
+        <div class="box-bar"><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box filled" style="background:var(--differentiation)"></div><div class="box"></div><div class="box"></div><div class="box"></div></div>
+      </div>
+      <div class="funnel-arrow">&#x27A1;</div>
+      <div class="funnel-viz-card" style="border-top-color:var(--conversion)" onclick="openEditor('conversion')">
+        <div class="fv-tooltip">The Conversion page drives the purchase. For visitors who are ready to buy — it eliminates friction with clear offers, pricing, and trust signals.</div>
+        <div class="fv-icon">&#x1F4B0;</div>
+        <h4>Conversion</h4>
+        <div class="fv-desc">Drive the purchase</div>
+        <div class="fv-use">Use with retargeting ads, email campaigns, and direct search</div>
+        <div class="readiness" style="margin-top:10px">Readiness: 7/10</div>
+        <div class="box-bar"><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box filled" style="background:var(--conversion)"></div><div class="box"></div><div class="box"></div><div class="box"></div></div>
+      </div>
+      <div class="funnel-arrow">&#x27A1;</div>
+      <div class="funnel-viz-card" style="border-top-color:var(--loyalty)" onclick="openEditor('loyalty')">
+        <div class="fv-tooltip">The Loyalty page brings existing customers back. Rewards repeat buyers, showcases new products, and turns happy customers into referral channels.</div>
+        <div class="fv-icon">&#x1F49C;</div>
+        <h4>Loyalty</h4>
+        <div class="fv-desc">Bring them back</div>
+        <div class="fv-use">Use with post-purchase emails, loyalty programs, and referrals</div>
+        <div class="readiness" style="margin-top:10px">Readiness: 6/10</div>
+        <div class="box-bar"><div class="box filled" style="background:var(--loyalty)"></div><div class="box filled" style="background:var(--loyalty)"></div><div class="box filled" style="background:var(--loyalty)"></div><div class="box filled" style="background:var(--loyalty)"></div><div class="box filled" style="background:var(--loyalty)"></div><div class="box filled" style="background:var(--loyalty)"></div><div class="box"></div><div class="box"></div><div class="box"></div><div class="box"></div></div>
+      </div>
+    </div>
+
+    <!-- Checklists for all 4 pages -->
+    <div id="checklists-container"></div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 7 — PAGE EDITOR ══ -->
+<div class="screen" id="screen-editor">
+  <div class="editor-topbar">
+    <button class="back-btn" onclick="goToDashboard()">&#x2190; Back to Funnel</button>
+    <span class="page-title" id="editor-page-title">Awareness Page</span>
+    <span class="page-badge" id="editor-page-badge" style="background:var(--awareness)">Top Funnel</span>
+    <div class="device-toggle">
+      <button class="active" onclick="setDevice('desktop',this)">&#x1F5A5; Desktop</button>
+      <button onclick="setDevice('mobile',this)">&#x1F4F1; Mobile</button>
+    </div>
+    <button class="publish-btn" onclick="showScreen(6)">Publish Page</button>
+  </div>
+  <div class="editor-body">
+    <div class="editor-canvas">
+      <div class="page-frame" id="page-frame">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+    <div class="editor-sidebar-right" id="editor-sidebar">
+      <!-- Sidebar injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 8 — SUBSCRIPTION ══ -->
+<div class="screen" id="screen-subscribe">
+  <div class="subscribe-container">
+    <div style="font-size:48px;margin-bottom:16px">&#x1F389;</div>
+    <h2>Your Page Is Ready to Go Live</h2>
+    <p class="sub">Choose a plan to publish your landing pages and start converting visitors into customers. Cancel anytime.</p>
+
+    <div class="plans-row">
+      <!-- Monthly Plan -->
+      <div class="plan-card">
+        <div class="plan-name">Monthly</div>
+        <div class="plan-price"><span class="currency">$</span>25<span class="period">/mo</span></div>
+        <div class="plan-billed">Billed monthly</div>
+        <div class="plan-features">
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> All 4 funnel pages (Awareness, Differentiation, Conversion, Loyalty)</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Guided funnel education and coaching</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Visual page editor with contextual hints</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Desktop and mobile preview</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Brand auto-detection from URL</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Page readiness checklists</div>
+        </div>
+        <button class="plan-cta outline" onclick="selectPlan('monthly')">Start Monthly Plan</button>
+      </div>
+
+      <!-- Yearly Plan -->
+      <div class="plan-card featured">
+        <div class="popular-badge">Best Value</div>
+        <div class="plan-name">Yearly</div>
+        <div style="margin-top:12px"><span class="orig-price">$25/mo</span></div>
+        <div class="plan-price"><span class="currency">$</span>20<span class="period">/mo</span></div>
+        <div class="plan-billed">Billed annually at $240/year</div>
+        <div class="plan-savings">&#x1F4B0; Save $60 per year (20% off)</div>
+        <div class="plan-features">
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Everything in Monthly, plus:</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Priority support</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> A/B testing (coming soon)</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Advanced performance analytics</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Custom domain for landing pages</div>
+          <div class="pf-item"><span class="pf-check">&#x2713;</span> Early access to new features</div>
+        </div>
+        <button class="plan-cta primary" onclick="selectPlan('yearly')">Start Yearly Plan — Save 20%</button>
+      </div>
+    </div>
+
+    <div class="subscribe-guarantee">&#x1F6E1; 14-day free trial on all plans. No credit card required to start.</div>
+    <div class="subscribe-footer">
+      <p>Questions? <a href="#">Contact our team</a> or <a href="#">compare plans in detail</a></p>
+      <p style="margin-top:8px">By subscribing you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let currentScreen = 0;
+const screens = ['screen-url','screen-extract','screen-preview','screen-funnel-edu','screen-dashboard','screen-editor','screen-subscribe'];
+
+function showScreen(index) {
+  screens.forEach((s,i) => document.getElementById(s).classList.toggle('active', i===index));
+  for(let i=0;i<7;i++){
+    const d=document.getElementById('dot-'+i);
+    d.className='step-dot';
+    if(i<index) d.classList.add('done');
+    if(i===index) d.classList.add('active');
+  }
+  currentScreen=index;
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCREEN 1→2: EXTRACTION
+// ═══════════════════════════════════════════════════════════════
+function startExtraction(){
+  document.getElementById('extract-url').textContent='https://'+document.getElementById('url-input').value;
+  document.getElementById('extract-next-btn').style.display='none';
+  showScreen(1);
+
+  const steps=['es-1','es-2','es-3','es-4','es-5'];
+  const stepDuration = 6000; // 6 seconds per step = 30 seconds total
+  const spinner = document.querySelector('.spinner');
+  const statusText = document.getElementById('extract-status-text');
+
+  // Reset all steps
+  steps.forEach(s=>{const el=document.getElementById(s);el.classList.remove('active','done');el.querySelector('.icon').innerHTML='';});
+  spinner.style.display='';
+  statusText.textContent='This may take a moment...';
+
+  // Animate steps over 30 seconds (6s each)
+  steps.forEach((s,i)=>{
+    setTimeout(()=>{
+      if(i>0){document.getElementById(steps[i-1]).classList.remove('active');document.getElementById(steps[i-1]).classList.add('done');document.getElementById(steps[i-1]).querySelector('.icon').innerHTML='&#x2713;';}
+      document.getElementById(s).classList.add('active');
+    }, i*stepDuration);
+  });
+
+  // Show Next button immediately
+  document.getElementById('extract-next-btn').style.display='block';
+
+  // After all steps complete, hide spinner
+  setTimeout(()=>{
+    const last = document.getElementById('es-5');
+    last.classList.remove('active');last.classList.add('done');last.querySelector('.icon').innerHTML='&#x2713;';
+    spinner.style.display='none';
+    statusText.textContent='';
+  }, steps.length * stepDuration);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCREEN 3: FUNNEL EDUCATION + PAGE GENERATION
+// ═══════════════════════════════════════════════════════════════
+function startGeneration(){
+  showScreen(3);
+  // Reset state
+  ['sc-1','sc-2','sc-3','sc-4'].forEach(s=>document.getElementById(s).classList.remove('generated'));
+
+  // Show the dashboard button immediately
+  document.getElementById('edu-next-btn').style.display='block';
+
+  // Stagger the stage card animations
+  ['fs-1','fs-2','fs-3','fs-4'].forEach((s,i)=>setTimeout(()=>document.getElementById(s).classList.add('visible'),300+i*600));
+
+  // Stagger completion of each page generation (spinners → checkmarks)
+  const delays = [3000, 5500, 8000, 10500];
+  delays.forEach((d,i)=>{
+    setTimeout(()=>{
+      document.getElementById('sc-'+(i+1)).classList.add('generated');
+    }, d);
+  });
+}
+
+function goToDashboard(){showScreen(4);renderChecklists();}
+
+// ═══════════════════════════════════════════════════════════════
+// CHECKLISTS DATA (US-7)
+// ═══════════════════════════════════════════════════════════════
+const checklists = {
+  awareness: {
+    title: 'Awareness Page', icon: '&#x1F50D;', color: 'var(--awareness)', pct: '85%',
+    items: [
+      {done:true, label:'Hero image and headline present'},
+      {done:true, label:'Value proposition subheadline filled in'},
+      {done:true, label:'Benefit statements written (3 of 3)'},
+      {done:true, label:'Soft CTA configured ("Learn More" / "Explore")'},
+      {done:false, label:'<strong>Add a customer testimonial</strong> — builds credibility with new visitors'},
+      {done:false, label:'<strong>Complete brand story section</strong> — creates emotional connection'},
+    ]
+  },
+  differentiation: {
+    title: 'Differentiation Page', icon: '&#x2694;', color: 'var(--differentiation)', pct: '70%',
+    items: [
+      {done:true, label:'Comparison-oriented headline present'},
+      {done:true, label:'Feature comparison table filled in'},
+      {done:true, label:'Unique differentiator sections created (2 of 3)'},
+      {done:false, label:'<strong>Add third differentiator section</strong> — strengthens competitive moat'},
+      {done:false, label:'<strong>Add customer quotes about choosing your product</strong> — reinforces with real voices'},
+      {done:true, label:'Decision CTA configured ("See Pricing" / "Start Trial")'},
+    ]
+  },
+  conversion: {
+    title: 'Conversion Page', icon: '&#x1F4B0;', color: 'var(--conversion)', pct: '75%',
+    items: [
+      {done:true, label:'Offer headline and CTA above the fold'},
+      {done:true, label:'Product pricing and details filled in'},
+      {done:true, label:'Urgency element configured (countdown timer)'},
+      {done:true, label:'Trust signals present (guarantee, shipping, badges)'},
+      {done:false, label:'<strong>Add product images</strong> — buyers need to see what they\'re getting'},
+      {done:false, label:'<strong>Add second CTA at bottom</strong> — catches visitors who scrolled past the first'},
+    ]
+  },
+  loyalty: {
+    title: 'Loyalty Page', icon: '&#x1F49C;', color: 'var(--loyalty)', pct: '60%',
+    items: [
+      {done:true, label:'Personalized welcome greeting present'},
+      {done:true, label:'Returning customer discount configured'},
+      {done:false, label:'<strong>Add new product showcase</strong> — give them a reason to re-engage'},
+      {done:false, label:'<strong>Set up referral program details</strong> — turn customers into advocates'},
+      {done:false, label:'<strong>Add community/VIP invitation</strong> — deepen the relationship'},
+      {done:true, label:'Referral share buttons present'},
+    ]
+  }
+};
+
+function renderChecklists(){
+  let html='';
+  for(const [key,cl] of Object.entries(checklists)){
+    html+=`<div class="checklist-panel" id="cl-${key}" style="border-top:4px solid ${cl.color}"><h3>${cl.icon} ${cl.title} <span class="cl-tag" style="background:${cl.color}20;color:${cl.color}">${cl.pct} ready</span></h3>`;
+    cl.items.forEach(it=>{
+      html+=`<div class="checklist-item"><div class="ch-icon ${it.done?'done':'pending'}">${it.done?'&#x2713;':'&#x25CB;'}</div><div class="ch-label">${it.label}</div><div class="ch-action" onclick="openEditor('${key}')">${it.done?'View':'Add now'}</div></div>`;
+    });
+    html+='</div>';
+  }
+  document.getElementById('checklists-container').innerHTML=html;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PAGE CONTENT DATA — 4 UNIQUE PAGES
+// ═══════════════════════════════════════════════════════════════
+const pageContent = {
+  // ── AWARENESS PAGE (PRD 5.1) ──
+  awareness: {
+    title: 'Awareness Page',
+    badge: 'Top Funnel',
+    badgeColor: 'var(--awareness)',
+    frame: `
+      <!-- Hero: Large brand image, headline, subheadline, value prop -->
+      <div class="page-section hero-section" style="background:var(--nordic-blue)">
+        <div class="section-hint-icon" title="First impression — visitor decides in 3 seconds whether to stay">?</div>
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:0.6;margin-bottom:16px">Nordic Naturals</div>
+        <h2 style="font-size:32px;margin-bottom:12px;color:white">The World's #1 Selling Omega-3</h2>
+        <p style="font-size:16px;max-width:520px">Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions for heart, brain, and joint health.</p>
+        <div class="cta-button" style="background:var(--nordic-gold);color:var(--nordic-blue)">Learn More About Omega-3</div>
+      </div>
+      <!-- What We Do: 3-4 benefit statements -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Quickly communicate core offering without overwhelming detail">?</div>
+        <h3>Why Your Body Needs Omega-3</h3>
+        <p>Essential fatty acids your body can't make on its own — delivered in the purest, most absorbable form.</p>
+        <div class="benefits-grid">
+          <div class="benefit-item"><div class="b-icon">&#x2764;</div><h4>Heart Health</h4><p>Supports healthy heart function and cardiovascular wellness</p></div>
+          <div class="benefit-item"><div class="b-icon">&#x1F9E0;</div><h4>Brain Function</h4><p>Promotes cognitive performance and mental clarity</p></div>
+          <div class="benefit-item"><div class="b-icon">&#x1F4AA;</div><h4>Joint Support</h4><p>Helps maintain mobility and everyday comfort</p></div>
+        </div>
+      </div>
+      <!-- Social Proof: Customer count, press, testimonial -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Build credibility with someone who does not know you yet">?</div>
+        <h3>Trusted by Millions Worldwide</h3>
+        <p>Over 35 million bottles sold. Recommended by doctors, nutritionists, and health professionals across 35 countries.</p>
+        <div class="trust-row" style="margin-top:16px">
+          <div class="trust-badge"><div class="t-icon">&#x1F3C6;</div> #1 Fish Oil in the US</div>
+          <div class="trust-badge"><div class="t-icon">&#x1F52C;</div> Third-Party Tested</div>
+          <div class="trust-badge"><div class="t-icon">&#x1F30D;</div> Sustainably Sourced</div>
+        </div>
+        <div class="empty-section" style="margin-top:16px">
+          <p>&#x1F4AC; Add a standout customer testimonial here</p>
+          <p style="font-size:12px;margin-top:4px">A real quote builds instant trust with first-time visitors</p>
+          <div class="add-btn">+ Add Testimonial</div>
+        </div>
+      </div>
+      <!-- Brand Story -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Create emotional connection and memorability">?</div>
+        <h3>Our Story</h3>
+        <div class="empty-section">
+          <p>&#x1F4DD; Tell visitors about Nordic Naturals' mission</p>
+          <p style="font-size:12px;margin-top:4px">2-3 sentences about why you started, what drives you, and why quality matters</p>
+          <div class="add-btn">+ Add Brand Story</div>
+        </div>
+      </div>
+      <!-- Soft CTA -->
+      <div class="page-section" style="text-align:center;background:var(--bg)">
+        <div class="section-hint-icon" title="Move visitor deeper into funnel without asking for a purchase">?</div>
+        <h3>Ready to Feel the Difference?</h3>
+        <p>Explore our full range of omega-3 supplements and find the right one for your health goals.</p>
+        <div class="cta-button" style="background:var(--nordic-blue);color:white;display:inline-block">Explore Our Products</div>
+      </div>`,
+    sidebar: `
+      <h4>Page Guidance</h4>
+      <div class="hint-card"><div class="hint-title">&#x1F4A1; About This Page</div><div class="hint-text">The Awareness page is for people who have <strong>never heard of you</strong>. Keep the tone welcoming and focus on education over selling. No hard sells here.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F3AF; Best Campaign Use</div><div class="hint-text">Link this page to <strong>social media ads, display campaigns</strong>, or content marketing that targets new audiences who don't know Nordic Naturals yet.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F50D; Visitor Mindset</div><div class="hint-text">"I've never heard of this brand. What do they sell? Can I trust them?" — Your job is to answer these questions in 10 seconds.</div></div>
+      <h4 style="margin-top:20px">Suggestions</h4>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add a testimonial</div><div class="sug-text">Your Social Proof section needs a real customer quote. First-time visitors trust other customers more than brand claims.</div></div>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Complete brand story</div><div class="sug-text">Visitors who connect with your "why" are 2x more likely to explore further. Add 2-3 sentences about Nordic Naturals' mission.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Hero section looks great</div><div class="hint-text">Your headline clearly communicates what you offer. The soft CTA ("Learn More") is perfect for awareness — no hard sell needed.</div></div>`
+  },
+
+  // ── DIFFERENTIATION PAGE (PRD 5.2) ──
+  differentiation: {
+    title: 'Differentiation Page',
+    badge: 'Mid Funnel',
+    badgeColor: 'var(--differentiation)',
+    frame: `
+      <!-- Hero: Comparison-oriented headline -->
+      <div class="page-section hero-section" style="background:linear-gradient(135deg, #1a3a5c, #2a5a8c)">
+        <div class="section-hint-icon" title="Frame the page as a decision-making tool">?</div>
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:0.6;margin-bottom:16px">Nordic Naturals</div>
+        <h2 style="font-size:30px;margin-bottom:12px;color:white">Not All Fish Oil Is Created Equal</h2>
+        <p style="font-size:16px;max-width:520px">You're shopping for omega-3. Here's why Ultimate Omega 2X consistently outperforms the competition on purity, potency, and absorption.</p>
+        <div class="cta-button" style="background:var(--differentiation);color:white">See the Comparison</div>
+      </div>
+      <!-- Comparison Table -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Give the visitor a structured way to evaluate">?</div>
+        <h3>How We Compare</h3>
+        <p>Feature-by-feature breakdown against standard omega-3 supplements:</p>
+        <table class="comparison-table">
+          <tr><th>Feature</th><th>Ultimate Omega 2X</th><th>Standard Fish Oil</th><th>Krill Oil</th></tr>
+          <tr><td>EPA + DHA per serving</td><td><span class="check">2150 mg &#x2713;</span></td><td>600-900 mg</td><td>240-300 mg</td></tr>
+          <tr><td>Third-party purity testing</td><td><span class="check">&#x2713; Yes</span></td><td><span class="cross">Varies</span></td><td><span class="cross">Varies</span></td></tr>
+          <tr><td>Triglyceride form (better absorption)</td><td><span class="check">&#x2713; Yes</span></td><td><span class="cross">&#x2717; No (ethyl ester)</span></td><td>Phospholipid</td></tr>
+          <tr><td>Sustainably sourced</td><td><span class="check">&#x2713; Friend of the Sea</span></td><td><span class="cross">Varies</span></td><td><span class="cross">Varies</span></td></tr>
+          <tr><td>No fishy aftertaste</td><td><span class="check">&#x2713; Lemon-flavored</span></td><td><span class="cross">&#x2717; Common issue</span></td><td><span class="cross">&#x2717; Common issue</span></td></tr>
+        </table>
+      </div>
+      <!-- Unique Differentiators -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Establish competitive moat in the visitor's mind">?</div>
+        <h3>What Only Nordic Naturals Offers</h3>
+        <div class="benefits-grid" style="grid-template-columns:1fr 1fr;margin-top:16px">
+          <div style="padding:20px;background:var(--bg);border-radius:var(--radius)">
+            <div style="font-size:28px;margin-bottom:8px">&#x1F52C;</div>
+            <h4 style="font-size:15px;margin-bottom:6px">Award-Winning Purity</h4>
+            <p style="font-size:13px;color:var(--text-light)">Every batch surpasses international pharmaceutical standards for freshness and purity. Verified by independent labs.</p>
+          </div>
+          <div style="padding:20px;background:var(--bg);border-radius:var(--radius)">
+            <div style="font-size:28px;margin-bottom:8px">&#x1F30A;</div>
+            <h4 style="font-size:15px;margin-bottom:6px">Ocean-to-Bottle Traceability</h4>
+            <p style="font-size:13px;color:var(--text-light)">Track your fish oil from wild-caught source to finished product. Full supply chain transparency — no other brand offers this.</p>
+          </div>
+        </div>
+        <div class="empty-section" style="margin-top:16px">
+          <p>&#x2795; Add a third differentiator section</p>
+          <p style="font-size:12px;margin-top:4px">Highlight another unique advantage to strengthen your competitive moat</p>
+          <div class="add-btn">+ Add Differentiator</div>
+        </div>
+      </div>
+      <!-- Customer Quotes -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Reinforce differentiation with real voices">?</div>
+        <h3>Why Customers Switched to Nordic Naturals</h3>
+        <div class="empty-section">
+          <p>&#x1F4AC; Add customer quotes that reference choosing you over alternatives</p>
+          <p style="font-size:12px;margin-top:4px">Real quotes like "I tried 5 brands before finding Nordic Naturals" are incredibly persuasive at this stage</p>
+          <div class="add-btn">+ Add Customer Quotes</div>
+        </div>
+      </div>
+      <!-- Decision CTA -->
+      <div class="page-section" style="text-align:center;background:var(--bg)">
+        <div class="section-hint-icon" title="Capture visitors ready to move from evaluation to action">?</div>
+        <h3>Ready to Make the Switch?</h3>
+        <p>Join millions who chose the highest-quality omega-3 on the market.</p>
+        <div class="cta-button" style="background:var(--differentiation);color:white;display:inline-block">See Pricing &amp; Options</div>
+      </div>`,
+    sidebar: `
+      <h4>Page Guidance</h4>
+      <div class="hint-card"><div class="hint-title">&#x1F4A1; About This Page</div><div class="hint-text">The Differentiation page targets <strong>visitors who are comparing options</strong>. They know what omega-3 is — they're deciding <em>which brand</em>. Your job is to win the comparison.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F3AF; Best Campaign Use</div><div class="hint-text">Link this to <strong>search ads (branded + competitor terms), comparison shopping pages</strong>, and review site placements.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2694; Visitor Mindset</div><div class="hint-text">"I'm comparing fish oil brands. Why should I pick this one?" — Be specific, show evidence, let data speak.</div></div>
+      <h4 style="margin-top:20px">Suggestions</h4>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add a third differentiator</div><div class="sug-text">Two is good, three is convincing. Consider highlighting your flavor innovation, the lemon coating, or clinical study results.</div></div>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add real customer quotes</div><div class="sug-text">Quotes from customers who <em>switched from another brand</em> are the most powerful proof at this funnel stage.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Comparison table is strong</div><div class="hint-text">Side-by-side comparisons are the most effective format for mid-funnel visitors. The data points you've chosen address the top purchase concerns.</div></div>`
+  },
+
+  // ── CONVERSION PAGE (PRD 5.3) ──
+  conversion: {
+    title: 'Conversion Page',
+    badge: 'Bottom Funnel',
+    badgeColor: 'var(--conversion)',
+    frame: `
+      <!-- Urgency Banner -->
+      <div class="urgency-banner">
+        <span>&#x1F525; Limited Time: Free Shipping + 20% Off</span>
+        <div class="countdown">
+          <div class="cd-block">02<span class="cd-label">HRS</span></div>
+          <div class="cd-block">47<span class="cd-label">MIN</span></div>
+          <div class="cd-block">13<span class="cd-label">SEC</span></div>
+        </div>
+      </div>
+      <!-- Hero with Offer -->
+      <div class="page-section hero-section" style="background:var(--nordic-blue)">
+        <div class="section-hint-icon" title="Eliminate friction — make the action obvious immediately">?</div>
+        <h2 style="font-size:28px;margin-bottom:8px;color:white">Get Ultimate Omega 2X — 20% Off Today</h2>
+        <p style="font-size:16px;max-width:480px">The highest-concentration omega-3 on the market. 2150mg EPA+DHA per serving. Free shipping on orders over $35.</p>
+        <div class="cta-button" style="background:#06D6A0;color:var(--nordic-blue);font-size:16px;padding:16px 40px">Buy Now — $39.96 <span style="text-decoration:line-through;opacity:0.6;font-size:13px;margin-left:4px">$49.95</span></div>
+      </div>
+      <!-- Product Details -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Give the buyer the information they need to commit">?</div>
+        <h3>What You're Getting</h3>
+        <div style="display:flex;gap:24px;margin-top:16px;align-items:flex-start;flex-wrap:wrap">
+          <div class="empty-section" style="flex:0 0 200px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;min-height:200px;margin:0">
+            <div style="text-align:center"><p>&#x1F4F7;</p><p style="font-size:12px;margin-top:4px">Add product image</p><div class="add-btn" style="margin-top:8px">+ Upload</div></div>
+          </div>
+          <div style="flex:1;min-width:200px">
+            <p style="margin-bottom:12px"><strong>Ultimate Omega 2X</strong> — 60 Soft Gels (30 servings)</p>
+            <p style="font-size:13px;color:var(--text-light);margin-bottom:4px">&#x2713; 2150mg EPA+DHA per serving (2x concentrate)</p>
+            <p style="font-size:13px;color:var(--text-light);margin-bottom:4px">&#x2713; Triglyceride form for superior absorption</p>
+            <p style="font-size:13px;color:var(--text-light);margin-bottom:4px">&#x2713; Lemon-flavored — no fishy aftertaste</p>
+            <p style="font-size:13px;color:var(--text-light);margin-bottom:4px">&#x2713; Non-GMO verified, gluten-free</p>
+            <p style="font-size:13px;color:var(--text-light)">&#x2713; Third-party tested for purity</p>
+          </div>
+        </div>
+        <div class="pricing-card" style="margin-top:24px">
+          <div><span class="price-orig">$49.95</span><span class="price">$39.96</span></div>
+          <div class="price-sub">Save $9.99 — 20% off with code OMEGA20</div>
+          <div class="cta-button" style="background:var(--nordic-blue);color:white;margin-top:12px;width:100%;text-align:center;display:block">Add to Cart</div>
+        </div>
+      </div>
+      <!-- Trust Signals -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Reduce purchase anxiety at the moment of decision">?</div>
+        <h3>Shop with Confidence</h3>
+        <div class="trust-row">
+          <div class="trust-badge"><div class="t-icon">&#x1F6E1;</div> 90-Day Money-Back Guarantee</div>
+          <div class="trust-badge"><div class="t-icon">&#x1F69A;</div> Free Shipping Over $35</div>
+          <div class="trust-badge"><div class="t-icon">&#x1F512;</div> Secure Checkout</div>
+          <div class="trust-badge"><div class="t-icon">&#x1F504;</div> Easy Returns</div>
+        </div>
+      </div>
+      <!-- Final CTA -->
+      <div class="page-section" style="text-align:center;background:var(--nordic-blue);color:white">
+        <div class="section-hint-icon" style="background:white;color:var(--primary)" title="Catch visitors who scrolled past the first CTA">?</div>
+        <h3 style="color:white">Don't Miss Out — This Offer Ends Soon</h3>
+        <p style="color:rgba(255,255,255,0.8)">Join 35 million customers who trust Nordic Naturals for their daily omega-3.</p>
+        <div class="cta-button" style="background:#06D6A0;color:var(--nordic-blue);font-size:16px;padding:16px 40px;display:inline-block">Buy Now — Save 20%</div>
+      </div>`,
+    sidebar: `
+      <h4>Page Guidance</h4>
+      <div class="hint-card"><div class="hint-title">&#x1F4A1; About This Page</div><div class="hint-text">The Conversion page is your <strong>"sell now" page</strong>. Visitors here are ready to buy — remove every possible barrier to purchase. Clarity over creativity.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F3AF; Best Campaign Use</div><div class="hint-text">Link this to <strong>retargeting ads, email campaigns for warm leads</strong>, and direct branded search traffic.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F4B0; Visitor Mindset</div><div class="hint-text">"I'm ready to buy, but I need to feel confident about this purchase." — Your job is to remove doubt and create urgency.</div></div>
+      <h4 style="margin-top:20px">Suggestions</h4>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add product images</div><div class="sug-text">Buyers need to <em>see</em> what they're getting. Upload a product photo — it can increase conversion rates by 30%+ on supplement pages.</div></div>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Duplicate CTA at bottom</div><div class="sug-text">Many visitors scroll the entire page before deciding. Your bottom section needs the same buy button to catch them.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Urgency element is effective</div><div class="hint-text">The countdown timer and limited-time discount create real motivation to act now. The trust signals below address the biggest purchase hesitation points.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Pricing is clear</div><div class="hint-text">Showing the original price crossed out next to the sale price is proven to boost conversions. The savings amount makes the value tangible.</div></div>`
+  },
+
+  // ── LOYALTY PAGE (PRD 5.4) ──
+  loyalty: {
+    title: 'Loyalty Page',
+    badge: 'Post-Purchase',
+    badgeColor: 'var(--loyalty)',
+    frame: `
+      <!-- Personalized Welcome -->
+      <div class="welcome-banner">
+        <div class="section-hint-icon" style="background:white;color:var(--loyalty);top:12px;right:12px;position:absolute;opacity:0.8" title="Make the customer feel recognized and valued">?</div>
+        <div style="font-size:40px;margin-bottom:12px">&#x1F44B;</div>
+        <h2 style="color:white">Welcome Back to Nordic Naturals</h2>
+        <p>Thank you for being part of our community. Here's something special just for you.</p>
+      </div>
+      <!-- Exclusive Returning Customer Offers -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Provide tangible incentive for repeat purchase">?</div>
+        <h3>Your Exclusive Returning Customer Rewards</h3>
+        <p>Because loyalty deserves to be rewarded. These offers are only available to existing customers.</p>
+        <div class="reward-grid">
+          <div class="reward-card">
+            <div class="r-icon">&#x1F381;</div>
+            <h4>15% Off Your Next Order</h4>
+            <p>Valid on any product in our store. No minimum purchase required.</p>
+            <div class="reward-code">LOYAL15</div>
+          </div>
+          <div class="reward-card">
+            <div class="r-icon">&#x1F680;</div>
+            <h4>Early Access: New Products</h4>
+            <p>Get first access to our newest formulations before they hit the shelves.</p>
+            <div class="cta-button" style="background:var(--loyalty);color:white;margin-top:8px;font-size:12px;padding:8px 16px">View Early Access</div>
+          </div>
+        </div>
+      </div>
+      <!-- New Arrivals / What's New -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Give them a reason to re-engage beyond discounts">?</div>
+        <h3>New Since Your Last Visit</h3>
+        <p>Check out what we've been working on — new products and improved formulations.</p>
+        <div class="product-grid">
+          <div class="product-card">
+            <div class="p-image">&#x1F48A;</div>
+            <div class="p-tag">NEW</div>
+            <h4>Omega-3 Gummies</h4>
+            <p style="font-size:12px;color:var(--text-light)">Same great omega-3, now in a delicious gummy</p>
+          </div>
+          <div class="product-card">
+            <div class="p-image">&#x1F331;</div>
+            <div class="p-tag">NEW</div>
+            <h4>Algae Omega</h4>
+            <p style="font-size:12px;color:var(--text-light)">Plant-based omega-3 for vegetarian lifestyles</p>
+          </div>
+          <div class="product-card">
+            <div class="p-image">&#x2B50;</div>
+            <div class="p-tag">IMPROVED</div>
+            <h4>Complete Omega 3-6-9</h4>
+            <p style="font-size:12px;color:var(--text-light)">Updated formula with higher EPA concentration</p>
+          </div>
+        </div>
+      </div>
+      <!-- Referral Program -->
+      <div class="page-section">
+        <div class="section-hint-icon" title="Turn satisfied customers into acquisition channels">?</div>
+        <h3>Share the Health — Earn Rewards</h3>
+        <div class="referral-box">
+          <h3>Give $10, Get $10</h3>
+          <p style="color:var(--text-light);font-size:14px;margin-top:4px">Share your personal referral link with friends. They get $10 off their first order, and you get a $10 credit.</p>
+          <div style="margin-top:12px;background:white;padding:10px 16px;border-radius:8px;display:inline-block;font-family:monospace;font-size:13px;color:var(--nordic-blue);border:1px solid var(--border)">nordic.com/refer/<strong>YOUR-CODE</strong></div>
+          <div class="share-buttons">
+            <button style="background:#1877F2">Share on Facebook</button>
+            <button style="background:#1DA1F2">Share on Twitter</button>
+            <button style="background:var(--nordic-blue)">Copy Link</button>
+          </div>
+        </div>
+      </div>
+      <!-- Community CTA -->
+      <div class="page-section" style="text-align:center;background:linear-gradient(135deg, #F3EAFF, #EEF2FF)">
+        <div class="section-hint-icon" title="Deepen the relationship beyond transactions">?</div>
+        <h3>Join the Nordic Naturals Community</h3>
+        <p>Get exclusive health tips, early product access, and connect with other wellness enthusiasts.</p>
+        <div style="display:flex;gap:12px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+          <div class="cta-button" style="background:var(--loyalty);color:white">Join Our VIP Program</div>
+          <div class="cta-button" style="background:white;color:var(--loyalty);border:2px solid var(--loyalty)">Subscribe to Newsletter</div>
+        </div>
+      </div>`,
+    sidebar: `
+      <h4>Page Guidance</h4>
+      <div class="hint-card"><div class="hint-title">&#x1F4A1; About This Page</div><div class="hint-text">The Loyalty page targets <strong>existing customers</strong>. They already trust you — your job is to make them feel valued, give them reasons to come back, and turn them into advocates.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F3AF; Best Campaign Use</div><div class="hint-text">Use this page in <strong>post-purchase email sequences, loyalty program communications</strong>, and re-engagement campaigns for lapsed customers.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x1F49C; Visitor Mindset</div><div class="hint-text">"I've already bought from them. Is there a reason to come back?" — Reward their loyalty and show them what's new.</div></div>
+      <h4 style="margin-top:20px">Suggestions</h4>
+      <div class="hint-card"><div class="hint-title">&#x2705; Welcome greeting is warm</div><div class="hint-text">Acknowledging the customer's relationship with your brand makes them feel recognized. This increases engagement with the rest of the page.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Referral program is set up</div><div class="hint-text">Give $10 / Get $10 is simple and effective. The share buttons make it easy to act on immediately.</div></div>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Consider personalization</div><div class="sug-text">If you can pull in the customer's last purchase, you could show "Based on your Ultimate Omega 2X order..." — this dramatically increases reorder rates.</div></div>
+      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add VIP tier details</div><div class="sug-text">Spell out what VIP members get: exclusive discounts, early access, birthday gifts. Clear benefits drive sign-ups.</div></div>`
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// OPEN EDITOR
+// ═══════════════════════════════════════════════════════════════
+function openEditor(pageType){
+  const data = pageContent[pageType];
+  if(!data) return;
+  document.getElementById('editor-page-title').textContent = data.title;
+  const badge = document.getElementById('editor-page-badge');
+  badge.textContent = data.badge;
+  badge.style.background = data.badgeColor;
+  document.getElementById('page-frame').innerHTML = data.frame;
+  document.getElementById('editor-sidebar').innerHTML = data.sidebar;
+  // Reset device toggle
+  document.querySelectorAll('.device-toggle button').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.getElementById('page-frame').classList.remove('mobile');
+  showScreen(5);
+}
+
+function setDevice(type,btn){
+  document.querySelectorAll('.device-toggle button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('page-frame').classList.toggle('mobile',type==='mobile');
+}
+
+function selectPlan(plan){
+  const name = plan === 'yearly' ? 'Yearly ($20/mo)' : 'Monthly ($25/mo)';
+  alert('You selected the ' + name + ' plan!\n\nThis is a mockup — in the real product, this would redirect to the payment flow.');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SCAFFOLD WALKTHROUGH
+// ═══════════════════════════════════════════════════════════════
+let scaffoldStep = 0;
+let scaffoldActive = false;
+
+const scaffoldSteps = [
+  {
+    target: '#fv-awareness',
+    title: "Your Awareness page is almost there",
+    body: "We've built this page for you, but it's 8 out of 10 — meaning there are a couple of things only you can add to make it truly effective. Let's take a quick look.",
+    pos: 'bottom', // tooltip below target
+    step: 'Step 1 of 3'
+  },
+  {
+    target: '#cl-awareness',
+    title: "These items need your touch",
+    body: "See the empty circles? Those are sections we couldn't auto-generate — like a real customer testimonial and your brand story. Adding these will take your page from good to great.",
+    pos: 'top', // tooltip above target
+    step: 'Step 2 of 3',
+    scrollTo: true
+  },
+  {
+    target: '#fv-awareness',
+    title: "Click any card to start editing",
+    body: "When you're ready, just click a funnel card or hit 'Add now' on any checklist item. Your pages are live-editable with hints built into every section. You've got this.",
+    pos: 'bottom',
+    step: 'Step 3 of 3',
+    scrollTo: true,
+    last: true
+  }
+];
+
+function startScaffold(){
+  scaffoldStep = 0;
+  scaffoldActive = true;
+  document.getElementById('scaffold-overlay').classList.add('active');
+  showScaffoldStep();
+}
+
+function showScaffoldStep(){
+  const step = scaffoldSteps[scaffoldStep];
+  const target = document.querySelector(step.target);
+  if(!target) return endScaffold();
+
+  if(step.scrollTo) target.scrollIntoView({behavior:'smooth', block:'center'});
+
+  // Position highlight and tooltip after a short delay for scroll
+  setTimeout(()=>{
+    const rect = target.getBoundingClientRect();
+    const highlight = document.getElementById('scaffold-highlight');
+    const tooltip = document.getElementById('scaffold-tooltip');
+
+    // Position highlight over target
+    highlight.style.top = (rect.top - 6) + 'px';
+    highlight.style.left = (rect.left - 6) + 'px';
+    highlight.style.width = (rect.width + 12) + 'px';
+    highlight.style.height = (rect.height + 12) + 'px';
+    highlight.style.borderRadius = 'var(--radius)';
+
+    // Build dots
+    let dots = '';
+    for(let i=0;i<scaffoldSteps.length;i++){
+      dots += '<div class="st-dot'+(i===scaffoldStep?' active':'')+'"></div>';
+    }
+
+    // Build tooltip content
+    tooltip.innerHTML = `
+      <div class="st-step">${step.step}</div>
+      <h3>${step.title}</h3>
+      <p>${step.body}</p>
+      <div class="st-actions">
+        <button class="st-next" onclick="nextScaffold()">${step.last ? 'Got it — let me explore' : 'Next'}</button>
+        ${!step.last ? '<button class="st-skip" onclick="endScaffold()">Skip tour</button>' : ''}
+        <div class="st-dots">${dots}</div>
+      </div>
+    `;
+
+    // Position tooltip
+    if(step.pos === 'bottom'){
+      tooltip.style.top = (rect.bottom + 16) + 'px';
+      tooltip.style.left = Math.max(16, rect.left + rect.width/2 - 180) + 'px';
+      // Arrow on top
+      const arrow = document.createElement('div');
+      arrow.className = 'st-arrow';
+      arrow.style.top = '-8px';
+      arrow.style.left = Math.min(rect.width/2, 180) + 'px';
+      tooltip.prepend(arrow);
+    } else {
+      tooltip.style.top = (rect.top - tooltip.offsetHeight - 16) + 'px';
+      tooltip.style.left = Math.max(16, rect.left + rect.width/2 - 180) + 'px';
+    }
+
+    tooltip.style.display = 'block';
+
+    // Make target pop above overlay
+    target.style.position = 'relative';
+    target.style.zIndex = '201';
+    target.style.pointerEvents = 'none';
+  }, step.scrollTo ? 400 : 50);
+}
+
+function nextScaffold(){
+  // Clean up current step
+  const prevStep = scaffoldSteps[scaffoldStep];
+  const prevTarget = document.querySelector(prevStep.target);
+  if(prevTarget){
+    prevTarget.style.zIndex = '';
+    prevTarget.style.pointerEvents = '';
+  }
+
+  scaffoldStep++;
+  if(scaffoldStep >= scaffoldSteps.length){
+    endScaffold();
+  } else {
+    showScaffoldStep();
+  }
+}
+
+function endScaffold(){
+  scaffoldActive = false;
+  document.getElementById('scaffold-overlay').classList.remove('active');
+  document.getElementById('scaffold-tooltip').style.display = 'none';
+  // Clean up z-index on all targets
+  scaffoldSteps.forEach(s=>{
+    const t = document.querySelector(s.target);
+    if(t){ t.style.zIndex=''; t.style.pointerEvents=''; }
+  });
+}
+
+// Patch goToDashboard to trigger scaffold on first visit
+let dashboardVisited = false;
+const _origGoToDashboard = goToDashboard;
+goToDashboard = function(){
+  _origGoToDashboard();
+  if(!dashboardVisited){
+    dashboardVisited = true;
+    setTimeout(startScaffold, 600);
+  }
+};
+</script>
+
+<!-- Scaffold overlay elements -->
+<div class="scaffold-overlay" id="scaffold-overlay" onclick="endScaffold()">
+  <div class="scaffold-highlight" id="scaffold-highlight"></div>
+</div>
+<div class="scaffold-tooltip" id="scaffold-tooltip" style="display:none;position:fixed;z-index:202"></div>
+
+</body>
+</body>
+</html>
