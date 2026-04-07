@@ -152,10 +152,10 @@
   .dash-header { margin-bottom:28px; }
   .dash-header h1 { font-size:24px; color:var(--primary-dark); }
   .dash-header p { color:var(--text-light); font-size:14px; }
-  .funnel-viz { display:flex; gap:16px; margin-bottom:32px; }
+  .funnel-viz { display:flex; gap:16px; margin-bottom:32px; overflow:visible; position:relative; z-index:5; }
   .funnel-viz-card { flex:1; background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; border-top:4px solid transparent; position:relative; }
   .funnel-viz-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); }
-  .funnel-viz-card .fv-tooltip { position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%); background:var(--text); color:white; font-size:12px; line-height:1.5; padding:10px 14px; border-radius:8px; width:220px; text-align:left; opacity:0; pointer-events:none; transition:opacity 0.2s; z-index:10; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
+  .funnel-viz-card .fv-tooltip { position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%); background:var(--text); color:white; font-size:12px; line-height:1.5; padding:10px 14px; border-radius:8px; width:220px; text-align:left; opacity:0; pointer-events:none; transition:opacity 0.2s; z-index:15; box-shadow:0 4px 16px rgba(0,0,0,0.2); }
   .funnel-viz-card .fv-tooltip::after { content:''; position:absolute; bottom:100%; left:50%; transform:translateX(-50%); border:6px solid transparent; border-bottom-color:var(--text); }
   .funnel-viz-card:hover .fv-tooltip { opacity:1; }
   .fv-use { font-size:11px; color:var(--text-light); margin-top:6px; line-height:1.4; }
@@ -191,8 +191,31 @@
   .editor-topbar .device-toggle button { background:white; border:none; padding:6px 14px; font-size:13px; cursor:pointer; color:var(--text-light); transition:all 0.15s; }
   .editor-topbar .device-toggle button.active { background:var(--primary); color:white; }
   .editor-topbar .publish-btn { background:var(--success); color:white; border:none; padding:8px 20px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; }
+  .editor-topbar .edit-btn { background:var(--primary-light); color:white; border:none; padding:8px 20px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+  .editor-topbar .edit-btn:hover { background:var(--primary); }
+  .editor-topbar .edit-btn.active { background:var(--primary-dark); }
 
-  .editor-body { display:flex; margin-top:48px; min-height:calc(100vh - 104px); }
+  /* ── Edit Panel ── */
+  .edit-panel { position:fixed; top:104px; left:0; bottom:0; width:280px; background:white; border-right:1px solid var(--border); box-shadow:4px 0 24px rgba(0,0,0,0.08); z-index:80; transform:translateX(-100%); transition:transform 0.3s ease; overflow-y:auto; padding:0; }
+  .edit-panel.open { transform:translateX(0); }
+  .ep-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+  .ep-header h3 { font-size:15px; font-weight:700; color:var(--primary-dark); }
+  .ep-close { background:none; border:none; font-size:18px; cursor:pointer; color:var(--text-light); padding:4px; }
+  .ep-close:hover { color:var(--text); }
+  .ep-section { padding:16px 20px; border-bottom:1px solid var(--border); }
+  .ep-section-title { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-light); font-weight:700; margin-bottom:12px; }
+  .ep-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; font-size:13px; color:var(--text); cursor:pointer; transition:all 0.15s; margin-bottom:2px; }
+  .ep-item:hover { background:var(--bg); color:var(--primary); }
+  .ep-item .ep-icon { width:32px; height:32px; border-radius:8px; background:var(--bg); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+  .ep-item:hover .ep-icon { background:#EEF2FF; }
+  .ep-item span { font-weight:500; }
+  .ep-lock { margin-left:auto; font-size:14px; color:var(--text-light); opacity:0.5; flex-shrink:0; }
+  .ep-item:hover .ep-lock { opacity:0.8; }
+  .ep-badge { font-size:10px; background:#EEF2FF; color:var(--primary); padding:2px 8px; border-radius:10px; font-weight:600; }
+  .ep-badge.soon { background:#FFF3E0; color:var(--accent2); }
+
+  .editor-body { display:flex; margin-top:48px; min-height:calc(100vh - 104px); transition:margin-left 0.3s ease; }
+  .editor-body.panel-open { margin-left:280px; }
   .editor-canvas { flex:1; padding:32px; display:flex; justify-content:center; overflow-y:auto; }
   .editor-canvas .page-frame { background:white; border-radius:var(--radius); box-shadow:var(--shadow-lg); width:100%; max-width:800px; overflow:hidden; transition:max-width 0.3s; }
   .editor-canvas .page-frame.mobile { max-width:375px; }
@@ -603,9 +626,63 @@
       <button class="active" onclick="setDevice('desktop',this)">&#x1F5A5; Desktop</button>
       <button onclick="setDevice('mobile',this)">&#x1F4F1; Mobile</button>
     </div>
+    <button class="edit-btn" id="edit-panel-toggle" onclick="toggleEditPanel()">&#x270F; Edit Page</button>
     <button class="publish-btn" onclick="showScreen(6)">Publish Page</button>
   </div>
-  <div class="editor-body">
+
+  <!-- Edit Panel (slides from left) -->
+  <div class="edit-panel" id="edit-panel">
+    <div class="ep-header">
+      <h3>&#x270F; Edit Page</h3>
+      <button class="ep-close" onclick="toggleEditPanel()">&times;</button>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-section-title">Content</div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4DD;</div><span>Edit Text</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F5BC;</div><span>Images & Media</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F517;</div><span>Buttons & CTAs</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4CB;</div><span>Forms & Inputs</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F3AC;</div><span>Video Embed</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F9E9;</div><span>Add Section</span><div class="ep-lock">&#x1F512;</div></div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-section-title">Design</div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F3A8;</div><span>Colors & Branding</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F524;</div><span>Fonts & Typography</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4D0;</div><span>Layout & Spacing</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F307;</div><span>Backgrounds</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x2728;</div><span>Animations</span><span class="ep-badge soon">Soon</span><div class="ep-lock">&#x1F512;</div></div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-section-title">Page Settings</div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F50D;</div><span>SEO & Meta Tags</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F310;</div><span>Custom Domain</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4CA;</div><span>Analytics & Tracking</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4E3;</div><span>Social Sharing</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x2B50;</div><span>Favicon</span><div class="ep-lock">&#x1F512;</div></div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-section-title">Advanced</div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4BB;</div><span>Custom HTML/CSS</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x2699;</div><span>Custom Scripts</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4AC;</div><span>Pop-ups & Alerts</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F50C;</div><span>Integrations</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4C2;</div><span>Version History</span><div class="ep-lock">&#x1F512;</div></div>
+    </div>
+
+    <div class="ep-section">
+      <div class="ep-section-title">AI Tools</div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F916;</div><span>AI Copywriter</span><span class="ep-badge">New</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F4A1;</div><span>Smart Suggestions</span><span class="ep-badge">New</span><div class="ep-lock">&#x1F512;</div></div>
+      <div class="ep-item" onclick="showScreen(6)"><div class="ep-icon">&#x1F9EA;</div><span>A/B Test Variant</span><span class="ep-badge soon">Soon</span><div class="ep-lock">&#x1F512;</div></div>
+    </div>
+  </div>
+
+  <div class="editor-body" id="editor-body">
     <div class="editor-canvas">
       <div class="page-frame" id="page-frame">
         <!-- Content injected by JS -->
@@ -1151,6 +1228,8 @@ function openEditor(pageType){
   // Reset device toggle
   document.querySelectorAll('.device-toggle button').forEach((b,i)=>b.classList.toggle('active',i===0));
   document.getElementById('page-frame').classList.remove('mobile');
+  // Close edit panel if open
+  if(editPanelOpen) toggleEditPanel();
   showScreen(5);
 }
 
@@ -1158,6 +1237,30 @@ function setDevice(type,btn){
   document.querySelectorAll('.device-toggle button').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('page-frame').classList.toggle('mobile',type==='mobile');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EDIT PANEL
+// ═══════════════════════════════════════════════════════════════
+let editPanelOpen = false;
+
+function toggleEditPanel(){
+  editPanelOpen = !editPanelOpen;
+  document.getElementById('edit-panel').classList.toggle('open', editPanelOpen);
+  document.getElementById('editor-body').classList.toggle('panel-open', editPanelOpen);
+  document.getElementById('edit-panel-toggle').classList.toggle('active', editPanelOpen);
+}
+
+function epAction(action){
+  const labels = {
+    text:'Edit Text', images:'Images & Media', buttons:'Buttons & CTAs', forms:'Forms & Inputs',
+    video:'Video Embed', sections:'Add Section', colors:'Colors & Branding', fonts:'Fonts & Typography',
+    layout:'Layout & Spacing', background:'Backgrounds', animations:'Animations', seo:'SEO & Meta Tags',
+    domain:'Custom Domain', tracking:'Analytics & Tracking', social:'Social Sharing', favicon:'Favicon',
+    html:'Custom HTML/CSS', scripts:'Custom Scripts', popups:'Pop-ups & Alerts', integrations:'Integrations',
+    versions:'Version History', 'ai-copy':'AI Copywriter', 'ai-suggest':'Smart Suggestions', 'ab-test':'A/B Test Variant'
+  };
+  alert(labels[action] + '\n\nThis is a mockup — in the real product, this would open the ' + labels[action] + ' editor panel.');
 }
 
 function selectPlan(plan){
@@ -1243,10 +1346,17 @@ function showScaffoldStep(){
       </div>
     `;
 
+    // Render tooltip off-screen first to measure height
+    tooltip.style.display = 'block';
+    tooltip.style.top = '-9999px';
+    tooltip.style.left = '-9999px';
+    const ttHeight = tooltip.offsetHeight;
+
     // Position tooltip
+    const ttLeft = Math.max(16, rect.left + rect.width/2 - 180);
     if(step.pos === 'bottom'){
       tooltip.style.top = (rect.bottom + 16) + 'px';
-      tooltip.style.left = Math.max(16, rect.left + rect.width/2 - 180) + 'px';
+      tooltip.style.left = ttLeft + 'px';
       // Arrow on top
       const arrow = document.createElement('div');
       arrow.className = 'st-arrow';
@@ -1254,11 +1364,15 @@ function showScaffoldStep(){
       arrow.style.left = Math.min(rect.width/2, 180) + 'px';
       tooltip.prepend(arrow);
     } else {
-      tooltip.style.top = (rect.top - tooltip.offsetHeight - 16) + 'px';
-      tooltip.style.left = Math.max(16, rect.left + rect.width/2 - 180) + 'px';
+      tooltip.style.top = (rect.top - ttHeight - 16) + 'px';
+      tooltip.style.left = ttLeft + 'px';
+      // Arrow on bottom
+      const arrow = document.createElement('div');
+      arrow.className = 'st-arrow';
+      arrow.style.bottom = '-8px';
+      arrow.style.left = Math.min(rect.width/2, 180) + 'px';
+      tooltip.appendChild(arrow);
     }
-
-    tooltip.style.display = 'block';
 
     // Make target pop above overlay
     target.style.position = 'relative';
