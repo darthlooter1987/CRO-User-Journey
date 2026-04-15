@@ -45,19 +45,63 @@
   .topnav .step-dot.active { background:var(--primary); width:24px; border-radius:4px; }
   .topnav .step-dot.done { background:var(--success); }
 
-  /* ── Screen 1: URL ── */
-  #screen-url { flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); padding-top:56px; }
-  .url-card { background:white; border-radius:20px; padding:56px 48px; max-width:600px; width:90%; box-shadow:var(--shadow-lg); text-align:center; }
-  .url-card h1 { font-size:28px; color:var(--primary-dark); margin-bottom:8px; }
-  .url-card p { color:var(--text-light); font-size:16px; margin-bottom:32px; line-height:1.6; }
-  .url-input-wrap { display:flex; border:2px solid var(--border); border-radius:var(--radius); overflow:hidden; transition:border-color 0.2s; }
-  .url-input-wrap:focus-within { border-color:var(--primary); }
-  .url-input-wrap .prefix { background:var(--bg); padding:14px 16px; color:var(--text-light); font-size:14px; white-space:nowrap; border-right:1px solid var(--border); display:flex; align-items:center; }
-  .url-input-wrap input { flex:1; border:none; outline:none; padding:14px 16px; font-size:15px; min-width:0; }
-  .url-btn { margin-top:24px; background:var(--primary); color:white; border:none; padding:16px 48px; border-radius:var(--radius); font-size:16px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-  .url-btn:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 4px 16px rgba(46,80,144,0.3); }
-  .url-features { display:flex; gap:24px; margin-top:32px; justify-content:center; }
-  .url-features .feat { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-light); }
+  /* ── Screen 1: Landing Page ── */
+  #screen-url { flex-direction:column; align-items:center; background:linear-gradient(160deg, #EEF2FF 0%, #F8FAFC 60%); padding-top:56px; overflow-y:auto; }
+
+  /* Hero */
+  .lp-hero { display:grid; grid-template-columns:1fr 1fr; gap:48px; max-width:960px; width:92%; padding:64px 0 48px; align-items:center; }
+  .lp-headline { font-size:36px; font-weight:800; color:var(--primary-dark); line-height:1.2; margin-bottom:14px; }
+  .lp-headline em { font-style:italic; }
+  .lp-accent { color:var(--primary); }
+  .lp-sub { font-size:15px; color:var(--text-light); line-height:1.7; margin-bottom:28px; }
+  .lp-input-row { display:flex; border:2px solid var(--border); border-radius:var(--radius); overflow:hidden; background:white; box-shadow:var(--shadow); transition:border-color 0.2s; }
+  .lp-input-row:focus-within { border-color:var(--primary); }
+  .lp-url-input { flex:1; border:none; outline:none; padding:14px 16px; font-size:14px; min-width:0; color:var(--text); }
+  .lp-cta-btn { background:var(--primary); color:white; border:none; padding:14px 22px; font-size:14px; font-weight:700; cursor:pointer; transition:all 0.2s; white-space:nowrap; }
+  .lp-cta-btn:hover { background:var(--primary-dark); }
+  .lp-no-settings { font-size:12px; color:var(--text-light); margin-top:10px; }
+  .lp-hero-right { display:flex; flex-direction:column; gap:16px; }
+  .lp-value-prop { display:flex; align-items:flex-start; gap:14px; background:white; border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow); border:1px solid var(--border); transition:border-color 0.2s; }
+  .lp-value-prop.lp-vp-active { border-color:var(--primary); }
+  .lp-vp-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
+  .lp-vp-title { font-size:15px; font-weight:700; color:var(--text); margin-bottom:2px; }
+  .lp-vp-desc { font-size:13px; color:var(--text-light); }
+
+  /* Four Moments */
+  .lp-moments { max-width:960px; width:92%; text-align:center; padding-bottom:48px; }
+  .lp-moments-title { font-size:28px; font-weight:800; color:var(--primary-dark); margin-bottom:6px; }
+  .lp-moments-sub { font-size:14px; color:var(--text-light); margin-bottom:32px; }
+  .lp-pages-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  .lp-page-card { background:white; border-radius:var(--radius); padding:20px 16px; box-shadow:var(--shadow); text-align:left; border:1px solid var(--border); }
+  .lp-page-card h3 { font-size:15px; font-weight:700; color:var(--text); margin-bottom:4px; }
+  .lp-page-card p { font-size:12px; color:var(--text-light); line-height:1.5; margin-bottom:12px; }
+  .lp-page-badge { display:inline-block; font-size:10px; font-weight:700; padding:3px 10px; border-radius:20px; background:var(--awareness); color:white; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .lp-badge-2 { background:var(--differentiation); }
+  .lp-badge-3 { background:var(--conversion); }
+  .lp-badge-4 { background:var(--loyalty); }
+  .lp-page-preview { height:100px; border-radius:8px; background:linear-gradient(135deg,#EEF2FF,#E2E8F0); border:1px solid var(--border); display:flex; flex-direction:column; gap:6px; padding:10px; overflow:hidden; }
+  .lp-page-preview::before,.lp-page-preview::after { content:''; display:block; height:8px; border-radius:4px; background:var(--border); }
+  .lp-page-preview::after { width:60%; }
+  .lp-preview-2 { background:linear-gradient(135deg,#FFF3E0,#FFE8CC); }
+  .lp-preview-3 { background:linear-gradient(135deg,#E8FFF5,#D1FAE5); }
+  .lp-preview-4 { background:linear-gradient(135deg,#F3EAFF,#EDE0FF); }
+
+  /* How It Works */
+  .lp-hiw { max-width:960px; width:92%; padding-bottom:40px; text-align:center; }
+  .lp-hiw-title { font-size:22px; font-weight:800; color:var(--primary-dark); margin-bottom:28px; position:relative; }
+  .lp-hiw-title::before,.lp-hiw-title::after { content:''; display:inline-block; width:60px; height:2px; background:var(--border); vertical-align:middle; margin:0 14px; }
+  .lp-hiw-steps { display:flex; align-items:center; justify-content:center; gap:0; }
+  .lp-hiw-step { display:flex; align-items:flex-start; gap:14px; background:white; border-radius:var(--radius); padding:20px 22px; box-shadow:var(--shadow); max-width:240px; flex:1; text-align:left; }
+  .lp-hiw-num { width:32px; height:32px; border-radius:50%; background:var(--primary); color:white; font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .lp-hiw-text { display:flex; flex-direction:column; gap:3px; }
+  .lp-hiw-text strong { font-size:14px; color:var(--text); }
+  .lp-hiw-text span { font-size:12px; color:var(--text-light); line-height:1.5; }
+  .lp-hiw-arrow { font-size:20px; color:var(--border); padding:0 12px; flex-shrink:0; }
+  .lp-footer-tag { font-size:13px; color:var(--text-light); padding-bottom:40px; text-align:center; }
+
+  /* legacy kept for JS compat */
+  .url-btn { display:none; }
+  .url-features { display:none; }
 
   /* ── Screen 2: Extract ── */
   #screen-extract { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
@@ -352,6 +396,308 @@
   .scaffold-tooltip .st-dot.active { background:var(--primary); }
   .scaffold-tooltip .st-arrow { position:absolute; width:16px; height:16px; background:white; transform:rotate(45deg); }
 
+  /* ── Screen 9: A/B Testing ── */
+  #screen-abtesting { flex-direction:column; padding-top:56px; background:var(--bg); }
+  .ab-main { margin-left:240px; padding:32px; min-height:calc(100vh - 56px); }
+  .ab-header { margin-bottom:28px; display:flex; align-items:center; justify-content:space-between; }
+  .ab-header h1 { font-size:24px; color:var(--primary-dark); }
+  .ab-header p { color:var(--text-light); font-size:14px; }
+  .ab-new-btn { background:var(--primary); color:white; border:none; padding:12px 24px; border-radius:var(--radius); font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:8px; }
+  .ab-new-btn:hover { background:var(--primary-dark); transform:translateY(-1px); }
+
+  /* Step indicator */
+  .ab-steps { display:flex; gap:0; margin-bottom:32px; position:relative; }
+  .ab-step-item { flex:1; text-align:center; position:relative; padding-bottom:20px; }
+  .ab-step-item::after { content:''; position:absolute; bottom:8px; left:50%; right:-50%; height:2px; background:var(--border); z-index:0; }
+  .ab-step-item:last-child::after { display:none; }
+  .ab-step-item.active::after, .ab-step-item.done::after { background:var(--primary); }
+  .ab-step-num { width:32px; height:32px; border-radius:50%; background:var(--border); color:var(--text-light); display:inline-flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; position:relative; z-index:1; transition:all 0.3s; margin-bottom:6px; }
+  .ab-step-item.active .ab-step-num { background:var(--primary); color:white; }
+  .ab-step-item.done .ab-step-num { background:var(--success); color:white; }
+  .ab-step-label { font-size:12px; color:var(--text-light); font-weight:500; }
+  .ab-step-item.active .ab-step-label { color:var(--primary); font-weight:700; }
+  .ab-step-item.done .ab-step-label { color:var(--success); }
+
+  /* Page picker cards */
+  .ab-page-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:720px; }
+  .ab-page-card { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; border:2px solid transparent; position:relative; }
+  .ab-page-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--primary-light); }
+  .ab-page-card.selected { border-color:var(--primary); background:#F8FAFF; }
+  .ab-page-card .ab-pc-icon { font-size:28px; margin-bottom:10px; }
+  .ab-page-card h4 { font-size:16px; margin-bottom:4px; }
+  .ab-page-card .ab-pc-desc { font-size:13px; color:var(--text-light); line-height:1.5; }
+  .ab-page-card .ab-pc-check { position:absolute; top:12px; right:12px; width:24px; height:24px; border-radius:50%; background:var(--primary); color:white; display:none; align-items:center; justify-content:center; font-size:14px; }
+  .ab-page-card.selected .ab-pc-check { display:flex; }
+  .ab-page-card .ab-pc-readiness { font-size:11px; color:var(--text-light); margin-top:8px; }
+
+  /* Variant builder */
+  .ab-variant-section { max-width:800px; }
+  .ab-variant-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .ab-variant-header h3 { font-size:18px; color:var(--primary-dark); }
+  .ab-add-variant-btn { background:white; border:2px dashed var(--border); padding:10px 20px; border-radius:var(--radius); font-size:13px; font-weight:600; color:var(--primary); cursor:pointer; transition:all 0.2s; }
+  .ab-add-variant-btn:hover { border-color:var(--primary); background:#F8FAFF; }
+  .ab-variant-row { display:flex; gap:16px; margin-bottom:16px; }
+  .ab-variant-card { flex:1; background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; border:2px solid transparent; transition:all 0.2s; position:relative; }
+  .ab-variant-card.control { border-color:var(--primary-light); }
+  .ab-variant-card .ab-vc-tag { position:absolute; top:0; left:0; right:0; padding:6px 16px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; text-align:center; }
+  .ab-variant-card .ab-vc-preview { padding:16px; padding-top:40px; min-height:200px; background:var(--bg); border-bottom:1px solid var(--border); position:relative; }
+  .ab-variant-card .ab-vc-preview .preview-mini { font-size:12px; color:var(--text-light); line-height:1.6; }
+  .ab-variant-card .ab-vc-preview .preview-mini h5 { font-size:14px; color:var(--text); margin-bottom:4px; }
+  .ab-variant-card .ab-vc-preview .mini-cta { display:inline-block; padding:6px 14px; border-radius:6px; font-size:11px; font-weight:700; margin-top:8px; }
+  .ab-variant-card .ab-vc-body { padding:16px; }
+  .ab-variant-card .ab-vc-body h4 { font-size:14px; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+  .ab-vc-changes { list-style:none; padding:0; }
+  .ab-vc-changes li { font-size:12px; color:var(--text-light); padding:4px 0; display:flex; align-items:flex-start; gap:6px; }
+  .ab-vc-changes li::before { content:''; display:none; }
+  .ab-vc-edit-btn { background:none; border:1px solid var(--border); padding:4px 12px; border-radius:6px; font-size:11px; color:var(--primary); cursor:pointer; font-weight:600; }
+  .ab-vc-edit-btn:hover { border-color:var(--primary); background:#F8FAFF; }
+  .ab-vc-remove { position:absolute; top:8px; right:8px; background:none; border:none; font-size:16px; color:var(--text-light); cursor:pointer; z-index:2; opacity:0; transition:opacity 0.2s; }
+  .ab-variant-card:hover .ab-vc-remove { opacity:1; }
+
+  /* Traffic split */
+  .ab-traffic-section { max-width:720px; }
+  .ab-traffic-card { background:white; border-radius:var(--radius); padding:28px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .ab-traffic-card h3 { font-size:18px; color:var(--primary-dark); margin-bottom:16px; }
+  .ab-split-row { display:flex; align-items:center; gap:16px; margin-bottom:16px; padding:12px 0; border-bottom:1px solid var(--border); }
+  .ab-split-row:last-of-type { border-bottom:none; }
+  .ab-split-label { min-width:120px; font-size:14px; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .ab-split-label .ab-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+  .ab-split-slider { flex:1; -webkit-appearance:none; height:6px; border-radius:3px; background:var(--border); outline:none; cursor:pointer; }
+  .ab-split-slider::-webkit-slider-thumb { -webkit-appearance:none; width:20px; height:20px; border-radius:50%; background:var(--primary); cursor:pointer; border:3px solid white; box-shadow:0 1px 4px rgba(0,0,0,0.2); }
+  .ab-split-pct { min-width:50px; text-align:right; font-size:18px; font-weight:700; color:var(--primary-dark); }
+  .ab-traffic-info { display:flex; gap:12px; margin-top:12px; }
+  .ab-traffic-info-item { background:var(--bg); border-radius:8px; padding:14px 18px; flex:1; }
+  .ab-traffic-info-item .ab-ti-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:4px; }
+  .ab-traffic-info-item .ab-ti-value { font-size:15px; font-weight:600; color:var(--text); }
+
+  /* Goal selector */
+  .ab-goal-options { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+  .ab-goal-opt { background:var(--bg); border:2px solid transparent; border-radius:var(--radius); padding:16px; cursor:pointer; transition:all 0.2s; }
+  .ab-goal-opt:hover { border-color:var(--primary-light); }
+  .ab-goal-opt.selected { border-color:var(--primary); background:#F8FAFF; }
+  .ab-goal-opt h5 { font-size:14px; margin-bottom:4px; }
+  .ab-goal-opt p { font-size:12px; color:var(--text-light); }
+
+  /* Results dashboard */
+  .ab-results-section { max-width:900px; }
+  .ab-results-header { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:20px; display:flex; align-items:center; gap:20px; }
+  .ab-results-header .ab-rh-status { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; }
+  .ab-results-header .ab-rh-status.running { background:#E8FFF5; color:var(--success); }
+  .ab-results-header .ab-rh-status.completed { background:#EEF2FF; color:var(--primary); }
+  .ab-results-header .ab-rh-meta { font-size:13px; color:var(--text-light); }
+  .ab-results-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+  .ab-result-card { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); position:relative; border-top:4px solid var(--border); }
+  .ab-result-card.winner { border-top-color:var(--success); }
+  .ab-result-card .ab-rc-tag { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
+  .ab-result-card .ab-rc-metric { margin-bottom:8px; }
+  .ab-result-card .ab-rc-metric .label { font-size:12px; color:var(--text-light); }
+  .ab-result-card .ab-rc-metric .value { font-size:28px; font-weight:700; color:var(--primary-dark); }
+  .ab-result-card .ab-rc-metric .sub { font-size:12px; color:var(--text-light); }
+  .ab-rc-bar-wrap { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin:12px 0; }
+  .ab-rc-bar-wrap .ab-rc-bar { height:100%; border-radius:4px; transition:width 1s ease; }
+  .ab-result-card .ab-rc-stats { display:flex; gap:16px; }
+  .ab-result-card .ab-rc-stat { font-size:12px; color:var(--text-light); }
+  .ab-result-card .ab-rc-stat strong { color:var(--text); }
+  .ab-winner-badge { position:absolute; top:12px; right:12px; background:var(--success); color:white; font-size:11px; font-weight:700; padding:4px 12px; border-radius:12px; display:flex; align-items:center; gap:4px; }
+  .ab-confidence-bar { background:white; border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:20px; }
+  .ab-confidence-bar h4 { font-size:14px; margin-bottom:12px; color:var(--primary-dark); }
+  .ab-conf-track { height:12px; background:var(--border); border-radius:6px; position:relative; overflow:hidden; }
+  .ab-conf-fill { height:100%; border-radius:6px; background:linear-gradient(90deg, #FFD166, #06D6A0); transition:width 1.5s ease; }
+  .ab-conf-labels { display:flex; justify-content:space-between; margin-top:8px; font-size:11px; color:var(--text-light); }
+  .ab-promote-btn { background:var(--success); color:white; border:none; padding:14px 32px; border-radius:var(--radius); font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:8px; margin:0 auto; }
+  .ab-promote-btn:hover { background:#05c090; transform:translateY(-1px); box-shadow:0 4px 16px rgba(6,214,160,0.3); }
+  .ab-promote-btn:disabled { background:var(--border); color:var(--text-light); cursor:not-allowed; transform:none; box-shadow:none; }
+
+  /* Empty state */
+  .ab-empty { text-align:center; padding:80px 40px; }
+  .ab-empty .ab-empty-icon { font-size:64px; margin-bottom:16px; opacity:0.6; }
+  .ab-empty h3 { font-size:20px; color:var(--primary-dark); margin-bottom:8px; }
+  .ab-empty p { color:var(--text-light); font-size:14px; max-width:400px; margin:0 auto 24px; line-height:1.6; }
+
+  /* Toolbar: search + filters */
+  .ab-toolbar { display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+  .ab-search-wrap { display:flex; align-items:center; background:white; border:1.5px solid var(--border); border-radius:8px; padding:0 12px; flex:0 0 280px; transition:border-color 0.2s; }
+  .ab-search-wrap:focus-within { border-color:var(--primary); }
+  .ab-search-wrap .ab-search-icon { color:var(--text-light); font-size:14px; margin-right:8px; flex-shrink:0; }
+  .ab-search-wrap input { border:none; outline:none; padding:9px 0; font-size:13px; width:100%; background:transparent; }
+  .ab-filter-dropdown { position:relative; }
+  .ab-filter-btn { display:flex; align-items:center; gap:6px; background:white; border:1.5px solid var(--border); border-radius:8px; padding:8px 14px; font-size:13px; color:var(--text); cursor:pointer; transition:all 0.15s; font-family:inherit; }
+  .ab-filter-btn:hover { border-color:var(--primary-light); }
+  .ab-filter-btn .ab-fb-label { color:var(--text-light); font-size:12px; }
+  .ab-filter-btn .ab-fb-value { font-weight:600; }
+  .ab-filter-btn .ab-fb-arrow { font-size:10px; color:var(--text-light); margin-left:4px; }
+  .ab-filter-menu { position:absolute; top:calc(100% + 4px); left:0; background:white; border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow-lg); min-width:160px; z-index:20; display:none; overflow:hidden; }
+  .ab-filter-menu.open { display:block; }
+  .ab-filter-menu-item { padding:9px 16px; font-size:13px; cursor:pointer; transition:background 0.1s; display:flex; align-items:center; gap:8px; }
+  .ab-filter-menu-item:hover { background:var(--bg); }
+  .ab-filter-menu-item.active { color:var(--primary); font-weight:600; background:#F0F4FF; }
+  .ab-filter-menu-item .fm-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .ab-toolbar-right { margin-left:auto; display:flex; align-items:center; gap:8px; }
+  .ab-count-label { font-size:12px; color:var(--text-light); }
+
+  /* Experiments table */
+  .ab-table-wrap { background:white; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+  .ab-table { width:100%; border-collapse:collapse; }
+  .ab-table th { text-align:left; padding:12px 20px; font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-light); font-weight:600; border-bottom:2px solid var(--border); background:var(--bg); white-space:nowrap; }
+  .ab-table td { padding:14px 20px; font-size:14px; border-bottom:1px solid var(--border); vertical-align:middle; }
+  .ab-table tr:last-child td { border-bottom:none; }
+  .ab-table tr { cursor:pointer; transition:background 0.1s; }
+  .ab-table tbody tr:hover { background:#F8FAFF; }
+  .ab-table .ab-t-name { font-weight:600; color:var(--primary); display:flex; align-items:center; gap:8px; }
+  .ab-table .ab-t-name:hover { text-decoration:underline; }
+  .ab-table .ab-t-name .ab-t-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .ab-table .ab-t-type { font-size:13px; color:var(--text); }
+  .ab-table .ab-t-page { font-size:12px; padding:3px 10px; border-radius:12px; font-weight:600; white-space:nowrap; display:inline-block; }
+  .ab-table .ab-t-status { padding:4px 12px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; display:inline-block; }
+  .ab-table .ab-t-status.running { background:#E8FFF5; color:var(--success); }
+  .ab-table .ab-t-status.not-started { background:#F1F5F9; color:var(--text-light); }
+  .ab-table .ab-t-status.paused { background:#FFF3E0; color:var(--accent2); }
+  .ab-table .ab-t-status.completed { background:#EEF2FF; color:var(--primary); }
+  .ab-table .ab-t-date { font-size:13px; color:var(--text-light); white-space:nowrap; }
+  .ab-table .ab-t-results-btn { display:inline-flex; align-items:center; gap:4px; padding:5px 14px; border:1.5px solid var(--border); border-radius:6px; font-size:12px; font-weight:600; color:var(--text); cursor:pointer; background:white; transition:all 0.15s; }
+  .ab-table .ab-t-results-btn:hover { border-color:var(--primary); color:var(--primary); background:#F8FAFF; }
+  .ab-table .ab-t-results-btn .ab-rb-icon { font-size:13px; }
+
+  /* Element picker cards */
+  .ab-element-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:24px; }
+  .ab-el-card { background:white; border-radius:var(--radius); padding:18px; box-shadow:var(--shadow); cursor:pointer; transition:all 0.2s; border:2px solid transparent; position:relative; user-select:none; }
+  .ab-el-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-lg); border-color:var(--primary-light); }
+  .ab-el-card.selected { border-color:var(--primary); background:#F8FAFF; }
+  .ab-el-card .ab-el-check { position:absolute; top:10px; right:10px; width:22px; height:22px; border-radius:50%; border:2px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; color:white; transition:all 0.2s; }
+  .ab-el-card.selected .ab-el-check { background:var(--primary); border-color:var(--primary); }
+  .ab-el-card .ab-el-icon { font-size:24px; margin-bottom:8px; }
+  .ab-el-card h5 { font-size:14px; margin-bottom:4px; color:var(--text); }
+  .ab-el-card .ab-el-desc { font-size:12px; color:var(--text-light); line-height:1.4; }
+  .ab-el-card .ab-el-impact { display:inline-block; margin-top:8px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; text-transform:uppercase; letter-spacing:0.5px; }
+  .ab-el-card .ab-el-impact.high { background:#E8FFF5; color:var(--success); }
+  .ab-el-card .ab-el-impact.medium { background:#FFF3E0; color:var(--accent2); }
+  .ab-el-card .ab-el-impact.low { background:#EEF2FF; color:var(--primary); }
+
+  /* Element config panel (after selection) */
+  .ab-config-section { margin-top:8px; }
+  .ab-config-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:16px; overflow:hidden; border-left:4px solid var(--primary); }
+  .ab-config-header { display:flex; align-items:center; gap:12px; padding:16px 20px; cursor:pointer; transition:background 0.15s; }
+  .ab-config-header:hover { background:var(--bg); }
+  .ab-config-header .ab-cfg-icon { font-size:20px; }
+  .ab-config-header .ab-cfg-title { font-size:14px; font-weight:600; flex:1; }
+  .ab-config-header .ab-cfg-badge { font-size:11px; padding:3px 10px; border-radius:10px; font-weight:600; }
+  .ab-config-header .ab-cfg-arrow { font-size:14px; color:var(--text-light); transition:transform 0.2s; }
+  .ab-config-card.open .ab-cfg-arrow { transform:rotate(180deg); }
+  .ab-config-body { display:none; padding:0 20px 20px; border-top:1px solid var(--border); }
+  .ab-config-card.open .ab-config-body { display:block; padding-top:16px; }
+  .ab-cfg-row { display:flex; gap:16px; margin-bottom:12px; }
+  .ab-cfg-col { flex:1; }
+  .ab-cfg-label { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); font-weight:600; margin-bottom:6px; }
+  .ab-cfg-current { background:var(--bg); border-radius:8px; padding:12px 14px; font-size:13px; color:var(--text); border:1px solid var(--border); min-height:42px; display:flex; align-items:center; }
+  .ab-cfg-input { width:100%; padding:10px 14px; border:2px solid var(--border); border-radius:8px; font-size:13px; outline:none; transition:border-color 0.2s; font-family:inherit; resize:vertical; }
+  .ab-cfg-input:focus { border-color:var(--primary); }
+  .ab-cfg-suggestions { margin-top:12px; }
+  .ab-cfg-suggestions .ab-sug-label { font-size:11px; color:var(--primary); font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+  .ab-sug-list { display:flex; flex-direction:column; gap:6px; }
+  .ab-sug-item { display:flex; align-items:center; gap:10px; padding:10px 14px; background:var(--bg); border-radius:8px; cursor:pointer; transition:all 0.15s; border:1.5px solid transparent; font-size:13px; color:var(--text); }
+  .ab-sug-item:hover { background:#EEF2FF; border-color:var(--primary-light); }
+  .ab-sug-item.picked { background:#EEF2FF; border-color:var(--primary); font-weight:500; }
+  .ab-sug-item .ab-sug-radio { width:16px; height:16px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+  .ab-sug-item.picked .ab-sug-radio { border-color:var(--primary); background:var(--primary); }
+  .ab-sug-item.picked .ab-sug-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:white; }
+  .ab-sug-item .ab-sug-text { flex:1; line-height:1.4; }
+  .ab-sug-item .ab-sug-tag { font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; white-space:nowrap; }
+  .ab-cfg-custom-toggle { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--primary); cursor:pointer; font-weight:600; margin-top:8px; padding:4px 0; }
+  .ab-cfg-custom-toggle:hover { text-decoration:underline; }
+  .ab-cfg-custom-wrap { margin-top:10px; display:none; }
+  .ab-cfg-custom-wrap.open { display:block; }
+
+  /* Variant summary strip */
+  .ab-summary-strip { background:white; border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); margin-bottom:24px; display:flex; align-items:center; gap:16px; }
+  .ab-summary-strip .ab-ss-count { width:48px; height:48px; border-radius:50%; background:var(--primary); color:white; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex-shrink:0; }
+  .ab-summary-strip .ab-ss-info h4 { font-size:15px; margin-bottom:2px; }
+  .ab-summary-strip .ab-ss-info p { font-size:13px; color:var(--text-light); }
+  .ab-summary-strip .ab-ss-changes { margin-left:auto; display:flex; gap:8px; flex-wrap:wrap; }
+  .ab-summary-strip .ab-ss-tag { padding:4px 12px; border-radius:20px; font-size:11px; font-weight:600; background:#EEF2FF; color:var(--primary); }
+
+  /* ── Variation Editor (full-page preview view) ── */
+  .ab-ve-layout { display:flex; min-height:calc(100vh - 56px); margin-left:-32px; margin-right:-32px; margin-top:-32px; }
+  .ab-ve-sidebar { width:280px; min-width:280px; background:white; border-right:1px solid var(--border); display:flex; flex-direction:column; height:calc(100vh - 56px); position:sticky; top:56px; overflow-y:auto; }
+  .ab-ve-sidebar .ab-ve-back { display:flex; align-items:center; gap:6px; padding:14px 20px; font-size:13px; color:var(--primary); font-weight:600; cursor:pointer; border-bottom:1px solid var(--border); transition:background 0.15s; text-decoration:none; background:none; border-top:none; border-left:none; border-right:none; width:100%; text-align:left; }
+  .ab-ve-sidebar .ab-ve-back:hover { background:var(--bg); }
+  .ab-ve-sidebar .ab-ve-title { padding:20px 20px 4px; font-size:16px; font-weight:700; color:var(--primary-dark); line-height:1.3; }
+  .ab-ve-sidebar .ab-ve-subtitle { padding:0 20px 16px; font-size:12px; color:var(--text-light); }
+
+  /* Variant selector dropdown */
+  .ab-ve-variant-select { margin:0 20px 12px; position:relative; }
+  .ab-ve-variant-select select { width:100%; padding:9px 32px 9px 12px; border:1.5px solid var(--border); border-radius:8px; font-size:13px; font-family:inherit; color:var(--text); background:white; appearance:none; -webkit-appearance:none; cursor:pointer; outline:none; transition:border-color 0.15s; }
+  .ab-ve-variant-select select:focus { border-color:var(--primary); }
+  .ab-ve-variant-select::after { content:'\\25BC'; position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:10px; color:var(--text-light); pointer-events:none; }
+
+  /* Preview button */
+  .ab-ve-preview-btn { margin:0 20px 20px; display:flex; align-items:center; }
+  .ab-ve-preview-btn button { flex:1; padding:10px 0; background:var(--primary); color:white; border:none; border-radius:8px 0 0 8px; font-size:14px; font-weight:600; cursor:pointer; transition:background 0.15s; }
+  .ab-ve-preview-btn button:hover { background:var(--primary-dark); }
+  .ab-ve-preview-btn .ab-ve-pbtn-arrow { padding:10px 12px; background:var(--primary-dark); color:white; border:none; border-radius:0 8px 8px 0; font-size:12px; cursor:pointer; border-left:1px solid rgba(255,255,255,0.2); }
+
+  /* Changes section */
+  .ab-ve-changes { padding:0 20px; margin-bottom:20px; }
+  .ab-ve-changes-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .ab-ve-changes-header h4 { font-size:14px; font-weight:700; color:var(--text); }
+  .ab-ve-changes-header .ab-ve-create-btn { padding:5px 14px; border:1.5px solid var(--border); border-radius:6px; font-size:12px; font-weight:600; color:var(--text); cursor:pointer; background:white; transition:all 0.15s; display:flex; align-items:center; gap:4px; }
+  .ab-ve-changes-header .ab-ve-create-btn:hover { border-color:var(--primary); color:var(--primary); }
+
+  /* Changes illustration (empty state) */
+  .ab-ve-empty-art { text-align:center; padding:20px 16px; }
+  .ab-ve-empty-art .ab-ve-art-circle { width:160px; height:160px; border-radius:50%; background:linear-gradient(135deg, #EEF2FF, #F8FAFC); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; }
+  .ab-ve-empty-art .ab-ve-art-inner { width:120px; height:80px; background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.06); position:relative; overflow:hidden; border:1px solid var(--border); }
+  .ab-ve-empty-art .ab-ve-art-line { height:6px; border-radius:3px; margin:8px; background:var(--border); }
+  .ab-ve-empty-art .ab-ve-art-line.short { width:50%; }
+  .ab-ve-empty-art .ab-ve-art-line.accent { background:var(--primary-light); opacity:0.4; }
+  .ab-ve-empty-art .ab-ve-art-box { position:absolute; right:6px; top:10px; width:28px; height:20px; border-radius:4px; border:1.5px solid var(--accent2); display:flex; align-items:center; justify-content:center; font-size:7px; color:var(--accent2); font-weight:700; }
+  .ab-ve-empty-art p { font-size:13px; color:var(--text-light); line-height:1.5; }
+  .ab-ve-empty-art .ab-ve-arrow { font-size:28px; color:var(--border); margin-top:8px; }
+
+  /* Changes list (when changes exist) */
+  .ab-ve-change-list { display:flex; flex-direction:column; gap:8px; }
+  .ab-ve-change-item { background:var(--bg); border-radius:8px; padding:10px 14px; font-size:12px; color:var(--text); display:flex; align-items:flex-start; gap:8px; border:1px solid var(--border); }
+  .ab-ve-change-item .ab-ve-ci-icon { color:var(--accent2); flex-shrink:0; font-size:14px; margin-top:1px; }
+  .ab-ve-change-item .ab-ve-ci-text { flex:1; line-height:1.4; }
+  .ab-ve-change-item .ab-ve-ci-label { font-weight:600; color:var(--text); display:block; }
+  .ab-ve-change-item .ab-ve-ci-value { color:var(--text-light); }
+
+  /* Stats strip in sidebar */
+  .ab-ve-stats { padding:16px 20px; border-top:1px solid var(--border); margin-top:auto; }
+  .ab-ve-stats-title { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); font-weight:600; margin-bottom:10px; }
+  .ab-ve-stat-row { display:flex; justify-content:space-between; padding:5px 0; font-size:13px; }
+  .ab-ve-stat-row .ab-ve-sl { color:var(--text-light); }
+  .ab-ve-stat-row .ab-ve-sv { font-weight:600; color:var(--text); }
+  .ab-ve-stat-row .ab-ve-sv.green { color:var(--success); }
+  .ab-ve-stat-row .ab-ve-sv.orange { color:var(--accent2); }
+
+  /* Main preview area */
+  .ab-ve-main { flex:1; background:#E2E8F0; display:flex; flex-direction:column; min-height:calc(100vh - 56px); }
+  .ab-ve-urlbar { display:flex; align-items:center; gap:8px; padding:8px 16px; background:#F1F5F9; border-bottom:1px solid var(--border); font-size:12px; }
+  .ab-ve-urlbar .ab-ve-nav-btns { display:flex; gap:4px; }
+  .ab-ve-urlbar .ab-ve-nav-btn { width:24px; height:24px; border-radius:6px; border:1px solid var(--border); background:white; display:flex; align-items:center; justify-content:center; font-size:11px; color:var(--text-light); cursor:pointer; }
+  .ab-ve-urlbar .ab-ve-url-pill { flex:1; background:white; border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:12px; color:var(--text-light); display:flex; align-items:center; gap:6px; }
+  .ab-ve-urlbar .ab-ve-url-pill .ab-ve-lock { color:var(--success); font-size:11px; }
+  .ab-ve-urlbar .ab-ve-url-pill .ab-ve-domain { color:var(--text); font-weight:500; }
+  .ab-ve-page-frame { flex:1; overflow-y:auto; background:white; }
+  .ab-ve-page-frame .page-section { pointer-events:auto; }
+
+  /* Confidence banner at top of sidebar */
+  .ab-ve-conf-banner { margin:0 20px 16px; padding:12px 14px; border-radius:8px; font-size:12px; line-height:1.5; }
+  .ab-ve-conf-banner.high { background:#E8FFF5; color:#047857; border:1px solid #A7F3D0; }
+  .ab-ve-conf-banner.mid { background:#FFF3E0; color:#9A3412; border:1px solid #FED7AA; }
+  .ab-ve-conf-banner.low { background:#F1F5F9; color:var(--text-light); border:1px solid var(--border); }
+  .ab-ve-conf-banner strong { display:block; margin-bottom:2px; }
+
+  /* Promote button in sidebar */
+  .ab-ve-promote { margin:0 20px 16px; }
+  .ab-ve-promote button { width:100%; padding:10px 0; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+  .ab-ve-promote button.active { background:var(--success); color:white; }
+  .ab-ve-promote button.active:hover { background:#05c090; }
+  .ab-ve-promote button.disabled { background:var(--border); color:var(--text-light); cursor:not-allowed; }
+
+  /* Navigation actions */
+  .ab-nav-actions { display:flex; gap:12px; justify-content:flex-end; margin-top:32px; }
+
   @media (max-width:768px) {
     .brand-grid, .gen-pages, .reward-grid { grid-template-columns:1fr; }
     .funnel-viz { flex-direction:column; }
@@ -363,6 +709,14 @@
     .comparison-table { font-size:11px; }
     .plans-row { flex-direction:column; align-items:center; }
     .plan-card { max-width:100%; }
+    .ab-main { margin-left:0; }
+    .ab-page-grid { grid-template-columns:1fr; }
+    .ab-variant-row { flex-direction:column; }
+    .ab-results-cards { grid-template-columns:1fr; }
+    .ab-goal-options { grid-template-columns:1fr; }
+    .ab-element-grid { grid-template-columns:1fr 1fr; }
+    .ab-cfg-row { flex-direction:column; }
+    .ab-ve-sidebar { width:220px; min-width:220px; }
   }
 </style>
 </head>
@@ -384,20 +738,108 @@
 
 <!-- ══ SCREEN 1 — URL SUBMISSION ══ -->
 <div class="screen active" id="screen-url">
-  <div class="url-card">
-    <h1>Welcome to Revmatics CRO</h1>
-    <p>Enter your product URL and we'll build you four landing pages — each designed for a different stage of your consumer's buying journey.</p>
-    <div class="url-input-wrap">
-      <div class="prefix">https://</div>
-      <input type="text" id="url-input" value="www.nordic.com/products/ultimate-omega-2x/" placeholder="yoursite.com">
+
+  <!-- ─ Hero ─ -->
+  <div class="lp-hero">
+    <div class="lp-hero-left">
+      <h1 class="lp-headline">Generate <span class="lp-accent">4 landing pages</span><br>that <em>sell</em> your product better.</h1>
+      <p class="lp-sub">Paste your product link. We create 4 pages for different buyer stages — from curiosity to purchase.</p>
+      <div class="lp-input-row">
+        <input type="text" id="url-input" class="lp-url-input" value="www.nordic.com/products/ultimate-omega-2x/" placeholder="Enter your product URL...">
+        <button class="lp-cta-btn" onclick="startExtraction()">Generate my 4 pages</button>
+      </div>
+      <p class="lp-no-settings">— No templates. No settings. Just results.</p>
     </div>
-    <button class="url-btn" onclick="startExtraction()">Generate My Pages</button>
-    <div class="url-features">
-      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> Your product, analyzed in seconds</div>
-      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> Your brand, your rules</div>
-      <div class="feat"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#06D6A0" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#06D6A0" stroke-width="1.5" stroke-linecap="round"/></svg> 4 campaign pages, zero effort</div>
+    <div class="lp-hero-right">
+      <div class="lp-value-prop">
+        <div class="lp-vp-icon">⚡</div>
+        <div>
+          <div class="lp-vp-title">Turnkey</div>
+          <div class="lp-vp-desc">Link in, pages out. Zero setup.</div>
+        </div>
+      </div>
+      <div class="lp-value-prop">
+        <div class="lp-vp-icon">⏱</div>
+        <div>
+          <div class="lp-vp-title">Built for speed</div>
+          <div class="lp-vp-desc">Minimal input, maximum output.</div>
+        </div>
+      </div>
+      <div class="lp-value-prop lp-vp-active">
+        <div class="lp-vp-icon">✅</div>
+        <div>
+          <div class="lp-vp-title">Ready to launch</div>
+          <div class="lp-vp-desc">Matched &amp; publish-ready.</div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- ─ One Product. Four Moments. ─ -->
+  <div class="lp-moments">
+    <h2 class="lp-moments-title">One product. <span class="lp-accent">Four moments.</span></h2>
+    <p class="lp-moments-sub">Four pages. Four stages of readiness.</p>
+    <div class="lp-pages-grid">
+      <div class="lp-page-card">
+        <div class="lp-page-badge">Page 1</div>
+        <h3>First Impression</h3>
+        <p>For people discovering you.</p>
+        <div class="lp-page-preview lp-preview-1"></div>
+      </div>
+      <div class="lp-page-card">
+        <div class="lp-page-badge lp-badge-2">Page 2</div>
+        <h3>Compare &amp; Decide</h3>
+        <p>For people weighing their options.</p>
+        <div class="lp-page-preview lp-preview-2"></div>
+      </div>
+      <div class="lp-page-card">
+        <div class="lp-page-badge lp-badge-3">Page 3</div>
+        <h3>Buy Now</h3>
+        <p>For people ready to purchase.</p>
+        <div class="lp-page-preview lp-preview-3"></div>
+      </div>
+      <div class="lp-page-card">
+        <div class="lp-page-badge lp-badge-4">Page 4</div>
+        <h3>Come Back</h3>
+        <p>For repeat buyers &amp; upgrades.</p>
+        <div class="lp-page-preview lp-preview-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─ How It Works ─ -->
+  <div class="lp-hiw">
+    <h2 class="lp-hiw-title">How it works</h2>
+    <div class="lp-hiw-steps">
+      <div class="lp-hiw-step">
+        <div class="lp-hiw-num">1</div>
+        <div class="lp-hiw-text">
+          <strong>Paste your product link</strong>
+          <span>Drop in your URL to get started.</span>
+        </div>
+      </div>
+      <div class="lp-hiw-arrow">→</div>
+      <div class="lp-hiw-step">
+        <div class="lp-hiw-num">2</div>
+        <div class="lp-hiw-text">
+          <strong>Get 4 tailored pages</strong>
+          <span>We generate 4 pages in seconds.</span>
+        </div>
+      </div>
+      <div class="lp-hiw-arrow">→</div>
+      <div class="lp-hiw-step">
+        <div class="lp-hiw-num">3</div>
+        <div class="lp-hiw-text">
+          <strong>Launch or export</strong>
+          <span>Edit, publish, or download easily.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─ Footer tagline ─ -->
+  <div class="lp-footer-tag">Start with done, not DIY. No complex choices needed.</div>
+
 </div>
 
 <!-- ══ SCREEN 2 — BRAND EXTRACTION ══ -->
@@ -561,7 +1003,7 @@
     <div class="nav-item" onclick="openEditor('conversion')"><div class="dot" style="background:var(--conversion)"></div> Conversion</div>
     <div class="nav-item" onclick="openEditor('loyalty')"><div class="dot" style="background:var(--loyalty)"></div> Loyalty</div>
     <div class="nav-section">Tools</div>
-    <div class="nav-item"><span>&#x1F9EA;</span> A/B Testing</div>
+    <div class="nav-item" onclick="openABTesting()"><span>&#x1F9EA;</span> A/B Testing</div>
     <div class="nav-item"><span>&#x2699;</span> Settings</div>
   </div>
   <div class="dash-main">
@@ -746,12 +1188,33 @@
   </div>
 </div>
 
+<!-- ══ SCREEN 9 — A/B TESTING ══ -->
+<div class="screen" id="screen-abtesting">
+  <div class="dash-sidebar">
+    <div class="nav-section">Overview</div>
+    <div class="nav-item" onclick="goToDashboard()"><span>&#x1F3AF;</span> My Funnel</div>
+    <div class="nav-item"><span>&#x1F4CA;</span> Performance</div>
+    <div class="nav-section">Pages</div>
+    <div class="nav-item" onclick="openEditor('awareness')"><div class="dot" style="background:var(--awareness)"></div> Awareness</div>
+    <div class="nav-item" onclick="openEditor('differentiation')"><div class="dot" style="background:var(--differentiation)"></div> Differentiation</div>
+    <div class="nav-item" onclick="openEditor('conversion')"><div class="dot" style="background:var(--conversion)"></div> Conversion</div>
+    <div class="nav-item" onclick="openEditor('loyalty')"><div class="dot" style="background:var(--loyalty)"></div> Loyalty</div>
+    <div class="nav-section">Tools</div>
+    <div class="nav-item active"><span>&#x1F9EA;</span> A/B Testing</div>
+    <div class="nav-item"><span>&#x2699;</span> Settings</div>
+  </div>
+  <div class="ab-main">
+    <!-- Dynamic content injected by JS -->
+    <div id="ab-content"></div>
+  </div>
+</div>
+
 <script>
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
 let currentScreen = 0;
-const screens = ['screen-url','screen-extract','screen-preview','screen-funnel-edu','screen-dashboard','screen-editor','screen-subscribe'];
+const screens = ['screen-url','screen-extract','screen-preview','screen-funnel-edu','screen-dashboard','screen-editor','screen-subscribe','screen-abtesting'];
 
 function showScreen(index) {
   screens.forEach((s,i) => document.getElementById(s).classList.toggle('active', i===index));
@@ -1407,6 +1870,1068 @@ function endScaffold(){
     const t = document.querySelector(s.target);
     if(t){ t.style.zIndex=''; t.style.pointerEvents=''; }
   });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// A/B TESTING ENGINE
+// ═══════════════════════════════════════════════════════════════
+let abStep = 0; // 0=list, 1=pick page, 2=variants, 3=traffic, 4=results
+let abSelectedPage = null;
+let abVariants = [];
+let abTrafficSplit = [50, 50];
+let abGoal = 'cta_clicks';
+let abTestName = '';
+
+// Sample existing tests (demo data)
+const abExistingTests = [
+  {
+    id: 1, page: 'conversion', name: 'CTA Color Test',
+    type: 'A/B Test', status: 'running', days: 5, visitors: 2847, modified: 'Apr 6, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 4.2, visitors: 1423, conversions: 60, changes: ['Original green CTA button', 'Current headline copy'] },
+      { name: 'Variant B', convRate: 5.8, visitors: 1424, conversions: 83, changes: ['Orange CTA button', 'Urgency-driven headline'] }
+    ],
+    confidence: 87, goal: 'cta_clicks'
+  },
+  {
+    id: 2, page: 'awareness', name: 'Headline Test',
+    type: 'A/B Test', status: 'completed', days: 14, visitors: 8210, modified: 'Mar 28, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 2.1, visitors: 4105, conversions: 86, changes: ['Original headline', 'Standard subheadline'] },
+      { name: 'Variant B', convRate: 3.4, visitors: 4105, conversions: 140, changes: ['Benefit-focused headline', 'Question-based subheadline'] }
+    ],
+    confidence: 96, goal: 'scroll_depth', winner: 1
+  },
+  {
+    id: 3, page: 'differentiation', name: 'Comparison Table Layout',
+    type: 'A/B Test', status: 'paused', days: 3, visitors: 1102, modified: 'Mar 22, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 3.1, visitors: 551, conversions: 17, changes: ['5-row detailed table'] },
+      { name: 'Variant B', convRate: 3.5, visitors: 551, conversions: 19, changes: ['3-row simplified table'] }
+    ],
+    confidence: 42, goal: 'cta_clicks'
+  },
+  {
+    id: 4, page: 'conversion', name: 'Urgency Banner Test',
+    type: 'A/B Test', status: 'not-started', days: 0, visitors: 0, modified: 'Mar 19, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 0, visitors: 0, conversions: 0, changes: ['Countdown timer'] },
+      { name: 'Variant B', convRate: 0, visitors: 0, conversions: 0, changes: ['Stock counter'] }
+    ],
+    confidence: 0, goal: 'cta_clicks'
+  },
+  {
+    id: 5, page: 'loyalty', name: 'Discount Amount Test',
+    type: 'A/B Test', status: 'running', days: 8, visitors: 3420, modified: 'Mar 31, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 6.1, visitors: 1710, conversions: 104, changes: ['15% off coupon'] },
+      { name: 'Variant B', convRate: 7.8, visitors: 1710, conversions: 133, changes: ['$10 fixed credit'] }
+    ],
+    confidence: 78, goal: 'cta_clicks'
+  },
+  {
+    id: 6, page: 'awareness', name: 'Social Proof Layout',
+    type: 'A/B Test', status: 'completed', days: 12, visitors: 6800, modified: 'Mar 15, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 1.8, visitors: 3400, conversions: 61, changes: ['Trust badges row'] },
+      { name: 'Variant B', convRate: 2.6, visitors: 3400, conversions: 88, changes: ['Customer counter + star rating'] }
+    ],
+    confidence: 95, goal: 'scroll_depth', winner: 1
+  },
+  {
+    id: 7, page: 'conversion', name: 'Pricing Display Test',
+    type: 'A/B Test', status: 'paused', days: 4, visitors: 1540, modified: 'Mar 10, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 4.0, visitors: 770, conversions: 31, changes: ['Strikethrough price'] },
+      { name: 'Variant B', convRate: 4.4, visitors: 770, conversions: 34, changes: ['Per-day cost framing'] }
+    ],
+    confidence: 35, goal: 'cta_clicks'
+  },
+  {
+    id: 8, page: 'differentiation', name: 'Hero Headline Angle',
+    type: 'A/B Test', status: 'not-started', days: 0, visitors: 0, modified: 'Mar 8, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 0, visitors: 0, conversions: 0, changes: ['Statement headline'] },
+      { name: 'Variant B', convRate: 0, visitors: 0, conversions: 0, changes: ['Question headline'] }
+    ],
+    confidence: 0, goal: 'cta_clicks'
+  },
+  {
+    id: 9, page: 'loyalty', name: 'Referral Incentive Test',
+    type: 'A/B Test', status: 'completed', days: 21, visitors: 4100, modified: 'Feb 28, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 3.2, visitors: 2050, conversions: 66, changes: ['Give $10 Get $10'] },
+      { name: 'Variant B', convRate: 4.5, visitors: 2050, conversions: 92, changes: ['Tiered referral with progress bar'] }
+    ],
+    confidence: 97, goal: 'cta_clicks', winner: 1
+  },
+  {
+    id: 10, page: 'awareness', name: 'CTA Wording Test',
+    type: 'A/B Test', status: 'not-started', days: 0, visitors: 0, modified: 'Feb 20, 2026',
+    variants: [
+      { name: 'Control (A)', convRate: 0, visitors: 0, conversions: 0, changes: ['Learn More About Omega-3'] },
+      { name: 'Variant B', convRate: 0, visitors: 0, conversions: 0, changes: ['Discover Your Omega-3'] }
+    ],
+    confidence: 0, goal: 'cta_clicks'
+  }
+];
+
+let abFilterStatus = 'all'; // all, running, paused, completed, not-started
+let abSearchQuery = '';
+let abFilterMenuOpen = false;
+
+const pageColors = {
+  awareness: 'var(--awareness)', differentiation: 'var(--differentiation)',
+  conversion: 'var(--conversion)', loyalty: 'var(--loyalty)'
+};
+
+const pageIcons = {
+  awareness: '&#x1F50D;', differentiation: '&#x2694;',
+  conversion: '&#x1F4B0;', loyalty: '&#x1F49C;'
+};
+
+const pageLabels = {
+  awareness: 'Awareness', differentiation: 'Differentiation',
+  conversion: 'Conversion', loyalty: 'Loyalty'
+};
+
+const statusLabels = {
+  'all': 'All Statuses', 'running': 'Running', 'paused': 'Paused',
+  'completed': 'Completed', 'not-started': 'Not Started'
+};
+const statusDotColors = {
+  'running': 'var(--success)', 'paused': 'var(--accent2)',
+  'completed': 'var(--primary)', 'not-started': 'var(--text-light)'
+};
+
+function openABTesting() {
+  abStep = 0;
+  showScreen(7);
+  renderABContent();
+}
+
+function renderABContent() {
+  const container = document.getElementById('ab-content');
+  switch(abStep) {
+    case 0: renderABList(container); break;
+    case 1: renderABPickPage(container); break;
+    case 2: renderABVariants(container); break;
+    case 3: renderABTraffic(container); break;
+    case 4: renderABResults(container); break;
+  }
+}
+
+function getFilteredTests() {
+  return abExistingTests.filter(t => {
+    const matchesStatus = abFilterStatus === 'all' || t.status === abFilterStatus;
+    const matchesSearch = !abSearchQuery || t.name.toLowerCase().includes(abSearchQuery.toLowerCase()) || pageLabels[t.page].toLowerCase().includes(abSearchQuery.toLowerCase());
+    return matchesStatus && matchesSearch;
+  });
+}
+
+// ── Step 0: Test List (Home) ──
+function renderABList(el) {
+  const filtered = getFilteredTests();
+  const total = abExistingTests.length;
+
+  const statusFilterHtml = `
+    <div class="ab-filter-dropdown">
+      <button class="ab-filter-btn" onclick="toggleABFilterMenu(event)">
+        <span class="ab-fb-label">Status</span>
+        <span class="ab-fb-value">${statusLabels[abFilterStatus]}</span>
+        <span class="ab-fb-arrow">&#x25BC;</span>
+      </button>
+      <div class="ab-filter-menu" id="ab-status-menu">
+        <div class="ab-filter-menu-item ${abFilterStatus==='all'?'active':''}" onclick="setABFilter('all')">All Statuses</div>
+        <div class="ab-filter-menu-item ${abFilterStatus==='running'?'active':''}" onclick="setABFilter('running')"><div class="fm-dot" style="background:var(--success)"></div> Running</div>
+        <div class="ab-filter-menu-item ${abFilterStatus==='paused'?'active':''}" onclick="setABFilter('paused')"><div class="fm-dot" style="background:var(--accent2)"></div> Paused</div>
+        <div class="ab-filter-menu-item ${abFilterStatus==='completed'?'active':''}" onclick="setABFilter('completed')"><div class="fm-dot" style="background:var(--primary)"></div> Completed</div>
+        <div class="ab-filter-menu-item ${abFilterStatus==='not-started'?'active':''}" onclick="setABFilter('not-started')"><div class="fm-dot" style="background:var(--text-light)"></div> Not Started</div>
+      </div>
+    </div>
+  `;
+
+  let tableHtml = '';
+  if (filtered.length > 0) {
+    tableHtml = `
+      <div class="ab-table-wrap">
+        <table class="ab-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Page</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Modified</th>
+              <th>Results</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filtered.map((t, _) => {
+              const realIdx = abExistingTests.indexOf(t);
+              const statusClass = t.status;
+              const statusLabel = t.status === 'running' ? 'Running' : t.status === 'completed' ? 'Completed' : t.status === 'paused' ? 'Paused' : 'Not Started';
+              return `
+                <tr onclick="viewABTestResults(${realIdx})">
+                  <td>
+                    <div class="ab-t-name">
+                      <div class="ab-t-dot" style="background:${pageColors[t.page]}"></div>
+                      ${t.name}
+                    </div>
+                  </td>
+                  <td><span class="ab-t-page" style="background:${pageColors[t.page]}15;color:${pageColors[t.page]}">${pageLabels[t.page]}</span></td>
+                  <td class="ab-t-type">${t.type}</td>
+                  <td><span class="ab-t-status ${statusClass}">${statusLabel}</span></td>
+                  <td class="ab-t-date">${t.modified}</td>
+                  <td><button class="ab-t-results-btn" onclick="event.stopPropagation();viewABTestResults(${realIdx})"><span class="ab-rb-icon">&#x1F4CA;</span> Results</button></td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else {
+    tableHtml = `
+      <div class="ab-empty">
+        <div class="ab-empty-icon">&#x1F9EA;</div>
+        <h3>${abSearchQuery || abFilterStatus !== 'all' ? 'No Matching Experiments' : 'No A/B Tests Yet'}</h3>
+        <p>${abSearchQuery || abFilterStatus !== 'all' ? 'Try adjusting your search or filter to find experiments.' : 'Create your first experiment to start optimizing your landing pages.'}</p>
+        ${!abSearchQuery && abFilterStatus === 'all' ? '<button class="ab-new-btn" onclick="startNewABTest()" style="margin:0 auto">&#x2795; Create Your First Test</button>' : ''}
+      </div>
+    `;
+  }
+
+  el.innerHTML = `
+    <div class="ab-header">
+      <div>
+        <h1>Experiments</h1>
+      </div>
+      <button class="ab-new-btn" onclick="startNewABTest()">&#x2795; Create New Experiment</button>
+    </div>
+
+    <div class="ab-toolbar">
+      <div class="ab-search-wrap">
+        <div class="ab-search-icon">&#x1F50D;</div>
+        <input type="text" placeholder="Filter by name, key, or description" value="${abSearchQuery}" oninput="abSearchQuery=this.value;renderABList(document.getElementById('ab-content'))" />
+      </div>
+      ${statusFilterHtml}
+      <div class="ab-toolbar-right">
+        <span class="ab-count-label">${filtered.length} of ${total} experiments</span>
+      </div>
+    </div>
+
+    ${tableHtml}
+  `;
+}
+
+function toggleABFilterMenu(e) {
+  e.stopPropagation();
+  const menu = document.getElementById('ab-status-menu');
+  abFilterMenuOpen = !abFilterMenuOpen;
+  menu.classList.toggle('open', abFilterMenuOpen);
+  // Close on outside click
+  if (abFilterMenuOpen) {
+    const closer = (ev) => {
+      if (!ev.target.closest('.ab-filter-dropdown')) {
+        menu.classList.remove('open');
+        abFilterMenuOpen = false;
+        document.removeEventListener('click', closer);
+      }
+    };
+    setTimeout(() => document.addEventListener('click', closer), 0);
+  }
+}
+
+function setABFilter(status) {
+  abFilterStatus = status;
+  abFilterMenuOpen = false;
+  renderABList(document.getElementById('ab-content'));
+}
+
+// ── Step 1: Pick a Page ──
+function startNewABTest() {
+  abStep = 1;
+  abSelectedPage = null;
+  abVariants = [];
+  abTrafficSplit = [50, 50];
+  abGoal = 'cta_clicks';
+  abTestName = '';
+  renderABContent();
+}
+
+function renderABPickPage(el) {
+  const pages = [
+    { key: 'awareness', icon: '&#x1F50D;', title: 'Awareness', desc: 'Test headlines, hero images, and CTAs for first-time visitors.', readiness: '8/10' },
+    { key: 'differentiation', icon: '&#x2694;', title: 'Differentiation', desc: 'Optimize comparison tables, differentiators, and competitive messaging.', readiness: '7/10' },
+    { key: 'conversion', icon: '&#x1F4B0;', title: 'Conversion', desc: 'Test pricing displays, urgency elements, and buy buttons.', readiness: '7/10' },
+    { key: 'loyalty', icon: '&#x1F49C;', title: 'Loyalty', desc: 'Optimize reward offers, referral programs, and re-engagement messaging.', readiness: '6/10' }
+  ];
+
+  el.innerHTML = `
+    ${renderABStepIndicator(0)}
+    <div style="margin-bottom:24px">
+      <h2 style="font-size:22px;color:var(--primary-dark);margin-bottom:6px">Which page do you want to test?</h2>
+      <p style="color:var(--text-light);font-size:14px">Pick a funnel page to create an A/B experiment. You'll create a variant of it in the next step.</p>
+    </div>
+    <div class="ab-page-grid">
+      ${pages.map(p => `
+        <div class="ab-page-card ${abSelectedPage === p.key ? 'selected' : ''}" onclick="selectABPage('${p.key}')" style="border-left:4px solid ${pageColors[p.key]}">
+          <div class="ab-pc-check">&#x2713;</div>
+          <div class="ab-pc-icon">${p.icon}</div>
+          <h4>${p.title}</h4>
+          <div class="ab-pc-desc">${p.desc}</div>
+          <div class="ab-pc-readiness" style="color:${pageColors[p.key]}">Readiness: ${p.readiness}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="ab-nav-actions">
+      <button class="btn-secondary" onclick="abStep=0;renderABContent()">Cancel</button>
+      <button class="btn-primary" onclick="abGoToVariants()" ${!abSelectedPage ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}>Continue &#x2192;</button>
+    </div>
+  `;
+}
+
+function selectABPage(key) {
+  abSelectedPage = key;
+  renderABContent();
+}
+
+// ── Testable Elements Data (per page) ──
+let abSelectedElements = []; // keys of selected elements
+let abElementConfigs = {};   // key -> { picked: index|null, custom: string }
+let abExpandedConfig = null;  // which config card is expanded
+
+const abTestableElements = {
+  awareness: [
+    { key: 'headline', icon: '&#x1F4DD;', title: 'Headline', desc: 'The main hero headline visitors see first', impact: 'high',
+      current: 'The World\'s #1 Selling Omega-3',
+      suggestions: [
+        { text: 'Feel the Omega-3 Difference in 30 Days', tag: 'Benefit-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'What 35 Million Customers Already Know About Omega-3', tag: 'Social Proof', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Your Heart, Brain & Joints Will Thank You', tag: 'Outcome-Led', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'subheadline', icon: '&#x1F4AC;', title: 'Subheadline', desc: 'Supporting text below the main headline', impact: 'medium',
+      current: 'Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions.',
+      suggestions: [
+        { text: '2X more EPA+DHA than standard fish oil. Zero fishy aftertaste. Trusted by doctors worldwide.', tag: 'Stat-Driven', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'The purest omega-3 you can buy — backed by 25+ years of clinical research.', tag: 'Trust-Led', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    },
+    { key: 'cta_text', icon: '&#x1F446;', title: 'CTA Button Text', desc: 'The primary call-to-action button wording', impact: 'high',
+      current: 'Learn More About Omega-3',
+      suggestions: [
+        { text: 'Discover Your Omega-3', tag: 'Personal', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'See Why Millions Choose Nordic', tag: 'Social Proof', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Start Your Omega-3 Journey', tag: 'Action-Led', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'cta_color', icon: '&#x1F3A8;', title: 'CTA Button Color', desc: 'Button background color and style', impact: 'medium',
+      current: 'Gold (#C8A951) on navy background',
+      suggestions: [
+        { text: 'Orange (#F77F00) — high contrast, urgency feel', tag: 'High Contrast', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: 'Teal (#00B4D8) — calming, health-oriented', tag: 'Health Theme', tagColor: '#E0F7FA', tagText: '#00838F' },
+        { text: 'Green (#06D6A0) — positive action, growth', tag: 'Positive', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    },
+    { key: 'hero_image', icon: '&#x1F5BC;', title: 'Hero Background', desc: 'The hero section background style', impact: 'medium',
+      current: 'Solid navy (#003B5C) background',
+      suggestions: [
+        { text: 'Ocean gradient (navy to teal) — reinforces purity story', tag: 'Gradient', tagColor: '#E0F7FA', tagText: '#00838F' },
+        { text: 'Light background with product image — product-first approach', tag: 'Product Hero', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'social_proof', icon: '&#x1F3C6;', title: 'Social Proof Layout', desc: 'How trust signals and credentials are displayed', impact: 'low',
+      current: 'Three trust badges in a row (Awards, Testing, Sustainability)',
+      suggestions: [
+        { text: 'Customer counter + star rating bar — "35M+ bottles sold ★★★★★"', tag: 'Quantified', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Logo strip of certifying bodies (Friend of the Sea, IFOS, etc.)', tag: 'Authority', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    }
+  ],
+  differentiation: [
+    { key: 'headline', icon: '&#x1F4DD;', title: 'Headline', desc: 'The comparison-oriented headline', impact: 'high',
+      current: 'Not All Fish Oil Is Created Equal',
+      suggestions: [
+        { text: 'Still Comparing Fish Oil Brands? Here\'s the Data.', tag: 'Question', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Why 35 Million Customers Switched to Nordic Naturals', tag: 'Social Switch', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'The Fish Oil Your Doctor Actually Recommends', tag: 'Authority', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'subheadline', icon: '&#x1F4AC;', title: 'Subheadline', desc: 'Supporting comparison context', impact: 'medium',
+      current: 'Here\'s why Ultimate Omega 2X consistently outperforms on purity, potency, and absorption.',
+      suggestions: [
+        { text: 'See why doctors, nutritionists, and customers choose us over every competitor.', tag: 'Authority', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Compare EPA+DHA content, purity certifications, and real customer results side by side.', tag: 'Data-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    },
+    { key: 'cta_text', icon: '&#x1F446;', title: 'CTA Button Text', desc: 'Primary call-to-action wording', impact: 'high',
+      current: 'See the Comparison',
+      suggestions: [
+        { text: 'See Why We Win on Purity', tag: 'Confidence', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Compare Now — The Data Speaks', tag: 'Data-Led', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'View Full Comparison Table', tag: 'Direct', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'table_layout', icon: '&#x1F4CA;', title: 'Comparison Table', desc: 'Table format and number of competitors', impact: 'high',
+      current: '5-row table comparing Nordic vs Standard Fish Oil vs Krill Oil',
+      suggestions: [
+        { text: 'Simplified 3-row table — just EPA+DHA, purity, absorption (less is more)', tag: 'Simplified', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Visual scorecards with icons instead of text — faster scanning', tag: 'Visual', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'differentiators', icon: '&#x2B50;', title: 'Differentiator Sections', desc: 'How unique advantages are presented', impact: 'medium',
+      current: 'Two cards side-by-side (Purity, Traceability)',
+      suggestions: [
+        { text: 'Three numbered steps with large icons — "Why We\'re Different: 1, 2, 3"', tag: 'Numbered', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Before/after comparison strips — "Others do X, we do Y"', tag: 'Contrast', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'cta_color', icon: '&#x1F3A8;', title: 'CTA Button Color', desc: 'Button color and style', impact: 'medium',
+      current: 'Orange (#F77F00)',
+      suggestions: [
+        { text: 'Blue (#2E5090) — authority and trust feel', tag: 'Trust', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Green (#06D6A0) — positive decision, go signal', tag: 'Go Signal', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    }
+  ],
+  conversion: [
+    { key: 'headline', icon: '&#x1F4DD;', title: 'Offer Headline', desc: 'The main offer headline above the fold', impact: 'high',
+      current: 'Get Ultimate Omega 2X — 20% Off Today',
+      suggestions: [
+        { text: 'Only 247 Left at This Price — Don\'t Miss Out', tag: 'Scarcity', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: 'Your Omega-3 Is Waiting — Save $9.99 Now', tag: 'Personal', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Doctor-Recommended Omega-3 — Now 20% Off', tag: 'Authority', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    },
+    { key: 'cta_text', icon: '&#x1F446;', title: 'Buy Button Text', desc: 'The primary purchase button wording', impact: 'high',
+      current: 'Buy Now — $39.96',
+      suggestions: [
+        { text: 'Add to Cart — Save $9.99', tag: 'Savings-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Claim Your 20% Discount', tag: 'Claim Action', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: 'Get My Omega-3 Now', tag: 'Personal', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    },
+    { key: 'cta_color', icon: '&#x1F3A8;', title: 'Buy Button Color', desc: 'Button background color and style', impact: 'high',
+      current: 'Green (#06D6A0)',
+      suggestions: [
+        { text: 'Orange (#F77F00) — maximum urgency, impulse trigger', tag: 'Urgency', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: 'Red (#E53E3E) — "sale" association, buy now energy', tag: 'Sale Red', tagColor: '#FFF0F0', tagText: '#E53E3E' },
+        { text: 'Blue (#2E5090) — calm confidence, trust', tag: 'Trust', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    },
+    { key: 'urgency', icon: '&#x23F0;', title: 'Urgency Element', desc: 'The countdown timer and scarcity messaging', impact: 'medium',
+      current: 'Countdown timer with "Limited Time: Free Shipping + 20% Off"',
+      suggestions: [
+        { text: 'Stock counter: "Only X left in stock" with live decrement', tag: 'Stock Scarcity', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: 'No urgency — clean offer without pressure tactics', tag: 'No Pressure', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    },
+    { key: 'pricing', icon: '&#x1F4B0;', title: 'Pricing Layout', desc: 'How price and discount are presented', impact: 'medium',
+      current: 'Strikethrough original price + sale price in pricing card',
+      suggestions: [
+        { text: 'Larger price with savings badge — "$39.96 (SAVE 20%)" as a banner', tag: 'Badge-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Per-day cost framing — "$1.33/day for premium health"', tag: 'Per-Day', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'trust_signals', icon: '&#x1F6E1;', title: 'Trust Signals', desc: 'Guarantee badges and trust indicators', impact: 'low',
+      current: 'Four badges: Guarantee, Free Shipping, Secure, Easy Returns',
+      suggestions: [
+        { text: 'Condensed into two high-impact badges (Guarantee + Secure Checkout)', tag: 'Minimal', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Customer review count + star rating above trust badges', tag: 'Reviews-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    }
+  ],
+  loyalty: [
+    { key: 'headline', icon: '&#x1F4DD;', title: 'Welcome Headline', desc: 'The personalized greeting headline', impact: 'high',
+      current: 'Welcome Back to Nordic Naturals',
+      suggestions: [
+        { text: 'Hi [Name], We Missed You! Here\'s Your Reward.', tag: 'Personalized', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'You\'re Back! Unlock Your Exclusive 20% Off', tag: 'Reward-Led', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Welcome Back, VIP — New Products Are Waiting', tag: 'VIP Status', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'discount', icon: '&#x1F381;', title: 'Discount Offer', desc: 'The returning customer discount amount and framing', impact: 'high',
+      current: '15% Off — Code: LOYAL15',
+      suggestions: [
+        { text: '20% Off — Code: VIP20 — "Because you\'re special to us"', tag: 'Higher Value', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Free Shipping + 10% Off — stacked offer feels bigger', tag: 'Stacked', tagColor: '#FFF3E0', tagText: 'var(--accent2)' },
+        { text: '$10 Credit — fixed dollar amount feels more tangible', tag: 'Dollar Off', tagColor: '#EEF2FF', tagText: 'var(--primary)' }
+      ]
+    },
+    { key: 'cta_text', icon: '&#x1F446;', title: 'CTA Button Text', desc: 'The primary action button text', impact: 'medium',
+      current: 'View Early Access',
+      suggestions: [
+        { text: 'Claim My Reward', tag: 'Ownership', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Shop My VIP Deals', tag: 'Exclusive', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Redeem Now — Expires Soon', tag: 'Urgency', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'referral', icon: '&#x1F91D;', title: 'Referral Section', desc: 'The "Give $10 Get $10" referral layout', impact: 'medium',
+      current: 'Referral box with share buttons (Facebook, Twitter, Copy Link)',
+      suggestions: [
+        { text: 'Tiered referral: Give $10, Get $10 for first — Give $15, Get $15 after 3 referrals', tag: 'Tiered', tagColor: '#E8FFF5', tagText: 'var(--success)' },
+        { text: 'Gamified referral with progress bar: "2 more referrals to unlock Gold status"', tag: 'Gamified', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'product_showcase', icon: '&#x1F6CD;', title: 'Product Showcase', desc: 'New products section layout and recommendations', impact: 'low',
+      current: '3 product cards in a grid (Gummies, Algae, Complete)',
+      suggestions: [
+        { text: 'Personalized "Based on your last order" recommendations', tag: 'Personalized', tagColor: '#EEF2FF', tagText: 'var(--primary)' },
+        { text: 'Single featured product with larger image and reviews', tag: 'Focused', tagColor: '#FFF3E0', tagText: 'var(--accent2)' }
+      ]
+    },
+    { key: 'cta_color', icon: '&#x1F3A8;', title: 'CTA Button Color', desc: 'Button color scheme', impact: 'low',
+      current: 'Purple (#9B5DE5)',
+      suggestions: [
+        { text: 'Gold (#C8A951) — premium VIP feel', tag: 'Premium', tagColor: '#FFF8E1', tagText: '#8D6E2F' },
+        { text: 'Green (#06D6A0) — positive action, growth feel', tag: 'Growth', tagColor: '#E8FFF5', tagText: 'var(--success)' }
+      ]
+    }
+  ]
+};
+
+function abGoToVariants() {
+  if (!abSelectedPage) return;
+  abSelectedElements = [];
+  abElementConfigs = {};
+  abExpandedConfig = null;
+  abTestName = pageLabels[abSelectedPage] + ' A/B Test';
+  abStep = 2;
+  renderABContent();
+}
+
+// ── Step 2: Element Selection + Configuration ──
+function renderABVariants(el) {
+  const color = pageColors[abSelectedPage];
+  const elements = abTestableElements[abSelectedPage] || [];
+  const hasSelections = abSelectedElements.length > 0;
+  const allConfigured = hasSelections && abSelectedElements.every(k => {
+    const cfg = abElementConfigs[k];
+    return cfg && (cfg.picked !== null || (cfg.custom && cfg.custom.trim()));
+  });
+
+  // Build element name and auto-generate test name
+  const selectedNames = abSelectedElements.map(k => elements.find(e => e.key === k)?.title || k);
+
+  el.innerHTML = `
+    ${renderABStepIndicator(1)}
+    <div class="ab-variant-section" style="max-width:900px">
+
+      <div style="margin-bottom:20px">
+        <label style="font-size:13px;color:var(--text-light);display:block;margin-bottom:6px">Experiment Name</label>
+        <input type="text" id="ab-test-name-input" value="${abTestName}" onchange="abTestName=this.value" style="width:100%;max-width:480px;padding:10px 14px;border:2px solid var(--border);border-radius:8px;font-size:14px;outline:none;transition:border-color 0.2s" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border)'" />
+      </div>
+
+      <!-- Phase A: Pick what to test -->
+      <div style="margin-bottom:8px">
+        <h3 style="font-size:18px;color:var(--primary-dark);margin-bottom:4px">What do you want to test on your ${pageLabels[abSelectedPage]} page?</h3>
+        <p style="color:var(--text-light);font-size:13px;margin-bottom:16px">Select one or more elements to change. Each comes with AI-generated suggestions you can pick from or customize.</p>
+      </div>
+
+      <div class="ab-element-grid">
+        ${elements.map(e => `
+          <div class="ab-el-card ${abSelectedElements.includes(e.key) ? 'selected' : ''}" onclick="toggleABElement('${e.key}')">
+            <div class="ab-el-check">${abSelectedElements.includes(e.key) ? '&#x2713;' : ''}</div>
+            <div class="ab-el-icon">${e.icon}</div>
+            <h5>${e.title}</h5>
+            <div class="ab-el-desc">${e.desc}</div>
+            <div class="ab-el-impact ${e.impact}">${e.impact} impact</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Phase B: Configure each selected element -->
+      ${hasSelections ? `
+        <div class="ab-config-section">
+          <h3 style="font-size:18px;color:var(--primary-dark);margin-bottom:4px;margin-top:28px">Configure your changes</h3>
+          <p style="color:var(--text-light);font-size:13px;margin-bottom:16px">For each element, pick an AI suggestion or write your own. This becomes your Variant B.</p>
+
+          ${abSelectedElements.map(k => {
+            const e = elements.find(x => x.key === k);
+            if (!e) return '';
+            const cfg = abElementConfigs[k] || { picked: null, custom: '' };
+            const isOpen = abExpandedConfig === k;
+            const isConfigured = cfg.picked !== null || (cfg.custom && cfg.custom.trim());
+            return `
+              <div class="ab-config-card ${isOpen ? 'open' : ''}" id="ab-cfg-${k}">
+                <div class="ab-config-header" onclick="toggleABConfig('${k}')">
+                  <div class="ab-cfg-icon">${e.icon}</div>
+                  <div class="ab-cfg-title">${e.title}</div>
+                  ${isConfigured ? '<div class="ab-cfg-badge" style="background:#E8FFF5;color:var(--success)">&#x2713; Configured</div>' : '<div class="ab-cfg-badge" style="background:#FFF3E0;color:var(--accent2)">Needs Input</div>'}
+                  <div class="ab-cfg-arrow">&#x25BC;</div>
+                </div>
+                <div class="ab-config-body">
+                  <div class="ab-cfg-row">
+                    <div class="ab-cfg-col">
+                      <div class="ab-cfg-label">&#x1F6E1; Current (Control A)</div>
+                      <div class="ab-cfg-current">${e.current}</div>
+                    </div>
+                  </div>
+
+                  <div class="ab-cfg-suggestions">
+                    <div class="ab-sug-label">&#x1F916; AI Suggestions for Variant B</div>
+                    <div class="ab-sug-list">
+                      ${e.suggestions.map((s, si) => `
+                        <div class="ab-sug-item ${cfg.picked === si ? 'picked' : ''}" onclick="pickABSuggestion('${k}', ${si})">
+                          <div class="ab-sug-radio"></div>
+                          <div class="ab-sug-text">${s.text}</div>
+                          <div class="ab-sug-tag" style="background:${s.tagColor};color:${s.tagText}">${s.tag}</div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <div class="ab-cfg-custom-toggle" onclick="toggleCustomInput('${k}')">&#x270F; Or write your own</div>
+                  <div class="ab-cfg-custom-wrap ${cfg.custom && cfg.custom.trim() ? 'open' : ''}" id="ab-custom-${k}">
+                    <textarea class="ab-cfg-input" rows="2" placeholder="Type your own variant text..." oninput="setABCustom('${k}', this.value)">${cfg.custom || ''}</textarea>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <!-- Summary strip -->
+        <div class="ab-summary-strip" style="margin-top:24px">
+          <div class="ab-ss-count">${abSelectedElements.length}</div>
+          <div class="ab-ss-info">
+            <h4>Variant B — ${abSelectedElements.length} element${abSelectedElements.length > 1 ? 's' : ''} modified</h4>
+            <p>${allConfigured ? 'All changes configured — ready to set traffic split' : 'Configure each element above to continue'}</p>
+          </div>
+          <div class="ab-ss-changes">
+            ${selectedNames.map(n => '<span class="ab-ss-tag">' + n + '</span>').join('')}
+          </div>
+        </div>
+      ` : ''}
+
+      <div class="ab-nav-actions">
+        <button class="btn-secondary" onclick="abStep=1;renderABContent()">&#x2190; Back</button>
+        <button class="btn-primary" onclick="abFinishVariants()" ${!allConfigured ? 'disabled style="opacity:0.5;cursor:not-allowed"' : ''}>Set Traffic Split &#x2192;</button>
+      </div>
+    </div>
+  `;
+}
+
+function toggleABElement(key) {
+  const idx = abSelectedElements.indexOf(key);
+  if (idx >= 0) {
+    abSelectedElements.splice(idx, 1);
+    delete abElementConfigs[key];
+    if (abExpandedConfig === key) abExpandedConfig = null;
+  } else {
+    abSelectedElements.push(key);
+    abElementConfigs[key] = { picked: null, custom: '' };
+    abExpandedConfig = key; // auto-expand newly selected
+  }
+  // Auto-update test name
+  const elements = abTestableElements[abSelectedPage] || [];
+  const names = abSelectedElements.map(k => elements.find(e => e.key === k)?.title || k);
+  if (names.length > 0) {
+    abTestName = pageLabels[abSelectedPage] + ' ' + names.join(' + ') + ' Test';
+  } else {
+    abTestName = pageLabels[abSelectedPage] + ' A/B Test';
+  }
+  renderABContent();
+}
+
+function toggleABConfig(key) {
+  abExpandedConfig = abExpandedConfig === key ? null : key;
+  // Toggle without full re-render for snappiness
+  document.querySelectorAll('.ab-config-card').forEach(card => {
+    const k = card.id.replace('ab-cfg-', '');
+    card.classList.toggle('open', k === abExpandedConfig);
+  });
+}
+
+function pickABSuggestion(key, idx) {
+  if (!abElementConfigs[key]) abElementConfigs[key] = { picked: null, custom: '' };
+  abElementConfigs[key].picked = abElementConfigs[key].picked === idx ? null : idx;
+  abElementConfigs[key].custom = ''; // clear custom when picking suggestion
+  renderABContent();
+}
+
+function setABCustom(key, val) {
+  if (!abElementConfigs[key]) abElementConfigs[key] = { picked: null, custom: '' };
+  abElementConfigs[key].custom = val;
+  if (val.trim()) abElementConfigs[key].picked = null; // clear suggestion when typing custom
+}
+
+function toggleCustomInput(key) {
+  const wrap = document.getElementById('ab-custom-' + key);
+  if (wrap) wrap.classList.toggle('open');
+}
+
+function abFinishVariants() {
+  const elements = abTestableElements[abSelectedPage] || [];
+  const controlChanges = [];
+  const variantChanges = [];
+
+  abSelectedElements.forEach(k => {
+    const e = elements.find(x => x.key === k);
+    const cfg = abElementConfigs[k];
+    if (!e || !cfg) return;
+    controlChanges.push('Current ' + e.title.toLowerCase() + ': "' + (e.current.length > 50 ? e.current.substring(0, 50) + '...' : e.current) + '"');
+    if (cfg.custom && cfg.custom.trim()) {
+      variantChanges.push(e.title + ': "' + cfg.custom.trim() + '"');
+    } else if (cfg.picked !== null && e.suggestions[cfg.picked]) {
+      const sug = e.suggestions[cfg.picked];
+      variantChanges.push(e.title + ': "' + (sug.text.length > 60 ? sug.text.substring(0, 60) + '...' : sug.text) + '"');
+    }
+  });
+
+  abVariants = [
+    { name: 'Control (A)', isControl: true, changes: controlChanges },
+    { name: 'Variant B', isControl: false, changes: variantChanges }
+  ];
+  abTrafficSplit = [50, 50];
+  abStep = 3;
+  renderABContent();
+}
+
+function recalcTrafficSplit() {
+  const n = abVariants.length;
+  const even = Math.floor(100 / n);
+  abTrafficSplit = abVariants.map((_, i) => i === 0 ? 100 - even * (n - 1) : even);
+}
+
+// ── Step 3: Traffic Split & Goal ──
+function renderABTraffic(el) {
+  // Ensure traffic split array matches variants
+  if (abTrafficSplit.length !== abVariants.length) recalcTrafficSplit();
+
+  const goals = [
+    { key: 'cta_clicks', icon: '&#x1F446;', title: 'CTA Click Rate', desc: 'Track clicks on your primary call-to-action button' },
+    { key: 'scroll_depth', icon: '&#x1F4CF;', title: 'Scroll Depth', desc: 'Measure how far visitors scroll down the page' },
+    { key: 'form_submit', icon: '&#x1F4DD;', title: 'Form Submissions', desc: 'Count form completions (email signups, contact forms)' },
+    { key: 'time_on_page', icon: '&#x23F1;', title: 'Time on Page', desc: 'Measure visitor engagement through time spent' }
+  ];
+
+  el.innerHTML = `
+    ${renderABStepIndicator(2)}
+    <div class="ab-traffic-section">
+      <div class="ab-traffic-card">
+        <h3>Traffic Split</h3>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:20px">Decide how to distribute visitors between your variants. We recommend 50/50 for fastest results.</p>
+        ${abVariants.map((v, i) => `
+          <div class="ab-split-row">
+            <div class="ab-split-label">
+              <div class="ab-dot" style="background:${v.isControl ? pageColors[abSelectedPage] : 'var(--accent2)'}"></div>
+              ${v.name}
+            </div>
+            <input type="range" class="ab-split-slider" min="5" max="95" value="${abTrafficSplit[i]}" oninput="updateTrafficSplit(${i}, this.value)" style="accent-color:${v.isControl ? pageColors[abSelectedPage] : 'var(--accent2)'}" />
+            <div class="ab-split-pct">${abTrafficSplit[i]}%</div>
+          </div>
+        `).join('')}
+        <div class="ab-traffic-info">
+          <div class="ab-traffic-info-item">
+            <div class="ab-ti-label">Est. Duration</div>
+            <div class="ab-ti-value">7–14 days</div>
+          </div>
+          <div class="ab-traffic-info-item">
+            <div class="ab-ti-label">Min. Visitors Needed</div>
+            <div class="ab-ti-value">~1,000 per variant</div>
+          </div>
+          <div class="ab-traffic-info-item">
+            <div class="ab-ti-label">Confidence Target</div>
+            <div class="ab-ti-value">95%</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ab-traffic-card">
+        <h3>Conversion Goal</h3>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:12px">What action determines the winner?</p>
+        <div class="ab-goal-options">
+          ${goals.map(g => `
+            <div class="ab-goal-opt ${abGoal === g.key ? 'selected' : ''}" onclick="abGoal='${g.key}';renderABContent()">
+              <h5>${g.icon} ${g.title}</h5>
+              <p>${g.desc}</p>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="ab-nav-actions">
+        <button class="btn-secondary" onclick="abStep=2;renderABContent()">&#x2190; Back</button>
+        <button class="btn-primary" onclick="launchABTest()" style="background:var(--success)">&#x1F680; Launch Experiment</button>
+      </div>
+    </div>
+  `;
+}
+
+function updateTrafficSplit(idx, val) {
+  val = parseInt(val);
+  const other = idx === 0 ? 1 : 0;
+  // For 2 variants, simple complementary split
+  if (abVariants.length === 2) {
+    abTrafficSplit[idx] = val;
+    abTrafficSplit[other] = 100 - val;
+  } else {
+    // Multi-variant: adjust proportionally
+    const oldVal = abTrafficSplit[idx];
+    const diff = val - oldVal;
+    abTrafficSplit[idx] = val;
+    // Distribute the difference among other variants
+    const others = abVariants.map((_, i) => i).filter(i => i !== idx);
+    const totalOthers = others.reduce((sum, i) => sum + abTrafficSplit[i], 0);
+    others.forEach(i => {
+      const proportion = totalOthers > 0 ? abTrafficSplit[i] / totalOthers : 1 / others.length;
+      abTrafficSplit[i] = Math.max(5, Math.round(abTrafficSplit[i] - diff * proportion));
+    });
+    // Correct rounding
+    const total = abTrafficSplit.reduce((a, b) => a + b, 0);
+    if (total !== 100) abTrafficSplit[others[0]] += 100 - total;
+  }
+  renderABContent();
+}
+
+function launchABTest() {
+  // Add to existing tests
+  abExistingTests.unshift({
+    id: abExistingTests.length + 1,
+    page: abSelectedPage,
+    name: abTestName,
+    status: 'running',
+    days: 0,
+    visitors: 0,
+    variants: abVariants.map((v, i) => ({
+      name: v.name,
+      convRate: 0,
+      visitors: 0,
+      conversions: 0,
+      changes: v.changes
+    })),
+    confidence: 0,
+    goal: abGoal
+  });
+  // Show results for new test (simulate running)
+  viewABTestResults(0);
+}
+
+// ── Step 4: Results ──
+let abViewTestIdx = 0;
+let abViewVariantIdx = 0; // which variant is being previewed
+
+function viewABTestResults(testIdx) {
+  abStep = 4;
+  abViewTestIdx = testIdx;
+  abViewVariantIdx = 0; // start on Original
+  const container = document.getElementById('ab-content');
+  renderABResults(container, testIdx);
+}
+
+function renderABResults(el, testIdx) {
+  testIdx = testIdx !== undefined ? testIdx : abViewTestIdx;
+  const test = abExistingTests[testIdx];
+  if (!test) { abStep = 0; renderABContent(); return; }
+
+  const hasWinner = test.winner !== undefined;
+  const bestIdx = hasWinner ? test.winner : test.variants.reduce((best, v, i) => v.convRate > test.variants[best].convRate ? i : best, 0);
+  const goalLabels = { cta_clicks: 'CTA Click Rate', scroll_depth: 'Scroll Depth', form_submit: 'Form Submissions', time_on_page: 'Time on Page' };
+  const v = test.variants[abViewVariantIdx] || test.variants[0];
+  const isControl = abViewVariantIdx === 0;
+  const uplift = !isControl && test.variants[0].convRate > 0 ? ((v.convRate - test.variants[0].convRate) / test.variants[0].convRate * 100).toFixed(1) : null;
+
+  // Determine confidence level
+  const confLevel = test.confidence >= 95 ? 'high' : test.confidence >= 60 ? 'mid' : 'low';
+  const confMsg = test.confidence >= 95
+    ? '<strong>&#x2705; Statistically Significant</strong>Confidence: ' + test.confidence + '%. You can promote the winner.'
+    : test.confidence >= 60
+    ? '<strong>&#x23F3; Gathering Data</strong>Confidence: ' + test.confidence + '%. Keep running for reliable results.'
+    : test.visitors === 0
+    ? '<strong>&#x1F680; Experiment Launched</strong>Waiting for traffic. Results will appear soon.'
+    : '<strong>&#x23F3; Early Results</strong>Confidence: ' + test.confidence + '%. Need more visitors.';
+
+  // Get the full page content for the preview
+  const pageFrame = pageContent[test.page] ? pageContent[test.page].frame : '<div style="padding:40px;text-align:center;color:var(--text-light)">Page preview not available</div>';
+
+  // Build variant-specific page content (modify the original for variant B)
+  const previewFrame = isControl ? pageFrame : buildVariantPreview(test.page, pageFrame, v.changes);
+
+  // Build changes list for sidebar
+  const changesHtml = v.changes && v.changes.length > 0 ? `
+    <div class="ab-ve-change-list">
+      ${v.changes.map(c => `
+        <div class="ab-ve-change-item">
+          <div class="ab-ve-ci-icon">${isControl ? '&#x1F6E1;' : '&#x270F;'}</div>
+          <div class="ab-ve-ci-text">${c}</div>
+        </div>
+      `).join('')}
+    </div>
+  ` : `
+    <div class="ab-ve-empty-art">
+      <div class="ab-ve-art-circle">
+        <div class="ab-ve-art-inner">
+          <div class="ab-ve-art-line"></div>
+          <div class="ab-ve-art-line short accent"></div>
+          <div class="ab-ve-art-line"></div>
+          <div class="ab-ve-art-line short"></div>
+          <div class="ab-ve-art-box">ON SALE</div>
+        </div>
+      </div>
+      <p>To make a change, select an element on the page.</p>
+      <div class="ab-ve-arrow">&#x27F6;</div>
+    </div>
+  `;
+
+  el.innerHTML = `
+    <div class="ab-ve-layout">
+      <!-- Left Sidebar -->
+      <div class="ab-ve-sidebar">
+        <button class="ab-ve-back" onclick="abStep=0;renderABContent()">&#x2190; Variations</button>
+
+        <div class="ab-ve-title">${test.name}</div>
+        <div class="ab-ve-subtitle">${pageLabels[test.page]} page &middot; ${test.days}d running</div>
+
+        <!-- Variant Selector Dropdown -->
+        <div class="ab-ve-variant-select">
+          <select onchange="switchABVariant(${testIdx}, parseInt(this.value))">
+            ${test.variants.map((vr, vi) => `
+              <option value="${vi}" ${vi === abViewVariantIdx ? 'selected' : ''}>${vr.name}${vi === 0 ? ' (Original)' : ''}</option>
+            `).join('')}
+          </select>
+        </div>
+
+        <!-- Preview Button -->
+        <div class="ab-ve-preview-btn">
+          <button>Preview</button>
+          <button class="ab-ve-pbtn-arrow">&#x25BC;</button>
+        </div>
+
+        <!-- Confidence Banner -->
+        <div class="ab-ve-conf-banner ${confLevel}">
+          ${confMsg}
+        </div>
+
+        <!-- Changes Section -->
+        <div class="ab-ve-changes">
+          <div class="ab-ve-changes-header">
+            <h4>Changes</h4>
+            <button class="ab-ve-create-btn">Create &#x203A;</button>
+          </div>
+          ${changesHtml}
+        </div>
+
+        ${test.confidence >= 95 ? `
+          <div class="ab-ve-promote">
+            <button class="${test.confidence >= 95 ? 'active' : 'disabled'}" onclick="promoteWinner(${testIdx}, ${bestIdx})">&#x1F3C6; Promote Winner</button>
+          </div>
+        ` : ''}
+
+        <!-- Stats at bottom of sidebar -->
+        <div class="ab-ve-stats">
+          <div class="ab-ve-stats-title">Current Variant Stats</div>
+          <div class="ab-ve-stat-row"><span class="ab-ve-sl">Visitors</span><span class="ab-ve-sv">${v.visitors.toLocaleString()}</span></div>
+          <div class="ab-ve-stat-row"><span class="ab-ve-sl">Conversions</span><span class="ab-ve-sv">${v.conversions.toLocaleString()}</span></div>
+          <div class="ab-ve-stat-row"><span class="ab-ve-sl">Conv. Rate</span><span class="ab-ve-sv ${v.convRate > 0 ? 'green' : ''}">${v.convRate}%</span></div>
+          ${uplift !== null ? '<div class="ab-ve-stat-row"><span class="ab-ve-sl">vs Control</span><span class="ab-ve-sv ' + (parseFloat(uplift) > 0 ? 'green' : 'orange') + '">' + (parseFloat(uplift) > 0 ? '+' : '') + uplift + '%</span></div>' : ''}
+          <div class="ab-ve-stat-row"><span class="ab-ve-sl">Goal</span><span class="ab-ve-sv">${goalLabels[test.goal] || 'CTA Clicks'}</span></div>
+          <div class="ab-ve-stat-row"><span class="ab-ve-sl">Confidence</span><span class="ab-ve-sv ${test.confidence >= 95 ? 'green' : 'orange'}">${test.confidence}%</span></div>
+        </div>
+      </div>
+
+      <!-- Main Preview Area -->
+      <div class="ab-ve-main">
+        <div class="ab-ve-urlbar">
+          <div class="ab-ve-nav-btns">
+            <div class="ab-ve-nav-btn">&#x2190;</div>
+            <div class="ab-ve-nav-btn">&#x2192;</div>
+            <div class="ab-ve-nav-btn">&#x21BB;</div>
+          </div>
+          <div class="ab-ve-url-pill">
+            <span class="ab-ve-lock">&#x1F512;</span>
+            <span class="ab-ve-domain">nordic.com</span>
+            <span>/landing/${test.page}${isControl ? '' : '?variant=' + abViewVariantIdx}</span>
+          </div>
+        </div>
+        <div class="ab-ve-page-frame">
+          ${previewFrame}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function switchABVariant(testIdx, variantIdx) {
+  abViewVariantIdx = variantIdx;
+  renderABResults(document.getElementById('ab-content'), testIdx);
+}
+
+function buildVariantPreview(page, originalFrame, changes) {
+  // Apply visual modifications to hint that this is a variant
+  // We overlay subtle highlights on changed elements
+  let modified = originalFrame;
+
+  // Apply change-specific visual modifications per page
+  const changeStr = (changes || []).join(' ').toLowerCase();
+
+  if (changeStr.includes('orange cta') || changeStr.includes('button')) {
+    modified = modified.replace(
+      /background:var\(--nordic-gold\);color:var\(--nordic-blue\)/g,
+      'background:#F77F00;color:white'
+    ).replace(
+      /background:#06D6A0;color:var\(--nordic-blue\)/g,
+      'background:#F77F00;color:white'
+    );
+  }
+
+  if (changeStr.includes('headline') || changeStr.includes('scarcity') || changeStr.includes('question')) {
+    // Add a subtle highlight border to hero section
+    modified = modified.replace(
+      'class="page-section hero-section"',
+      'class="page-section hero-section" style2="outline:2px dashed var(--accent2);outline-offset:-2px"'
+    );
+  }
+
+  if (changeStr.includes('simplified') || changeStr.includes('table')) {
+    modified = modified.replace(
+      'class="comparison-table"',
+      'class="comparison-table" style="border:2px solid var(--accent2);border-radius:8px"'
+    );
+  }
+
+  if (changeStr.includes('$10') || changeStr.includes('credit') || changeStr.includes('20%')) {
+    modified = modified.replace('15% Off', '20% Off').replace('LOYAL15', 'VIP20');
+  }
+
+  if (changeStr.includes('tiered') || changeStr.includes('progress bar') || changeStr.includes('gamified')) {
+    modified = modified.replace('Give $10, Get $10', 'Give $15, Get $15 — Gold Tier');
+  }
+
+  if (changeStr.includes('counter') || changeStr.includes('star rating')) {
+    modified = modified.replace(
+      '<div class="trust-badge"><div class="t-icon">&#x1F3C6;</div> #1 Fish Oil in the US</div>',
+      '<div class="trust-badge"><div class="t-icon">&#x2B50;</div> 35M+ Sold &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>'
+    );
+  }
+
+  return modified;
+}
+
+function promoteWinner(testIdx, variantIdx) {
+  const test = abExistingTests[testIdx];
+  test.status = 'completed';
+  test.winner = variantIdx;
+  alert(test.variants[variantIdx].name + ' has been promoted!\n\nIn the full product, this replaces your current ' + pageLabels[test.page] + ' page with the winning variant. All future visitors will see the optimized version.');
+  abStep = 0;
+  renderABContent();
+}
+
+// ── Step Indicator ──
+function renderABStepIndicator(activeStep) {
+  const steps = ['Select Page', 'Create Variants', 'Traffic & Goal'];
+  return `
+    <div class="ab-steps">
+      ${steps.map((s, i) => `
+        <div class="ab-step-item ${i === activeStep ? 'active' : i < activeStep ? 'done' : ''}">
+          <div class="ab-step-num">${i < activeStep ? '&#x2713;' : i + 1}</div>
+          <div class="ab-step-label">${s}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
 }
 
 // Patch goToDashboard to trigger scaffold on first visit
