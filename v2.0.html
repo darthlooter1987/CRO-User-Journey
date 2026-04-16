@@ -253,17 +253,13 @@
 
   /* Hover tooltip on cards */
   .sc-hover-tooltip {
-    position:absolute; bottom:calc(100%); left:50%; transform:translateX(-50%) translateY(20px);
-    background:var(--text); color:white; font-size:12px; line-height:1.5;
-    padding:12px 16px; border-radius:10px; width:260px; text-align:left;
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%) scale(0.95);
+    background:rgba(30,41,59,0.95); backdrop-filter:blur(8px); color:white; font-size:13px; line-height:1.6;
+    padding:16px 20px; border-radius:12px; width:280px; text-align:center;
     opacity:0; pointer-events:none; transition:all 0.25s ease;
-    z-index:50; box-shadow:0 4px 16px rgba(0,0,0,0.25);
+    z-index:50; box-shadow:0 8px 32px rgba(0,0,0,0.35);
   }
-  .sc-hover-tooltip::after {
-    content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
-    border:7px solid transparent; border-top-color:var(--text);
-  }
-  .showcase-card:hover .sc-hover-tooltip { opacity:1; transform:translateX(-50%) translateY(-8px); }
+  .showcase-card:hover .sc-hover-tooltip { opacity:1; transform:translate(-50%, -50%) scale(1); }
 
   /* Card info area — distinct background */
   .sc-info { padding:20px 24px 24px; background:#F8FAFC; }
@@ -1703,12 +1699,13 @@ function scoreColor(score) {
   const s = Math.max(0, Math.min(10, score));
   // Red(0) → Orange(3) → Amber(5) → Yellow-Green(7) → Green(10)
   const stops = [
-    [0, [220,38,38]],   // red-600
-    [3, [234,88,12]],   // orange-600
-    [5, [217,169,26]],  // amber-500
-    [7, [101,163,13]],  // lime-600
-    [9, [22,163,74]],   // green-600
-    [10,[5,150,105]]    // emerald-600
+    [0, [227,72,72]],    // red
+    [2, [237,106,58]],   // red-orange
+    [4, [243,165,55]],   // orange
+    [5, [247,206,57]],   // yellow
+    [6, [205,220,57]],   // yellow-green
+    [8, [139,198,63]],   // light green
+    [10,[76,175,80]]     // green
   ];
   let lo = stops[0], hi = stops[stops.length-1];
   for(let i = 0; i < stops.length - 1; i++) {
