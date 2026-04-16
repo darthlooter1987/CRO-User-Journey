@@ -1706,9 +1706,12 @@ function goToDashboard(){
     c.classList.remove('revealed');
     setTimeout(() => {
       c.classList.add('revealed');
-      // Mini confetti burst on last card
-      if(i === cards.length - 1) {
+      // Confetti burst on 10/10 cards (sc-ready class)
+      if(c.classList.contains('sc-ready')) {
         setTimeout(() => spawnConfetti(c), 200);
+      }
+      // Start tour after last card reveals
+      if(i === cards.length - 1) {
         setTimeout(() => startTourV2(), 1200);
       }
     }, 300 + i * 250);
