@@ -1,609 +1,988 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PRD v3.0 — CRO User Journey | Revmatics</title>
-<style>
-  :root {
-    --primary: #2E5090;
-    --primary-light: #4A7BC7;
-    --primary-dark: #1E3A6E;
-    --accent: #00B4D8;
-    --accent2: #F77F00;
-    --success: #06D6A0;
-    --bg: #F8FAFC;
-    --card: #FFFFFF;
-    --text: #1E293B;
-    --text-light: #64748B;
-    --border: #E2E8F0;
-    --radius: 10px;
-    --shadow: 0 2px 16px rgba(0,0,0,0.07);
-  }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revmatics CRO User Flow — PRD v3.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  .topbar {
-    background: var(--primary-dark);
-    color: white;
-    padding: 14px 40px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-size: 14px;
-  }
-  .topbar .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
-  .topbar .sep { opacity: 0.4; }
-  .topbar .doc-type { opacity: 0.8; }
-  .topbar a { color: rgba(255,255,255,0.7); text-decoration: none; margin-left: auto; font-size: 13px; transition: color 0.2s; }
-  .topbar a:hover { color: white; }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
 
-  .hero {
-    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
-    color: white;
-    padding: 60px 40px 48px;
-    text-align: center;
-  }
-  .hero .badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    border-radius: 20px;
-    padding: 4px 16px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 18px;
-  }
-  .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
-  .hero .subtitle { font-size: 16px; opacity: 0.8; max-width: 600px; margin: 0 auto 28px; }
-  .hero .meta-row {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    font-size: 13px;
-    opacity: 0.7;
-    flex-wrap: wrap;
-  }
-  .hero .meta-row span strong { opacity: 1; font-weight: 600; color: white; }
+        /* Topbar */
+        .topbar {
+            background-color: #2E5090;
+            color: white;
+            padding: 16px 0;
+            border-bottom: 1px solid #1E3A6E;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-  .container { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+        .topbar-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  .toc {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 48px;
-    box-shadow: var(--shadow);
-  }
-  .toc h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 16px; font-weight: 600; }
-  .toc ol { padding-left: 20px; }
-  .toc ol li { margin-bottom: 8px; }
-  .toc ol li a { color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-  .toc ol li a:hover { color: var(--primary-dark); text-decoration: underline; }
+        .topbar-title {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
 
-  .section { margin-bottom: 56px; }
-  .section-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: var(--primary-light);
-    margin-bottom: 8px;
-  }
-  .section h2 {
-    font-size: 26px;
-    font-weight: 800;
-    color: var(--primary-dark);
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--border);
-  }
-  .section p { font-size: 15px; color: var(--text); margin-bottom: 14px; }
-  .section ul, .section ol { padding-left: 22px; margin-bottom: 16px; }
-  .section ul li, .section ol li { font-size: 15px; margin-bottom: 8px; color: var(--text); }
+        .topbar-link {
+            color: #e0e8f0;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
 
-  .callout {
-    background: #EEF4FF;
-    border-left: 4px solid var(--primary);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    padding: 16px 20px;
-    margin: 20px 0;
-    font-size: 14px;
-    color: var(--primary-dark);
-  }
-  .callout strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .topbar-link:hover {
+            color: white;
+        }
 
-  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 24px;
-    box-shadow: var(--shadow);
-  }
-  .card .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .card .card-icon { font-size: 22px; }
-  .card h3 { font-size: 15px; font-weight: 700; color: var(--text); }
-  .card p { font-size: 13px; color: var(--text-light); line-height: 1.6; }
-  .card .tag {
-    display: inline-block;
-    font-size: 10px;
-    font-weight: 700;
-    padding: 2px 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .tag-awareness { background: #4A7BC7; color: white; }
-  .tag-consideration { background: #F77F00; color: white; }
-  .tag-conversion { background: #06D6A0; color: #0a3d2e; }
-  .tag-loyalty { background: #9B5DE5; color: white; }
+        /* Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
 
-  .user-story-box {
-    background: linear-gradient(135deg, #F0F4FF, #E8F0FF);
-    border: 1px solid #C7D7F8;
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin: 24px 0;
-  }
-  .user-story-box h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 12px; }
-  .user-story-box p { font-size: 15px; color: var(--primary-dark); font-style: italic; line-height: 1.8; }
+        /* Hero Section */
+        .hero {
+            background-color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 40px;
+        }
 
-  .funnel-row {
-    display: flex;
-    gap: 0;
-    margin: 24px 0;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  .funnel-stage {
-    flex: 1;
-    padding: 20px 16px;
-    text-align: center;
-  }
-  .funnel-stage h4 { font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px; }
-  .funnel-stage p { font-size: 11px; color: rgba(255,255,255,0.85); line-height: 1.4; }
-  .fs-1 { background: #4A7BC7; }
-  .fs-2 { background: #F77F00; }
-  .fs-3 { background: #06A87C; }
-  .fs-4 { background: #9B5DE5; }
+        .hero h1 {
+            font-size: 48px;
+            color: #1E3A6E;
+            margin-bottom: 16px;
+            font-weight: 700;
+        }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 14px;
-    background: white;
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-  }
-  thead { background: var(--primary); color: white; }
-  thead th { padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; }
-  tbody tr { border-bottom: 1px solid var(--border); }
-  tbody tr:last-child { border-bottom: none; }
-  tbody td { padding: 13px 16px; color: var(--text); }
-  tbody tr:hover { background: #F8FAFC; }
+        .hero .subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 24px;
+            font-weight: 500;
+        }
 
-  .status-badge {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 10px;
-    border-radius: 12px;
-  }
-  .status-v1 { background: #DBEAFE; color: #1D4ED8; }
-  .status-future { background: #F3F4F6; color: #6B7280; }
-  .status-must { background: #DCFCE7; color: #166534; }
-  .status-should { background: #FEF9C3; color: #854D0E; }
-  .status-nice { background: #F3F4F6; color: #374151; }
+        .hero .meta {
+            font-size: 13px;
+            color: #999;
+            letter-spacing: 0.5px;
+        }
 
-  .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--primary);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 32px;
-    transition: gap 0.2s;
-  }
-  .back-link:hover { gap: 12px; }
+        .hero .meta span {
+            display: inline-block;
+            margin-right: 24px;
+        }
 
-  @media (max-width: 640px) {
-    .card-grid { grid-template-columns: 1fr; }
-    .hero h1 { font-size: 26px; }
-    .container { padding: 32px 16px 60px; }
-    .funnel-row { flex-direction: column; }
-  }
-</style>
+        /* Section Heading */
+        .section-heading {
+            font-size: 28px;
+            color: #1E3A6E;
+            margin-bottom: 20px;
+            margin-top: 40px;
+            font-weight: 700;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #2E5090;
+            display: inline-block;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .toc ol {
+            margin-left: 20px;
+            color: #555;
+            line-height: 2;
+        }
+
+        .toc a {
+            color: #2E5090;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .toc a:hover {
+            color: #1E3A6E;
+            text-decoration: underline;
+        }
+
+        /* Product Overview */
+        .overview {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            line-height: 1.8;
+        }
+
+        .overview p {
+            margin-bottom: 12px;
+            color: #444;
+        }
+
+        /* Primary User Story */
+        .primary-story {
+            background-color: #f9fafb;
+            border-left: 6px solid #2E5090;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .primary-story .story-text {
+            font-size: 16px;
+            color: #2E5090;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        /* Product Flow Overview */
+        .flow-list {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .flow-list ol {
+            margin-left: 20px;
+            line-height: 2;
+            color: #555;
+        }
+
+        /* User Story Card */
+        .user-story-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            page-break-inside: avoid;
+        }
+
+        .user-story-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .user-story-card.deactivated {
+            opacity: 0.5;
+            border: 2px dashed #ccc;
+            position: relative;
+        }
+
+        .deactivated-badge {
+            display: inline-block;
+            background: #FFD166;
+            color: #1E293B;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 12px;
+        }
+
+        .story-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 16px;
+        }
+
+        .story-id {
+            background-color: #2E5090;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .story-title {
+            font-size: 22px;
+            color: #1E3A6E;
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .story-text-box {
+            background-color: #f0f4f9;
+            border-left: 4px solid #2E5090;
+            padding: 16px 20px;
+            border-radius: 4px;
+            margin-bottom: 24px;
+            font-style: italic;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .story-screenshot {
+            margin-bottom: 24px;
+        }
+
+        .story-screenshot img {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e8e8e8;
+            display: block;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .story-screenshot img:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .story-screenshots-multiple {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .story-screenshots-multiple img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+            border: 1px solid #e8e8e8;
+        }
+
+        @media (max-width: 768px) {
+            .story-screenshots-multiple {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .acceptance-heading {
+            font-size: 16px;
+            color: #1E3A6E;
+            font-weight: 700;
+            margin-bottom: 16px;
+            margin-top: 16px;
+        }
+
+        .acceptance-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .acceptance-list li {
+            padding: 8px 0 8px 28px;
+            position: relative;
+            color: #555;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .acceptance-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* NFR Table */
+        .nfr-table {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
+
+        .nfr-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .nfr-table th {
+            background-color: #f0f4f9;
+            color: #1E3A6E;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            border-bottom: 2px solid #2E5090;
+        }
+
+        .nfr-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e8e8e8;
+            color: #555;
+        }
+
+        .nfr-table tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Out of Scope */
+        .out-of-scope {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .out-of-scope ul {
+            margin-left: 20px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .out-of-scope li {
+            margin-bottom: 8px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #1E3A6E;
+            color: #e0e8f0;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 13px;
+            border-top: 1px solid #2E5090;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: #e0e8f0;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        /* Utility Classes */
+        .content {
+            background-color: white;
+            padding: 40px 0;
+        }
+
+        h2 {
+            color: #1E3A6E;
+        }
+
+        p {
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .hero .subtitle {
+                font-size: 16px;
+            }
+
+            .topbar-content {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .story-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-heading {
+                font-size: 22px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<div class="topbar">
-  <span class="logo">Revmatics</span>
-  <span class="sep">|</span>
-  <span class="doc-type">Product Requirements Document</span>
-  <a href="index.html">← Back to Version Library</a>
-</div>
-
-<div class="hero">
-  <div class="badge">PRD — Version 3.0</div>
-  <h1>CRO User Journey<br>Fit-for-Purpose Landing Pages</h1>
-  <p class="subtitle">A smart landing page generator for Shopify merchants — powered by funnel stage intelligence</p>
-  <div class="meta-row">
-    <span>Version: <strong>3.0</strong></span>
-    <span>Status: <strong>Carousel Showcase with Mock-up Previews</strong></span>
-    <span>Date: <strong>April 2026</strong></span>
-    <span>Author: <strong>Revmatics / Alex</strong></span>
-  </div>
-</div>
-
-<div class="container">
-
-  <a href="index.html" class="back-link">← Version Library</a>
-
-  <!-- Table of Contents -->
-  <div class="toc">
-    <h2>Table of Contents</h2>
-    <ol>
-      <li><a href="#changelog">What Changed in v3.0</a></li>
-      <li><a href="#overview">Overview &amp; Problem Statement</a></li>
-      <li><a href="#user-story">Primary User Story</a></li>
-      <li><a href="#funnel">The Purchase Funnel Model</a></li>
-      <li><a href="#pages">The Four Fit-for-Purpose Pages</a></li>
-      <li><a href="#flow">Product Flow (Updated)</a></li>
-      <li><a href="#requirements">Functional Requirements (Updated)</a></li>
-      <li><a href="#ux">UX &amp; Design Principles (Updated)</a></li>
-      <li><a href="#non-functional">Non-Functional Requirements</a></li>
-      <li><a href="#scope">Out of Scope — v3.0</a></li>
-      <li><a href="#success">Success Metrics</a></li>
-    </ol>
-  </div>
-
-  <!-- 0. CHANGELOG -->
-  <div class="section" id="changelog">
-    <div class="section-label">What's New</div>
-    <h2>What Changed in v3.0</h2>
-    <div class="callout">
-      <strong>Key Change</strong>
-      The showcase dashboard has been redesigned from a 2x2 grid to a horizontal carousel with portrait-oriented cards. Each card now features a real landing page mock-up image as its preview, replacing the inline HTML mini-renders from v2.0. This gives merchants a much clearer, higher-fidelity view of what each generated page looks like before they click in.
-    </div>
-    <p>Specific changes in this version:</p>
-    <ul>
-      <li><strong>Carousel Layout:</strong> The four showcase cards are now arranged in a horizontally scrollable carousel (replacing the v2.0 2x2 grid). Left/right navigation arrows and dot indicators allow smooth browsing between the four funnel stage cards. The carousel uses scroll-snap alignment for precise card positioning.</li>
-      <li><strong>Portrait Card Ratio:</strong> Cards have been switched from landscape (wide, short) to portrait (narrow, tall) orientation. This better accommodates the full-page landing page mock-ups and creates a more natural card-browsing experience similar to app stores and design galleries.</li>
-      <li><strong>Real Mock-up Image Previews:</strong> The inline HTML mini-renders (scaled-down DOM content with mp-hero, mp-section elements) have been replaced with actual landing page mock-up images (awareness mock-up.png, differentiation-mock-up.png, conversion-mock-up.png, loyalty-mock-up.png). These are high-fidelity screenshots that show the merchant exactly what each page looks like — providing a far more accurate and polished preview than the previous CSS-rendered approximations.</li>
-      <li><strong>Image Hover Effect:</strong> The preview images apply a subtle scale-up (1.03x) on hover, adding a tactile feel to the carousel interaction without obscuring content.</li>
-      <li><strong>Carousel Navigation:</strong> Dedicated prev/next arrow buttons (circular, white, with shadow) are positioned on the left and right edges of the carousel. Buttons disable at the start/end of the track. Four dot indicators below the carousel reflect the current scroll position and allow direct-click navigation to any card.</li>
-      <li><strong>Preserved Card Structure:</strong> All card info sections remain identical to v2.0 — funnel stage badges, titles, descriptions, readiness scores, todo strips, and action buttons (Publish Now / Finalize now) are unchanged. The educational content and guided tour are also preserved.</li>
-    </ul>
-  </div>
-
-  <!-- 1. Overview -->
-  <div class="section" id="overview">
-    <div class="section-label">Section 1</div>
-    <h2>Overview &amp; Problem Statement</h2>
-    <p>Small business owners using Shopify are often running paid or organic marketing campaigns without a clear understanding of <em>why</em> different campaigns need different landing pages. They tend to send all traffic to the same page — typically the homepage or a product page — regardless of where the customer is in their purchase journey.</p>
-    <p>This results in low conversion rates, high bounce rates, and wasted ad spend, because a customer who has never heard of the brand requires a fundamentally different experience than one who is ready to buy.</p>
-    <div class="callout">
-      <strong>The Core Insight</strong>
-      Different stages of the customer journey require different emotional jobs to be done. A single landing page cannot optimally serve all of them. CRO (Conversion Rate Optimisation) means serving the <em>right</em> message at the <em>right</em> moment.
-    </div>
-    <p>Revmatics solves this by generating fit-for-purpose landing pages tailored to the merchant's funnel stage — starting with just a URL input. The tool reads the merchant's site, understands their brand and product, and creates purpose-built pages for each stage of the customer journey.</p>
-  </div>
-
-  <!-- 2. User Story -->
-  <div class="section" id="user-story">
-    <div class="section-label">Section 2</div>
-    <h2>Primary User Story</h2>
-    <div class="user-story-box">
-      <h3>Primary User Story</h3>
-      <p>"As a small business owner with a Shopify account, I need to be educated on marketing activities in order for me to see the value in using the CRO tool. I need to understand what the stages of a purchase funnel are and why I am using different landing pages to facilitate different outcomes in different campaigns."</p>
-    </div>
-    <p>This user story reflects two intertwined needs:</p>
-    <ul>
-      <li><strong>Education:</strong> The merchant must first understand <em>why</em> different landing pages exist before they trust the tool enough to use it.</li>
-      <li><strong>Execution:</strong> Once convinced, they need a frictionless path to actually generating those pages for their store.</li>
-    </ul>
-    <p>The v1.0 mock-up focuses primarily on the educational onboarding experience and the URL-input-to-page-generation flow, establishing the product's core value proposition.</p>
-  </div>
-
-  <!-- 3. Funnel Model -->
-  <div class="section" id="funnel">
-    <div class="section-label">Section 3</div>
-    <h2>The Purchase Funnel Model</h2>
-    <p>The product is built around a four-stage purchase funnel model. Each stage represents a distinct moment in the customer's relationship with the brand, and each requires a landing page engineered for a different psychological and commercial outcome.</p>
-    <div class="funnel-row">
-      <div class="funnel-stage fs-1">
-        <h4>Awareness</h4>
-        <p>Customer discovers the brand for the first time</p>
-      </div>
-      <div class="funnel-stage fs-2">
-        <h4>Consideration</h4>
-        <p>Customer evaluates and compares options</p>
-      </div>
-      <div class="funnel-stage fs-3">
-        <h4>Conversion</h4>
-        <p>Customer is ready to buy — remove friction</p>
-      </div>
-      <div class="funnel-stage fs-4">
-        <h4>Loyalty</h4>
-        <p>Post-purchase retention and advocacy</p>
-      </div>
-    </div>
-    <p>The tool generates one optimised landing page per funnel stage, each with distinct copy strategy, CTA structure, social proof placement, and visual hierarchy.</p>
-  </div>
-
-  <!-- 4. The Four Pages -->
-  <div class="section" id="pages">
-    <div class="section-label">Section 4</div>
-    <h2>The Four Fit-for-Purpose Pages</h2>
-    <div class="card-grid">
-      <div class="card">
-        <span class="tag tag-awareness">Awareness</span>
-        <div class="card-header">
-          <span class="card-icon">🌱</span>
-          <h3>Awareness Landing Page</h3>
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar-content">
+            <div class="topbar-title">Revmatics | Product Requirements Document</div>
+            <a href="index.html" class="topbar-link">← Back to Index</a>
         </div>
-        <p>Designed for cold audiences encountering the brand for the first time. Leads with brand story and problem framing. Minimal commitment ask. Goal: build curiosity and trust.</p>
-      </div>
-      <div class="card">
-        <span class="tag tag-consideration">Consideration</span>
-        <div class="card-header">
-          <span class="card-icon">🔍</span>
-          <h3>Consideration Landing Page</h3>
-        </div>
-        <p>For audiences in research mode. Leads with differentiation, comparison, and social proof. Goal: establish why this brand beats alternatives.</p>
-      </div>
-      <div class="card">
-        <span class="tag tag-conversion">Conversion</span>
-        <div class="card-header">
-          <span class="card-icon">⚡</span>
-          <h3>Conversion Landing Page</h3>
-        </div>
-        <p>For high-intent audiences ready to buy. Removes friction, surfaces guarantees, urgency signals, and a dominant CTA. Goal: close the sale.</p>
-      </div>
-      <div class="card">
-        <span class="tag tag-loyalty">Loyalty</span>
-        <div class="card-header">
-          <span class="card-icon">💜</span>
-          <h3>Loyalty / Retention Page</h3>
-        </div>
-        <p>For existing customers. Focuses on repeat purchase incentives, referral mechanics, and community. Goal: reduce churn and increase LTV.</p>
-      </div>
     </div>
-  </div>
 
-  <!-- 5. Product Flow -->
-  <div class="section" id="flow">
-    <div class="section-label">Section 5</div>
-    <h2>Product Flow — v3.0</h2>
-    <p>The v3.0 user journey follows a six-step flow (Steps 1-4 unchanged from v1.0, Step 5 redesigned in v2.0 and updated in v3.0):</p>
-    <ol>
-      <li><strong>URL Input (Screen 1):</strong> The merchant enters their Shopify store URL on the landing page. The hero section educates them on the four page types before they input anything.</li>
-      <li><strong>Site Analysis (Screen 2):</strong> The tool crawls the merchant's site in real-time, extracting brand voice, product information, colour palette, and key selling points. A live progress indicator keeps the user engaged.</li>
-      <li><strong>Brand Summary (Screen 3):</strong> The extracted brand intelligence is surfaced to the merchant for review and light editing — ensuring the generated pages reflect their actual identity.</li>
-      <li><strong>Page Selection (Screen 4):</strong> The merchant selects which funnel stage(s) they want to build a landing page for, with plain-English explanations of each stage's purpose.</li>
-      <li><strong>Showcase Dashboard (Screen 5 — UPDATED in v3.0):</strong> The four generated pages are now presented as portrait-oriented cards in a horizontal carousel. Each card displays a real landing page mock-up image as its preview, replacing the v2.0 inline HTML mini-renders. Navigation arrows and dot indicators allow browsing between cards. Staggered reveal animations and the 4-step guided tour are preserved. Clicking any card opens the full page editor.</li>
-      <li><strong>Export &amp; Publish (Screen 6):</strong> The merchant can export the page to Shopify, download as HTML, or schedule a later activation.</li>
-    </ol>
-    <div class="callout">
-      <strong>Design Principle</strong>
-      Every screen in the flow includes contextual education — the merchant should leave each step understanding not just what happened, but why it helps them convert better.
+    <div class="content">
+        <!-- Hero Section -->
+        <div class="hero">
+            <h1>CRO User Flow — PRD v3.0</h1>
+            <div class="subtitle">Fit-for-Purpose Landing Pages for Shopify Merchants</div>
+            <div class="meta">
+                <span><strong>Version:</strong> 3.0</span>
+                <span><strong>Date:</strong> April 2026</span>
+                <span><strong>Author:</strong> Revmatics / Alex</span>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <div class="section-heading">Table of Contents</div>
+                <ol>
+                    <li><a href="#product-overview">Product Overview</a></li>
+                    <li><a href="#primary-user-story">Primary User Story</a></li>
+                    <li><a href="#product-flow">Product Flow Overview</a></li>
+                    <li><a href="#user-stories">User Stories & Acceptance Criteria</a></li>
+                    <li><a href="#nfr">Non-Functional Requirements</a></li>
+                    <li><a href="#out-of-scope">Out of Scope</a></li>
+                </ol>
+            </div>
+
+            <!-- Product Overview -->
+            <div id="product-overview">
+                <div class="section-heading">Product Overview</div>
+                <div class="overview">
+                    <p>Revmatics CRO is a conversion rate optimization tool designed specifically for Shopify merchants. It analyzes a merchant's storefront, extracts brand intelligence, and automatically generates four fit-for-purpose landing pages corresponding to the purchase funnel stages: Awareness, Differentiation, Conversion, and Loyalty. The tool educates merchants on why different landing pages are needed for different campaign objectives, guides them through a personalized setup experience with a persistent global progress bar, and provides a dashboard to view, finalize, and publish generated pages. Features include responsive editing and subscription-based publishing. A/B testing is planned for a future release.</p>
+                </div>
+            </div>
+
+            <!-- Primary User Story -->
+            <div id="primary-user-story">
+                <div class="section-heading">Primary User Story</div>
+                <div class="primary-story">
+                    <div class="story-text">
+                        As a small business owner with a Shopify account, I need to be educated on marketing activities in order for me to see the value in using the CRO tool. I need to understand what the stages of a purchase funnel are and why I am using different landing pages to facilitate different outcomes in different campaigns.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Flow Overview -->
+            <div id="product-flow">
+                <div class="section-heading">Product Flow Overview</div>
+                <div class="flow-list">
+                    <ol>
+                        <li><strong>URL Entry & Landing Page Education:</strong> Merchant enters Shopify store URL and learns about funnel stages</li>
+                        <li><strong>Automated Site Analysis:</strong> Tool extracts brand data (colors, fonts, logo, products) with progress animation</li>
+                        <li><strong>Brand Intelligence Review:</strong> Merchant confirms extracted brand details match their identity</li>
+                        <li><strong>Funnel Stage Education:</strong> Merchant learns about four funnel stages (Awareness, Differentiation, Conversion, Loyalty) as pages are generated</li>
+                        <li><strong>Dashboard Carousel Showcase:</strong> Merchant views all four generated pages in carousel with readiness scores</li>
+                        <li><strong>Guided Tour:</strong> Auto-starting tour walks merchant through each generated page</li>
+                        <li><strong>Page Readiness Checklists:</strong> Merchant sees what's complete and incomplete on each page</li>
+                        <li><strong>Page Editor & Responsive Preview:</strong> Merchant customizes pages and previews on mobile</li>
+                        <li><strong>Subscription & Publish:</strong> Merchant chooses plan tier and publishes pages live</li>
+                        <li><strong>Global Progress Bar:</strong> Persistent step-by-step progress bar across the top of every screen showing completion percentage</li>
+                        <li><strong>A/B Testing Suite (Coming Soon):</strong> Future feature — merchant will create, run, and analyze A/B tests to optimize pages</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- User Stories & Acceptance Criteria -->
+            <div id="user-stories">
+                <div class="section-heading">User Stories & Acceptance Criteria</div>
+
+                <!-- US-01 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-01</div>
+                        <div class="story-title">URL Entry & Landing Page Education</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to enter my store URL so the tool can analyze my site and generate landing pages.
+                    </div>
+                    <div class="story-screenshots-multiple">
+                        <div class="story-screenshot">
+                            <img src="prd-assets/screen-url.png" alt="URL Entry Screen" loading="lazy">
+                        </div>
+                        <div class="story-screenshot">
+                            <img src="prd-assets/screen-url-moments.png" alt="Four Moments Education" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>URL input field is clearly visible with placeholder text</li>
+                        <li>CTA button ("Generate Landing Pages" or similar) triggers site extraction</li>
+                        <li>Four value propositions are displayed on the page</li>
+                        <li>"Four Moments" section educates user on funnel stages</li>
+                        <li>"How It Works" steps section shows the process flow</li>
+                        <li>Layout is clean and centered with adequate whitespace</li>
+                    </ul>
+                </div>
+
+                <!-- US-02 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-02</div>
+                        <div class="story-title">Automated Site Analysis</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want my site to be analyzed automatically so I don't have to manually input brand details.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-extract.png" alt="Site Analysis Progress" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Animated progress bar displays with 5 sequential extraction steps</li>
+                        <li>Each step shows a clear active state then transitions to completed state</li>
+                        <li>Merchant's URL is displayed during the extraction process</li>
+                        <li>"Next" button appears when extraction is nearing completion</li>
+                        <li>Extraction process completes within 30 seconds</li>
+                        <li>Loading indicators and animations maintain user engagement</li>
+                    </ul>
+                </div>
+
+                <!-- US-03 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-03</div>
+                        <div class="story-title">Brand Intelligence Review</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to review the extracted brand data so I can confirm it matches my actual brand identity.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-preview.png" alt="Brand Intelligence Review" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Color swatches are displayed with accompanying hex color codes</li>
+                        <li>Font family is detected and previewed with actual text samples</li>
+                        <li>Logo is displayed in a brand-colored box with proper spacing</li>
+                        <li>Product tags are listed as visual pills or badges</li>
+                        <li>"Looks Good" action button allows merchant to proceed</li>
+                        <li>"Regenerate" action button allows merchant to extract again</li>
+                        <li>All extracted data is presented in an organized, scannable layout</li>
+                    </ul>
+                </div>
+
+                <!-- US-04 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-04</div>
+                        <div class="story-title">Funnel Stage Education</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to learn about purchase funnel stages so I understand why different pages exist.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-funnel-edu.png" alt="Funnel Stage Education" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Four funnel stages are presented in sequence: Awareness → Differentiation → Conversion → Loyalty</li>
+                        <li>Each stage animates in with an icon, description, and campaign type tags</li>
+                        <li>Global top progress bar remains visible, showing "Build Pages" as the active step</li>
+                        <li>Page generation happens simultaneously in the background (60-second timeline)</li>
+                        <li>"See my Landing Pages" CTA appears after all stages have animated in (also shows early after 5s for skip)</li>
+                        <li>Educational content clearly explains the purpose of each stage and recommended campaign types</li>
+                    </ul>
+                </div>
+
+                <!-- US-05 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-05</div>
+                        <div class="story-title">Dashboard Carousel Showcase</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see all four generated pages in an overview so I can assess them at a glance.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-dashboard.png" alt="Dashboard Carousel" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Four portrait cards are displayed in a horizontal carousel layout</li>
+                        <li>Each card includes a realistic mock-up image preview of the landing page</li>
+                        <li>Readiness score badge displays (e.g., "8/10") with color-coded progress bar</li>
+                        <li>Stage badge and title are shown prominently on each card</li>
+                        <li>Brief description explains the purpose of each page</li>
+                        <li>Action buttons change based on page status: "Publish Now" for complete pages, "Finalize Now" for incomplete</li>
+                        <li>Carousel navigation arrows and dot indicators are visible and functional</li>
+                        <li>Cards animate in with staggered reveal on initial load</li>
+                        <li>Hover tooltips explain the purpose of each page stage</li>
+                    </ul>
+                </div>
+
+                <!-- US-06 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-06</div>
+                        <div class="story-title">Guided Tour</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to be walked through my generated pages so I understand what's ready and what needs work.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-dashboard-tour.png" alt="Guided Tour Overlay" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Four-step tour auto-starts after carousel cards have fully revealed</li>
+                        <li>Lightweight transparent overlay keeps the page visible while highlighting the active card</li>
+                        <li>Tooltip displays step counter, title, body text, and action items</li>
+                        <li>"Next" button advances to the next step</li>
+                        <li>"Skip" option allows merchant to dismiss the tour at any time</li>
+                        <li>Tour ends with a dismissable completion overlay</li>
+                        <li>Tour can be restarted from a help icon or menu</li>
+                    </ul>
+                </div>
+
+                <!-- US-07 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-07</div>
+                        <div class="story-title">Page Readiness Checklists</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see what's missing on each page so I know exactly what to complete.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-dashboard-checklists.png" alt="Readiness Checklists" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Four checklist panels are displayed, one per landing page</li>
+                        <li>Each checklist item shows its completion status (done or pending)</li>
+                        <li>"Add" button allows merchant to add missing elements to a page</li>
+                        <li>"View" button navigates to the page editor</li>
+                        <li>Readiness percentage is shown in the panel header</li>
+                        <li>Completed items are visually distinct (checkmark, different color, strikethrough)</li>
+                        <li>Clicking items links directly to the relevant section in the page editor</li>
+                    </ul>
+                </div>
+
+                <!-- US-08 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-08</div>
+                        <div class="story-title">Page Editor — Visual Preview</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to preview and edit my landing page so I can customize it before publishing.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-editor.png" alt="Page Editor Preview" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Full page frame displays a live content preview of the landing page</li>
+                        <li>Desktop and mobile device toggle buttons are visible in the toolbar</li>
+                        <li>Back button returns merchant to the dashboard</li>
+                        <li>Page title and stage badge are prominently displayed in the toolbar</li>
+                        <li>Right sidebar provides contextual hints and suggestions</li>
+                        <li>Preview updates in real-time as edits are made</li>
+                        <li>Page hierarchy and content structure are clear and readable</li>
+                    </ul>
+                </div>
+
+                <!-- US-09 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-09</div>
+                        <div class="story-title">Page Editor — Edit Panel</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want access to editing tools so I can modify content, design, and settings.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-editor-panel.png" alt="Edit Panel with Tools" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Slide-out panel contains categorized editing tools</li>
+                        <li>Categories include: Content, Design, Page Settings, Advanced, AI Tools</li>
+                        <li>Each category lists specific actions (e.g., "Edit Hero Headline", "Change Colors")</li>
+                        <li>"New" badges highlight recently added AI-powered features</li>
+                        <li>"Soon" badges indicate upcoming features not yet available</li>
+                        <li>Panel toggle button in toolbar shows/hides the edit panel</li>
+                        <li>Tools are organized logically and clearly labeled</li>
+                        <li>Icons and labels make it clear what each tool does</li>
+                    </ul>
+                </div>
+
+                <!-- US-10 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-10</div>
+                        <div class="story-title">Page Editor — Responsive Preview</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see how my page looks on mobile so I can ensure it works on all devices.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-editor-mobile.png" alt="Mobile Responsive Preview" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Mobile toggle button switches preview to 375px width</li>
+                        <li>Page content reflows responsively for mobile viewport</li>
+                        <li>Device toggle buttons show clear active state (desktop/mobile)</li>
+                        <li>Mobile preview accurately represents how the page appears on phones</li>
+                        <li>Text, images, and buttons remain readable and functional on mobile</li>
+                        <li>Toggle between desktop and mobile views is instantaneous</li>
+                    </ul>
+                </div>
+
+                <!-- US-11 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-11</div>
+                        <div class="story-title">Subscription & Publish</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to choose a plan and publish my page so it goes live.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-subscribe.png" alt="Subscription Plans" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Monthly tier ($25/mo) and Yearly tier ($20/mo) options are displayed side-by-side</li>
+                        <li>Yearly tier shows annual savings and "Best Value" badge</li>
+                        <li>Feature comparison list shows what's included in each plan</li>
+                        <li>14-day free trial is prominently mentioned</li>
+                        <li>Plan toggle button (Monthly/Yearly) switches between billing options</li>
+                        <li>CTA button ("Start Free Trial" or "Choose Plan") is clearly visible</li>
+                        <li>Pricing is displayed clearly with no hidden fees mentioned</li>
+                    </ul>
+                </div>
+
+                <!-- US-12 -->
+                <div class="user-story-card">
+                    <div class="story-header">
+                        <div class="story-id">US-12</div>
+                        <div class="story-title">Global Progress Bar</div>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see how far along I am in the setup process so I know what's left before my pages are ready.
+                    </div>
+                    <div class="story-screenshots-multiple">
+                        <div class="story-screenshot">
+                            <img src="prd-assets/screen-url.png" alt="Progress Bar at Step 1" loading="lazy">
+                        </div>
+                        <div class="story-screenshot">
+                            <img src="prd-assets/screen-editor.png" alt="Progress Bar at Step 6" loading="lazy">
+                        </div>
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>A persistent progress bar is fixed below the top navigation during the setup flow (screens 1–4)</li>
+                        <li>Four labeled steps are displayed: Enter URL, Analyze, Brand Preview, Build Pages</li>
+                        <li>Numbered circles mark each step with active (blue), done (green), and pending (gray) states</li>
+                        <li>A connecting line fills with a gradient as the merchant progresses through steps</li>
+                        <li>Percentage text (0% to 100%) is displayed on the right side of the bar</li>
+                        <li>Progress bar updates automatically when navigating between screens</li>
+                        <li>Progress bar disappears after "Build Pages" — the dashboard, editor, and publish screens use the standard topnav</li>
+                        <li>Active step circle has a subtle glow ring for emphasis</li>
+                    </ul>
+                </div>
+
+                <!-- US-13 (Deactivated) -->
+                <div class="user-story-card deactivated">
+                    <div class="story-header">
+                        <div class="story-id">US-13</div>
+                        <div class="story-title">A/B Testing — Experiment List</div>
+                        <span class="deactivated-badge">Coming Soon</span>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see all my A/B tests so I can track their status and results.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-ab-list.png" alt="A/B Test List" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Table displays all A/B tests with columns: Test Name, Page, Type, Status, Last Modified</li>
+                        <li>Search functionality allows merchants to find specific tests</li>
+                        <li>Filter options allow sorting by status (running, paused, completed, not started)</li>
+                        <li>Status badges are color-coded for easy visual identification</li>
+                        <li>"Create New Experiment" CTA button is prominently displayed</li>
+                        <li>Clicking a table row opens detailed results view for that experiment</li>
+                        <li>Table is sortable by clicking column headers</li>
+                    </ul>
+                </div>
+
+                <!-- US-14 (Deactivated) -->
+                <div class="user-story-card deactivated">
+                    <div class="story-header">
+                        <div class="story-id">US-14</div>
+                        <div class="story-title">A/B Testing — Create Experiment (Page Selection)</div>
+                        <span class="deactivated-badge">Coming Soon</span>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to select which page to test so I can improve specific funnel stages.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-ab-pick-page.png" alt="Page Selection for A/B Test" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Four page cards are displayed representing each funnel stage</li>
+                        <li>Each card shows icon, stage name, description, and readiness score</li>
+                        <li>Single selection mode: only one page can be selected at a time</li>
+                        <li>Selected page shows a visual checkmark or highlight</li>
+                        <li>Cancel button returns user to previous screen without saving</li>
+                        <li>Continue button advances to variant setup with selected page</li>
+                        <li>Cards are clickable to select/deselect pages</li>
+                    </ul>
+                </div>
+
+                <!-- US-15 (Deactivated) -->
+                <div class="user-story-card deactivated">
+                    <div class="story-header">
+                        <div class="story-id">US-15</div>
+                        <div class="story-title">A/B Testing — Create Experiment (Variant Setup)</div>
+                        <span class="deactivated-badge">Coming Soon</span>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to choose which page elements to test and see AI-suggested variants.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-ab-variants.png" alt="Variant Setup and AI Suggestions" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Grid of testable page elements is displayed with clear labels</li>
+                        <li>Impact badges (High/Medium/Low) indicate potential conversion impact per element</li>
+                        <li>Multi-select mode allows merchant to choose multiple elements to test</li>
+                        <li>Visual feedback shows selected/unselected state for each element</li>
+                        <li>AI-generated variant suggestions appear below each selected element (2-3 options)</li>
+                        <li>Custom input option allows merchant to add custom variant text</li>
+                        <li>Test name is auto-generated from selected elements</li>
+                        <li>Expandable config cards provide detailed settings per element</li>
+                        <li>Create and Cancel buttons complete or exit the setup flow</li>
+                    </ul>
+                </div>
+
+                <!-- US-16 (Deactivated) -->
+                <div class="user-story-card deactivated">
+                    <div class="story-header">
+                        <div class="story-id">US-16</div>
+                        <div class="story-title">A/B Testing — Results & Promotion</div>
+                        <span class="deactivated-badge">Coming Soon</span>
+                    </div>
+                    <div class="story-text-box">
+                        As a merchant, I want to see test results and promote the winner so I can improve my conversion rates.
+                    </div>
+                    <div class="story-screenshot">
+                        <img src="prd-assets/screen-ab-results.png" alt="A/B Test Results" loading="lazy">
+                    </div>
+                    <div class="acceptance-heading">Acceptance Criteria</div>
+                    <ul class="acceptance-list">
+                        <li>Side-by-side variant comparison displays control vs. challenger variant</li>
+                        <li>Live page preview shows how each variant appears</li>
+                        <li>Stats displayed: visitors, conversions, conversion rate, vs. control comparison</li>
+                        <li>Confidence percentage is prominently shown with color-coded banner</li>
+                        <li>"Promote Winner" button appears only when confidence >= 95%</li>
+                        <li>Button is disabled or grayed out when confidence is below threshold</li>
+                        <li>Clicking "Promote Winner" replaces control with winner variant</li>
+                        <li>Test status shows when experiment is running, paused, or completed</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Non-Functional Requirements -->
+            <div id="nfr">
+                <div class="section-heading">Non-Functional Requirements</div>
+                <div class="nfr-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Requirement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Performance</strong></td>
+                                <td>Site extraction completes within 30 seconds; page loads in under 3 seconds; dashboard carousel animations smooth at 60fps</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Browser Support</strong></td>
+                                <td>Chrome, Safari, Firefox, and Edge (latest 2 versions)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Responsive Design</strong></td>
+                                <td>Mobile-first approach; minimum supported width 375px; touch-friendly interface</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Accessibility</strong></td>
+                                <td>WCAG AA compliance; keyboard navigation; semantic HTML; alt text on images; sufficient color contrast</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Security</strong></td>
+                                <td>Session-only data storage; HTTPS only; no credential storage; CSRF protection; input validation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Data Privacy</strong></td>
+                                <td>Comply with GDPR and CCPA; merchant data never shared with third parties; clear privacy policy</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Out of Scope -->
+            <div id="out-of-scope">
+                <div class="section-heading">Out of Scope</div>
+                <div class="out-of-scope">
+                    <ul>
+                        <li>A/B Testing Suite (planned for future release — user stories US-13 through US-16 are deactivated)</li>
+                        <li>Live Shopify API integration (mocked for MVP)</li>
+                        <li>Real site crawling and analysis (templated for MVP)</li>
+                        <li>User authentication and saved projects (single-session flow)</li>
+                        <li>Real-time analytics data collection and reporting</li>
+                        <li>Multi-language support (English only for v3.0)</li>
+                        <li>Team collaboration and shared workspaces</li>
+                        <li>Custom domain hosting or subdomain allocation</li>
+                        <li>Email marketing integrations</li>
+                        <li>CRM integrations (Salesforce, HubSpot, etc.)</li>
+                        <li>Advanced segmentation and personalization</li>
+                        <li>White-label or reseller portal</li>
+                        <li>Mobile app (web-responsive only)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- 6. Functional Requirements -->
-  <div class="section" id="requirements">
-    <div class="section-label">Section 6</div>
-    <h2>Functional Requirements</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Requirement</th>
-          <th>Priority</th>
-          <th>Version</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>FR-01</td>
-          <td>Accept a Shopify store URL as primary input</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-02</td>
-          <td>Display educational content about funnel stages before input</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-03</td>
-          <td>Simulate real-time site analysis with progress feedback</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-04</td>
-          <td>Display extracted brand intelligence for merchant review</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-05</td>
-          <td>Allow merchant to select one or more funnel stages</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-06</td>
-          <td>Generate a contextualised preview of each selected landing page</td>
-          <td><span class="status-badge status-must">Must Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-07</td>
-          <td>Provide mobile/desktop preview toggle</td>
-          <td><span class="status-badge status-should">Should Have</span></td>
-          <td><span class="status-badge status-v1">v1.0</span></td>
-        </tr>
-        <tr>
-          <td>FR-08</td>
-          <td>Export page to Shopify via API</td>
-          <td><span class="status-badge status-should">Should Have</span></td>
-          <td><span class="status-badge status-future">Future</span></td>
-        </tr>
-        <tr>
-          <td>FR-09</td>
-          <td>Allow inline editing of generated page copy</td>
-          <td><span class="status-badge status-should">Should Have</span></td>
-          <td><span class="status-badge status-future">Future</span></td>
-        </tr>
-        <tr>
-          <td>FR-10</td>
-          <td>A/B test scheduling across funnel stages</td>
-          <td><span class="status-badge status-nice">Nice to Have</span></td>
-          <td><span class="status-badge status-future">Future</span></td>
-        </tr>
-        <tr>
-          <td>FR-11</td>
-          <td>Performance analytics dashboard per page</td>
-          <td><span class="status-badge status-nice">Nice to Have</span></td>
-          <td><span class="status-badge status-future">Future</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 7. UX Principles -->
-  <div class="section" id="ux">
-    <div class="section-label">Section 7</div>
-    <h2>UX &amp; Design Principles</h2>
-    <ul>
-      <li><strong>Education-first:</strong> Every screen teaches the merchant something about CRO and funnel strategy, not just task completion.</li>
-      <li><strong>Progressive disclosure:</strong> Complexity is introduced only as needed. The URL input is the sole entry point — everything follows naturally from there.</li>
-      <li><strong>Brand-reflective output:</strong> Generated pages should feel like they were hand-crafted for the specific merchant, not generic templates.</li>
-      <li><strong>Trust through transparency:</strong> The site analysis step shows the merchant exactly what data was extracted and allows corrections — building confidence in the tool.</li>
-      <li><strong>Mobile-first preview:</strong> Given that Shopify merchants' customers are predominantly mobile, the preview defaults to mobile view.</li>
-      <li><strong>Jargon avoidance:</strong> All labels and tooltips use plain business language ("the page that turns browsers into buyers") rather than marketing-speak ("high-converting bottom-of-funnel asset").</li>
-    </ul>
-  </div>
-
-  <!-- 8. Non-Functional -->
-  <div class="section" id="non-functional">
-    <div class="section-label">Section 8</div>
-    <h2>Non-Functional Requirements</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Category</th>
-          <th>Requirement</th>
-          <th>Target</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Performance</td>
-          <td>Site analysis and page generation time</td>
-          <td>Under 15 seconds end-to-end</td>
-        </tr>
-        <tr>
-          <td>Compatibility</td>
-          <td>Browser support</td>
-          <td>Chrome, Safari, Firefox, Edge (last 2 major versions)</td>
-        </tr>
-        <tr>
-          <td>Responsive</td>
-          <td>Tool UI usability on mobile</td>
-          <td>Fully usable on 375px+ screens</td>
-        </tr>
-        <tr>
-          <td>Accessibility</td>
-          <td>WCAG compliance level</td>
-          <td>AA (minimum)</td>
-        </tr>
-        <tr>
-          <td>Security</td>
-          <td>Merchant URL data handling</td>
-          <td>Not stored beyond session without consent</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 9. Out of Scope -->
-  <div class="section" id="scope">
-    <div class="section-label">Section 9</div>
-    <h2>Out of Scope — v3.0</h2>
-    <ul>
-      <li>Live Shopify publishing integration (API connection)</li>
-      <li>Real site crawling and scraping (mocked in v1.0)</li>
-      <li>User authentication and saved projects</li>
-      <li>A/B testing infrastructure</li>
-      <li>Analytics and performance tracking per generated page</li>
-      <li>Multi-language / internationalisation</li>
-      <li>Team collaboration features</li>
-      <li>Custom domain publishing</li>
-    </ul>
-  </div>
-
-  <!-- 10. Success Metrics -->
-  <div class="section" id="success">
-    <div class="section-label">Section 10</div>
-    <h2>Success Metrics</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Metric</th>
-          <th>Target (v1.0 Mock-up)</th>
-          <th>How Measured</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Flow completion rate</td>
-          <td>&gt; 60% complete all 6 screens</td>
-          <td>Session recording / analytics</td>
-        </tr>
-        <tr>
-          <td>Time-to-first-page-preview</td>
-          <td>&lt; 2 minutes from URL input</td>
-          <td>Session duration tracking</td>
-        </tr>
-        <tr>
-          <td>Education comprehension</td>
-          <td>&gt; 70% can name 3 funnel stages unprompted</td>
-          <td>Post-session survey</td>
-        </tr>
-        <tr>
-          <td>Merchant satisfaction</td>
-          <td>NPS &gt; 40 in user testing</td>
-          <td>In-product NPS survey</td>
-        </tr>
-        <tr>
-          <td>Page generation accuracy</td>
-          <td>&gt; 80% feel pages reflect their brand</td>
-          <td>Post-generation survey</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-</div>
-
-<div style="background: var(--primary-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px;">
-  Revmatics · CRO User Journey PRD · v3.0 · April 2026 &nbsp;|&nbsp;
-  <a href="index.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">← Version Library</a>
-</div>
-
+    <!-- Footer -->
+    <div class="footer">
+        <p>Revmatics · CRO User Flow PRD · v3.0 · April 2026</p>
+        <p><a href="index.html">← Back to Index</a></p>
+    </div>
 </body>
 </html>

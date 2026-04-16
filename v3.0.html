@@ -40,13 +40,24 @@
   .topnav { position:fixed; top:0; left:0; right:0; height:56px; background:white; border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; z-index:100; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
   .topnav .logo { font-weight:700; font-size:18px; color:var(--primary); letter-spacing:-0.5px; }
   .topnav .logo span { color:var(--text-light); font-weight:400; margin-left:8px; font-size:14px; }
-  .topnav .step-indicator { margin-left:auto; display:flex; gap:8px; align-items:center; }
-  .topnav .step-dot { width:8px; height:8px; border-radius:50%; background:var(--border); transition:all 0.3s; }
-  .topnav .step-dot.active { background:var(--primary); width:24px; border-radius:4px; }
-  .topnav .step-dot.done { background:var(--success); }
+  /* ── Progress Bar (below topnav) ── */
+  .progress-bar-wrapper { position:fixed; top:56px; left:0; right:0; z-index:99; background:white; border-bottom:1px solid var(--border); padding:0; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+  .progress-bar-inner { max-width:960px; margin:0 auto; padding:12px 24px; display:flex; align-items:center; gap:16px; }
+  .progress-steps { display:flex; align-items:center; flex:1; position:relative; }
+  .progress-step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:2; flex:1; }
+  .progress-step:last-child { flex:0; }
+  .progress-step-circle { width:28px; height:28px; border-radius:50%; background:var(--border); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--text-light); transition:all 0.4s ease; border:2px solid var(--border); }
+  .progress-step.active .progress-step-circle { background:var(--primary); color:white; border-color:var(--primary); transform:scale(1.15); box-shadow:0 0 0 4px rgba(46,80,144,0.15); }
+  .progress-step.done .progress-step-circle { background:var(--success); color:white; border-color:var(--success); }
+  .progress-step-label { font-size:10px; color:var(--text-light); margin-top:4px; white-space:nowrap; font-weight:500; transition:color 0.3s; }
+  .progress-step.active .progress-step-label { color:var(--primary); font-weight:700; }
+  .progress-step.done .progress-step-label { color:var(--success); }
+  .progress-line-bg { position:absolute; top:14px; left:14px; right:14px; height:3px; background:var(--border); z-index:1; border-radius:2px; }
+  .progress-line-fill { height:100%; background:linear-gradient(90deg, var(--success), var(--primary)); border-radius:2px; transition:width 0.5s ease; width:0%; }
+  .progress-pct { font-size:14px; font-weight:800; color:var(--primary); min-width:48px; text-align:right; white-space:nowrap; }
 
   /* ── Screen 1: Landing Page ── */
-  #screen-url { flex-direction:column; align-items:center; background:linear-gradient(160deg, #EEF2FF 0%, #F8FAFC 60%); padding-top:56px; overflow-y:auto; }
+  #screen-url { flex-direction:column; align-items:center; background:linear-gradient(160deg, #EEF2FF 0%, #F8FAFC 60%); padding-top:110px; overflow-y:auto; }
 
   /* Hero */
   .lp-hero { display:grid; grid-template-columns:1fr 1fr; gap:48px; max-width:960px; width:92%; padding:64px 0 48px; align-items:center; }
@@ -106,7 +117,7 @@
   .url-features { display:none; }
 
   /* ── Screen 2: Extract ── */
-  #screen-extract { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
+  #screen-extract { flex-direction:column; align-items:center; justify-content:center; padding-top:110px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
   .extract-card { background:white; border-radius:20px; padding:48px; max-width:520px; width:90%; box-shadow:var(--shadow-lg); text-align:center; }
   .spinner { width:56px; height:56px; border:4px solid var(--border); border-top-color:var(--primary); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 24px; }
   .extract-card h2 { font-size:22px; color:var(--primary-dark); margin-bottom:8px; }
@@ -120,7 +131,7 @@
   .extract-step.done .icon { border-color:var(--success); background:var(--success); color:white; animation:checkPop 0.3s ease; }
 
   /* ── Screen 3: Preview ── */
-  #screen-preview { flex-direction:column; align-items:center; padding-top:80px; padding-bottom:40px; background:var(--bg); }
+  #screen-preview { flex-direction:column; align-items:center; padding-top:130px; padding-bottom:40px; background:var(--bg); }
   .preview-container { max-width:800px; width:92%; }
   .preview-container h2 { font-size:24px; color:var(--primary-dark); margin-bottom:4px; }
   .preview-container .subtitle { color:var(--text-light); margin-bottom:32px; font-size:15px; }
@@ -142,7 +153,7 @@
   .btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); }
 
   /* ── Screen 4: Generate ── */
-  #screen-generate { flex-direction:column; align-items:center; justify-content:center; padding-top:56px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
+  #screen-generate { flex-direction:column; align-items:center; justify-content:center; padding-top:110px; background:linear-gradient(135deg, #F8FAFC 0%, #EEF2FF 100%); }
   .gen-container { max-width:640px; width:92%; text-align:center; }
   .gen-container h2 { font-size:24px; color:var(--primary-dark); margin-bottom:8px; }
   .gen-container .sub { color:var(--text-light); margin-bottom:40px; }
@@ -159,13 +170,14 @@
   .gen-timer { font-size:14px; color:var(--text-light); }
 
   /* ── Screen 5: Funnel Education ── */
-  #screen-funnel-edu { flex-direction:column; align-items:center; padding-top:80px; padding-bottom:40px; background:linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%); }
+  #screen-funnel-edu { flex-direction:column; align-items:center; padding-top:140px; padding-bottom:40px; background:linear-gradient(180deg, #EEF2FF 0%, #F8FAFC 100%); }
   .funnel-edu { max-width:900px; width:94%; }
   .funnel-edu h2 { font-size:26px; color:var(--primary-dark); margin-bottom:4px; text-align:center; }
   .funnel-edu .sub { color:var(--text-light); text-align:center; margin-bottom:36px; font-size:15px; }
-  .funnel-timer-bar { width:100%; height:4px; background:var(--border); border-radius:2px; margin-bottom:36px; overflow:hidden; }
-  .funnel-timer-bar .fill { height:100%; background:linear-gradient(90deg, var(--awareness), var(--differentiation), var(--conversion), var(--loyalty)); border-radius:2px; transition:width 1s linear; }
-  .funnel-timer-text { text-align:center; font-size:13px; color:var(--text-light); margin-bottom:24px; }
+  .funnel-timer-bar { display:none; }
+  .funnel-timer-text { display:none; }
+
+  /* V3: Inline step progress removed — top progress bar used instead */
   .funnel-visual { display:flex; flex-direction:column; margin-bottom:32px; }
   .funnel-stage { display:flex; align-items:stretch; gap:20px; position:relative; }
   .funnel-stage .connector { width:3px; background:var(--border); position:absolute; left:28px; top:58px; bottom:-20px; }
@@ -378,7 +390,7 @@
   /* ── V2: Enhanced Tour Overlay ── */
   .tour-overlay {
     position:fixed; top:0; left:0; right:0; bottom:0;
-    background:rgba(15,23,42,0.6); backdrop-filter:blur(2px);
+    background:rgba(15,23,42,0.12);
     z-index:199; opacity:0; pointer-events:none; transition:opacity 0.4s;
   }
   .tour-overlay.active { opacity:1; pointer-events:auto; }
@@ -463,7 +475,7 @@
   .ch-action.ch-done { background:#ECFDF5; color:#065F46; }
 
   /* ── Screen 7: Editor ── */
-  #screen-editor { flex-direction:column; padding-top:56px; background:var(--bg); }
+  #screen-editor { flex-direction:column; padding-top:104px; background:var(--bg); }
   .editor-topbar { position:fixed; top:56px; left:0; right:0; height:48px; background:white; border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 24px; z-index:90; gap:12px; }
   .editor-topbar .back-btn { background:none; border:none; font-size:14px; color:var(--primary); cursor:pointer; font-weight:600; display:flex; align-items:center; gap:4px; }
   .editor-topbar .page-title { font-weight:600; font-size:15px; }
@@ -962,14 +974,31 @@
 <!-- ── TOP NAV ── -->
 <div class="topnav">
   <div class="logo">Revmatics <span>CRO</span></div>
-  <div class="step-indicator">
-    <div class="step-dot active" id="dot-0"></div>
-    <div class="step-dot" id="dot-1"></div>
-    <div class="step-dot" id="dot-2"></div>
-    <div class="step-dot" id="dot-3"></div>
-    <div class="step-dot" id="dot-4"></div>
-    <div class="step-dot" id="dot-5"></div>
-    <div class="step-dot" id="dot-6"></div>
+</div>
+
+<!-- ── PROGRESS BAR ── -->
+<div class="progress-bar-wrapper" id="progress-bar">
+  <div class="progress-bar-inner">
+    <div class="progress-steps">
+      <div class="progress-line-bg"><div class="progress-line-fill" id="progress-fill"></div></div>
+      <div class="progress-step active" id="pstep-0">
+        <div class="progress-step-circle">1</div>
+        <div class="progress-step-label">Enter URL</div>
+      </div>
+      <div class="progress-step" id="pstep-1">
+        <div class="progress-step-circle">2</div>
+        <div class="progress-step-label">Analyze</div>
+      </div>
+      <div class="progress-step" id="pstep-2">
+        <div class="progress-step-circle">3</div>
+        <div class="progress-step-label">Brand Preview</div>
+      </div>
+      <div class="progress-step" id="pstep-3">
+        <div class="progress-step-circle">4</div>
+        <div class="progress-step-label">Build Pages</div>
+      </div>
+    </div>
+    <div class="progress-pct" id="progress-pct">0%</div>
   </div>
 </div>
 
@@ -1211,6 +1240,9 @@
     <h2>Building Your Pages</h2>
     <p class="sub">While we generate your landing pages, here's a quick look at what each one does and how you'll use them in your marketing campaigns.</p>
     <div style="display:inline-flex;align-items:center;gap:8px;background:#EEF2FF;padding:8px 20px;border-radius:8px;font-size:13px;color:var(--primary);font-weight:600;margin-bottom:32px">&#x1F4D6; Quick Guide — 1 minute read</div>
+
+    <!-- V3: Inline step progress removed — using top progress bar instead -->
+
     <div class="funnel-visual">
       <div class="funnel-stage" id="fs-1">
         <div class="connector"></div>
@@ -1252,7 +1284,7 @@
         </div>
       </div>
     </div>
-    <button class="btn-primary" id="edu-next-btn" onclick="goToDashboard()" style="display:none;margin:0 auto;padding:16px 48px;font-size:16px">Go to My Dashboard &#x2192;</button>
+    <button class="btn-primary" id="edu-next-btn" onclick="goToDashboard()" style="display:none;margin:0 auto;padding:16px 48px;font-size:16px">See my Landing Pages &#x2192;</button>
   </div>
 </div>
 
@@ -1272,7 +1304,7 @@
     <div class="nav-item" onclick="openEditor('conversion')"><div class="dot" style="background:var(--conversion)"></div> Conversion</div>
     <div class="nav-item" onclick="openEditor('loyalty')"><div class="dot" style="background:var(--loyalty)"></div> Loyalty</div>
     <div class="nav-section">Tools</div>
-    <div class="nav-item" onclick="openABTesting()"><span>&#x1F9EA;</span> A/B Testing</div>
+    <div class="nav-item" style="opacity:0.45;cursor:default;pointer-events:none"><span>&#x1F9EA;</span> A/B Testing <span style="font-size:10px;background:var(--warning);color:var(--text);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:600">Soon</span></div>
     <div class="nav-item"><span>&#x2699;</span> Settings</div>
   </div>
   <div class="dash-main">
@@ -1562,12 +1594,22 @@ const screens = ['screen-url','screen-extract','screen-preview','screen-funnel-e
 
 function showScreen(index) {
   screens.forEach((s,i) => document.getElementById(s).classList.toggle('active', i===index));
-  for(let i=0;i<7;i++){
-    const d=document.getElementById('dot-'+i);
-    d.className='step-dot';
-    if(i<index) d.classList.add('done');
-    if(i===index) d.classList.add('active');
+  // Progress bar: 4 steps (screens 0-3), hidden after that
+  const progressBar = document.getElementById('progress-bar');
+  const totalSteps = 4; // steps 0-3
+  if(progressBar) progressBar.style.display = (index >= totalSteps) ? 'none' : '';
+  for(let i=0;i<totalSteps;i++){
+    const step = document.getElementById('pstep-'+i);
+    if(!step) continue;
+    step.className = 'progress-step';
+    if(i < index) step.classList.add('done');
+    if(i === index) step.classList.add('active');
   }
+  const pct = Math.round((Math.min(index, totalSteps-1) / (totalSteps-1)) * 100);
+  const fill = document.getElementById('progress-fill');
+  if(fill) fill.style.width = pct + '%';
+  const pctEl = document.getElementById('progress-pct');
+  if(pctEl) pctEl.textContent = pct + '%';
   currentScreen=index;
   window.scrollTo(0,0);
 }
@@ -1618,19 +1660,36 @@ function startGeneration(){
   // Reset state
   ['sc-1','sc-2','sc-3','sc-4'].forEach(s=>document.getElementById(s).classList.remove('generated'));
 
-  // Show the dashboard button immediately
-  document.getElementById('edu-next-btn').style.display='block';
+  // Hide button until all done
+  document.getElementById('edu-next-btn').style.display='none';
 
-  // Stagger the stage card animations
-  ['fs-1','fs-2','fs-3','fs-4'].forEach((s,i)=>setTimeout(()=>document.getElementById(s).classList.add('visible'),300+i*600));
+  // 60-second timeline: 4 stages, ~15s each
+  const stageAppear = [500, 15000, 30000, 45000];
+  const stageComplete = [14000, 29000, 44000, 59000];
 
-  // Stagger completion of each page generation (spinners → checkmarks)
-  const delays = [3000, 5500, 8000, 10500];
-  delays.forEach((d,i)=>{
-    setTimeout(()=>{
-      document.getElementById('sc-'+(i+1)).classList.add('generated');
-    }, d);
+  // Animate stage cards appearing
+  stageAppear.forEach((t,i) => {
+    setTimeout(() => {
+      document.getElementById('fs-'+(i+1)).classList.add('visible');
+    }, t);
   });
+
+  // Animate stage completions (spinners → checkmarks)
+  stageComplete.forEach((t,i) => {
+    setTimeout(() => {
+      document.getElementById('sc-'+(i+1)).classList.add('generated');
+    }, t);
+  });
+
+  // Show button after all stages complete (60s)
+  setTimeout(() => {
+    document.getElementById('edu-next-btn').style.display='block';
+  }, 60000);
+
+  // Also show button early if user wants to skip (after 5s)
+  setTimeout(() => {
+    document.getElementById('edu-next-btn').style.display='block';
+  }, 5000);
 }
 
 // Score color scale: 0=red → 5=amber → 10=green

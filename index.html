@@ -280,6 +280,15 @@
     border-color: #BBF7D0;
   }
   .link-btn-prd:hover { background: #DCFCE7; border-color: #86EFAC; }
+  .link-btn-disabled {
+    background: #F3F4F6;
+    color: #9CA3AF;
+    border-color: #E5E7EB;
+    pointer-events: none;
+    cursor: default;
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
 
   .link-cell { display: flex; flex-direction: column; gap: 8px; }
 
@@ -539,9 +548,9 @@
                 <a href="v2.0.html" class="link-btn link-btn-mockup" target="_blank">
                   &#x1F5A5; Mock-up
                 </a>
-                <a href="prd-v2.0.html" class="link-btn link-btn-prd" target="_blank">
-                  &#x1F4C4; PRD
-                </a>
+                <span class="link-btn link-btn-disabled">
+                  &#x1F4C4; PRD (Superseded)
+                </span>
               </div>
             </td>
             <td>
@@ -578,9 +587,9 @@
                 <a href="v1.0.html" class="link-btn link-btn-mockup" target="_blank">
                   &#x1F5A5; Mock-up
                 </a>
-                <a href="prd-v1.0.html" class="link-btn link-btn-prd" target="_blank">
-                  &#x1F4C4; PRD
-                </a>
+                <span class="link-btn link-btn-disabled">
+                  &#x1F4C4; PRD (Superseded)
+                </span>
               </div>
             </td>
             <td>
