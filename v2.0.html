@@ -202,13 +202,14 @@
   /* ── V2: Showcase Cards ── */
   .showcase-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:36px; overflow:visible; position:relative; z-index:5; }
   .showcase-card {
-    background:white; border-radius:16px; overflow:hidden; box-shadow:var(--shadow);
+    background:white; border-radius:16px; box-shadow:var(--shadow);
     cursor:pointer; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); position:relative;
     opacity:0; transform:translateY(30px) scale(0.97);
     border:2px solid transparent;
   }
+  .showcase-card .sc-preview { overflow:hidden; border-radius:14px 14px 0 0; }
   .showcase-card.revealed { opacity:1; transform:translateY(0) scale(1); }
-  .showcase-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 20px 60px rgba(0,0,0,0.15); border-color:var(--primary-light); }
+  .showcase-card:hover { transform:translateY(-6px) scale(1.01); box-shadow:0 20px 60px rgba(0,0,0,0.15); border-color:var(--primary-light); z-index:20; }
   .showcase-card.tour-active { border-color:var(--primary); box-shadow:0 0 0 4px rgba(46,80,144,0.15), var(--shadow-lg); z-index:201; }
 
   /* Preview area — the "a-ha" visual */
@@ -256,7 +257,7 @@
     background:var(--text); color:white; font-size:12px; line-height:1.5;
     padding:12px 16px; border-radius:10px; width:260px; text-align:left;
     opacity:0; pointer-events:none; transition:all 0.25s ease;
-    z-index:15; box-shadow:0 4px 16px rgba(0,0,0,0.25);
+    z-index:50; box-shadow:0 4px 16px rgba(0,0,0,0.25);
   }
   .sc-hover-tooltip::after {
     content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
@@ -1254,10 +1255,10 @@
       <!-- AWARENESS CARD — 10/10 READY -->
       <div class="showcase-card sc-ready" id="sc-card-awareness" onclick="openEditor('awareness')">
         <div class="sc-hover-tooltip">The Awareness page introduces your brand to people who have never heard of you. It's your first impression — designed to spark curiosity and build trust.</div>
-        <div class="sc-readiness sc-readiness-full">
-          <div class="sc-r-ring" style="background:var(--success)">10</div>
+        <div class="sc-readiness sc-readiness-full" data-score="10">
+          <div class="sc-r-ring">10</div>
           <span class="sc-r-text">out of 10</span>
-          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:100%;background:var(--success)"></div></div>
+          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:100%"></div></div>
         </div>
         <div class="sc-preview">
           <div class="sc-preview-inner">
@@ -1312,10 +1313,10 @@
       <!-- DIFFERENTIATION CARD -->
       <div class="showcase-card" id="sc-card-differentiation" onclick="openEditor('differentiation')">
         <div class="sc-hover-tooltip">The Differentiation page shows visitors why you're the better choice. Targets mid-funnel shoppers who are comparing options and evaluating alternatives.</div>
-        <div class="sc-readiness">
-          <div class="sc-r-ring" style="background:var(--differentiation)">7</div>
+        <div class="sc-readiness" data-score="7">
+          <div class="sc-r-ring">7</div>
           <span class="sc-r-text">out of 10</span>
-          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:70%;background:var(--differentiation)"></div></div>
+          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:70%"></div></div>
         </div>
         <div class="sc-preview">
           <div class="sc-preview-inner">
@@ -1359,10 +1360,10 @@
       <!-- CONVERSION CARD -->
       <div class="showcase-card" id="sc-card-conversion" onclick="openEditor('conversion')">
         <div class="sc-hover-tooltip">The Conversion page drives the purchase. For visitors who are ready to buy — it eliminates friction with clear offers, pricing, and trust signals.</div>
-        <div class="sc-readiness">
-          <div class="sc-r-ring" style="background:var(--conversion)">7</div>
+        <div class="sc-readiness" data-score="7">
+          <div class="sc-r-ring">7</div>
           <span class="sc-r-text">out of 10</span>
-          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:70%;background:var(--conversion)"></div></div>
+          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:70%"></div></div>
         </div>
         <div class="sc-preview">
           <div class="sc-preview-inner">
@@ -1411,10 +1412,10 @@
       <!-- LOYALTY CARD -->
       <div class="showcase-card" id="sc-card-loyalty" onclick="openEditor('loyalty')">
         <div class="sc-hover-tooltip">The Loyalty page brings existing customers back. Rewards repeat buyers, showcases new products, and turns happy customers into referral channels.</div>
-        <div class="sc-readiness">
-          <div class="sc-r-ring" style="background:var(--loyalty)">6</div>
+        <div class="sc-readiness" data-score="6">
+          <div class="sc-r-ring">6</div>
           <span class="sc-r-text">out of 10</span>
-          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:60%;background:var(--loyalty)"></div></div>
+          <div class="sc-r-bar-wrap"><div class="sc-r-bar-fill" style="width:60%"></div></div>
         </div>
         <div class="sc-preview">
           <div class="sc-preview-inner">
@@ -1697,9 +1698,44 @@ function startGeneration(){
   });
 }
 
+// Score color scale: 0=red → 5=amber → 10=green
+function scoreColor(score) {
+  const s = Math.max(0, Math.min(10, score));
+  // Red(0) → Orange(3) → Amber(5) → Yellow-Green(7) → Green(10)
+  const stops = [
+    [0, [220,38,38]],   // red-600
+    [3, [234,88,12]],   // orange-600
+    [5, [217,169,26]],  // amber-500
+    [7, [101,163,13]],  // lime-600
+    [9, [22,163,74]],   // green-600
+    [10,[5,150,105]]    // emerald-600
+  ];
+  let lo = stops[0], hi = stops[stops.length-1];
+  for(let i = 0; i < stops.length - 1; i++) {
+    if(s >= stops[i][0] && s <= stops[i+1][0]) { lo = stops[i]; hi = stops[i+1]; break; }
+  }
+  const t = hi[0] === lo[0] ? 1 : (s - lo[0]) / (hi[0] - lo[0]);
+  const r = Math.round(lo[1][0] + (hi[1][0] - lo[1][0]) * t);
+  const g = Math.round(lo[1][1] + (hi[1][1] - lo[1][1]) * t);
+  const b = Math.round(lo[1][2] + (hi[1][2] - lo[1][2]) * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+function applyScoreColors() {
+  document.querySelectorAll('.sc-readiness[data-score]').forEach(el => {
+    const score = parseInt(el.dataset.score, 10);
+    const color = scoreColor(score);
+    const ring = el.querySelector('.sc-r-ring');
+    const bar = el.querySelector('.sc-r-bar-fill');
+    if(ring) ring.style.background = color;
+    if(bar) bar.style.background = color;
+  });
+}
+
 function goToDashboard(){
   showScreen(4);
   renderChecklists();
+  applyScoreColors();
   // V2: Staggered reveal of showcase cards + auto-start tour
   const cards = document.querySelectorAll('.showcase-card');
   cards.forEach((c,i) => {
