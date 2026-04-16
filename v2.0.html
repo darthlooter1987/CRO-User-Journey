@@ -79,9 +79,11 @@
   .lp-badge-2 { background:var(--differentiation); }
   .lp-badge-3 { background:var(--conversion); }
   .lp-badge-4 { background:var(--loyalty); }
-  .lp-page-preview { height:100px; border-radius:8px; background:linear-gradient(135deg,#EEF2FF,#E2E8F0); border:1px solid var(--border); display:flex; flex-direction:column; gap:6px; padding:10px; overflow:hidden; }
-  .lp-page-preview::before,.lp-page-preview::after { content:''; display:block; height:8px; border-radius:4px; background:var(--border); }
-  .lp-page-preview::after { width:60%; }
+  .lp-page-preview { height:auto; min-height:80px; border-radius:8px; background:linear-gradient(135deg,#EEF2FF,#E2E8F0); border:1px solid var(--border); padding:10px 12px; overflow:hidden; }
+  .lp-page-preview .best-for-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; color:rgba(0,0,0,0.55); }
+  .lp-page-preview .best-for-list { list-style:none; padding:0; margin:0; }
+  .lp-page-preview .best-for-list li { font-size:11px; color:rgba(0,0,0,0.7); padding:2px 0; display:flex; align-items:center; gap:6px; }
+  .lp-page-preview .best-for-list li::before { content:'✓'; font-weight:700; font-size:10px; color:rgba(0,0,0,0.45); }
   .lp-preview-2 { background:linear-gradient(135deg,#FFF3E0,#FFE8CC); }
   .lp-preview-3 { background:linear-gradient(135deg,#E8FFF5,#D1FAE5); }
   .lp-preview-4 { background:linear-gradient(135deg,#F3EAFF,#EDE0FF); }
@@ -264,6 +266,10 @@
 
   /* Card info area — distinct background */
   .sc-info { padding:20px 24px 24px; background:#F8FAFC; }
+  #sc-card-awareness .sc-info { background:linear-gradient(135deg,#EEF2FF,#E2E8F0); }
+  #sc-card-differentiation .sc-info { background:linear-gradient(135deg,#FFF3E0,#FFE8CC); }
+  #sc-card-conversion .sc-info { background:linear-gradient(135deg,#E8FFF5,#D1FAE5); }
+  #sc-card-loyalty .sc-info { background:linear-gradient(135deg,#F3EAFF,#EDE0FF); }
   .sc-stage-badge {
     display:inline-flex; align-items:center; gap:6px;
     font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px;
@@ -979,28 +985,56 @@
     <p class="lp-moments-sub">Four pages. Four stages of readiness.</p>
     <div class="lp-pages-grid">
       <div class="lp-page-card">
-        <div class="lp-page-badge">Page 1</div>
+        <div class="lp-page-badge">Awareness</div>
         <h3>First Impression</h3>
         <p>For people discovering you.</p>
-        <div class="lp-page-preview lp-preview-1"></div>
+        <div class="lp-page-preview lp-preview-1">
+          <div class="best-for-title">Best for:</div>
+          <ul class="best-for-list">
+            <li>Social Media Ads</li>
+            <li>Display Ads</li>
+            <li>Content Marketing</li>
+          </ul>
+        </div>
       </div>
       <div class="lp-page-card">
-        <div class="lp-page-badge lp-badge-2">Page 2</div>
+        <div class="lp-page-badge lp-badge-2">Differentiation</div>
         <h3>Compare &amp; Decide</h3>
         <p>For people weighing their options.</p>
-        <div class="lp-page-preview lp-preview-2"></div>
+        <div class="lp-page-preview lp-preview-2">
+          <div class="best-for-title">Best for:</div>
+          <ul class="best-for-list">
+            <li>Search Ads (Branded &amp; Competitor)</li>
+            <li>Comparison Shopping</li>
+            <li>Review Site Placements</li>
+          </ul>
+        </div>
       </div>
       <div class="lp-page-card">
-        <div class="lp-page-badge lp-badge-3">Page 3</div>
+        <div class="lp-page-badge lp-badge-3">Conversion</div>
         <h3>Buy Now</h3>
         <p>For people ready to purchase.</p>
-        <div class="lp-page-preview lp-preview-3"></div>
+        <div class="lp-page-preview lp-preview-3">
+          <div class="best-for-title">Best for:</div>
+          <ul class="best-for-list">
+            <li>Retargeting Ads</li>
+            <li>Email Campaigns</li>
+            <li>Branded Search Traffic</li>
+          </ul>
+        </div>
       </div>
       <div class="lp-page-card">
-        <div class="lp-page-badge lp-badge-4">Page 4</div>
+        <div class="lp-page-badge lp-badge-4">Loyalty</div>
         <h3>Come Back</h3>
         <p>For repeat buyers &amp; upgrades.</p>
-        <div class="lp-page-preview lp-preview-4"></div>
+        <div class="lp-page-preview lp-preview-4">
+          <div class="best-for-title">Best for:</div>
+          <ul class="best-for-list">
+            <li>Post-Purchase Emails</li>
+            <li>Loyalty Programs</li>
+            <li>Re-engagement Campaigns</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1228,10 +1262,15 @@
         <div class="sc-preview">
           <div class="sc-preview-inner">
             <div class="mp-hero" style="background:var(--nordic-blue);min-height:140px">
-              <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;opacity:0.5;margin-bottom:8px">Nordic Naturals</div>
-              <h2>The World's #1 Selling Omega-3</h2>
-              <p>Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions.</p>
-              <div class="mp-cta" style="background:var(--nordic-gold);color:var(--nordic-blue)">Learn More About Omega-3</div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="flex:1">
+                  <div style="font-size:10px;text-transform:uppercase;letter-spacing:2px;opacity:0.5;margin-bottom:8px">Nordic Naturals</div>
+                  <h2>The World's #1 Selling Omega-3</h2>
+                  <p>Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions.</p>
+                  <div class="mp-cta" style="background:var(--nordic-gold);color:var(--nordic-blue)">Learn More About Omega-3</div>
+                </div>
+                <img src="A1.webp" alt="Product" style="width:60px;height:auto;border-radius:4px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3))">
+              </div>
             </div>
             <div class="mp-section">
               <h3>Why Your Body Needs Omega-3</h3>
@@ -1332,9 +1371,14 @@
               <span style="margin-left:8px;font-size:13px;font-weight:800;letter-spacing:1px">02:47:13</span>
             </div>
             <div class="mp-hero" style="background:var(--nordic-blue);min-height:110px">
-              <h2 style="font-size:18px">Get Ultimate Omega 2X — 20% Off Today</h2>
-              <p style="max-width:80%">The highest-concentration omega-3 on the market. 2150mg EPA+DHA. Free shipping over $35.</p>
-              <div class="mp-cta" style="background:#06D6A0;color:var(--nordic-blue);font-size:13px;padding:10px 24px">Buy Now — $39.96 <span style="text-decoration:line-through;opacity:0.6;font-size:10px">$49.95</span></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="flex:1">
+                  <h2 style="font-size:18px">Get Ultimate Omega 2X — 20% Off Today</h2>
+                  <p style="max-width:90%">The highest-concentration omega-3 on the market. 2150mg EPA+DHA. Free shipping over $35.</p>
+                  <div class="mp-cta" style="background:#06D6A0;color:var(--nordic-blue);font-size:13px;padding:10px 24px">Buy Now — $39.96 <span style="text-decoration:line-through;opacity:0.6;font-size:10px">$49.95</span></div>
+                </div>
+                <img src="A1.webp" alt="Product" style="width:50px;height:auto;border-radius:4px;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.3))">
+              </div>
             </div>
             <div class="mp-section">
               <h3>What You're Getting</h3>
@@ -1358,7 +1402,7 @@
           <div class="sc-desc">For high-intent buyers ready to purchase. Urgency, pricing, trust signals, and a dominant buy button.</div>
           <div class="sc-todo-strip">
             <div class="sc-todo-icon">&#x270F;</div>
-            <div class="sc-todo-text"><strong>2 items</strong> to add — product images &amp; bottom CTA</div>
+            <div class="sc-todo-text"><strong>2 items</strong> to add — customer reviews &amp; bottom CTA</div>
             <div class="sc-todo-action" onclick="event.stopPropagation();openEditor('conversion')">Finalize now</div>
           </div>
         </div>
@@ -1915,10 +1959,17 @@ const pageContent = {
       <!-- Hero: Large brand image, headline, subheadline, value prop -->
       <div class="page-section hero-section" style="background:var(--nordic-blue)">
         <div class="section-hint-icon" title="First impression — visitor decides in 3 seconds whether to stay">?</div>
-        <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:0.6;margin-bottom:16px">Nordic Naturals</div>
-        <h2 style="font-size:32px;margin-bottom:12px;color:white">The World's #1 Selling Omega-3</h2>
-        <p style="font-size:16px;max-width:520px">Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions for heart, brain, and joint health.</p>
-        <div class="cta-button" style="background:var(--nordic-gold);color:var(--nordic-blue)">Learn More About Omega-3</div>
+        <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap">
+          <div style="flex:1;min-width:280px">
+            <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;opacity:0.6;margin-bottom:16px">Nordic Naturals</div>
+            <h2 style="font-size:32px;margin-bottom:12px;color:white">The World's #1 Selling Omega-3</h2>
+            <p style="font-size:16px;max-width:520px">Discover Ultimate Omega 2X — clinically proven, sustainably sourced, and trusted by millions for heart, brain, and joint health.</p>
+            <div class="cta-button" style="background:var(--nordic-gold);color:var(--nordic-blue)">Learn More About Omega-3</div>
+          </div>
+          <div style="flex:0 0 180px;text-align:center">
+            <img src="A1.webp" alt="Ultimate Omega 2X Product" style="max-width:100%;height:auto;border-radius:8px;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.3))">
+          </div>
+        </div>
       </div>
       <!-- What We Do: 3-4 benefit statements -->
       <div class="page-section">
@@ -2003,6 +2054,10 @@ const pageContent = {
       <div class="page-section">
         <div class="section-hint-icon" title="Establish competitive moat in the visitor's mind">?</div>
         <h3>What Only Nordic Naturals Offers</h3>
+        <div style="margin:16px 0;text-align:center;background:var(--bg);border-radius:var(--radius);padding:20px">
+          <img src="A2.webp" alt="New Look, Same Great Formula" style="max-width:100%;height:auto;max-height:180px;border-radius:8px">
+          <p style="font-size:12px;color:var(--text-light);margin-top:8px">Updated packaging — same trusted formula inside</p>
+        </div>
         <div class="benefits-grid" style="grid-template-columns:1fr 1fr;margin-top:16px">
           <div style="padding:20px;background:var(--bg);border-radius:var(--radius)">
             <div style="font-size:28px;margin-bottom:8px">&#x1F52C;</div>
@@ -2076,8 +2131,8 @@ const pageContent = {
         <div class="section-hint-icon" title="Give the buyer the information they need to commit">?</div>
         <h3>What You're Getting</h3>
         <div style="display:flex;gap:24px;margin-top:16px;align-items:flex-start;flex-wrap:wrap">
-          <div class="empty-section" style="flex:0 0 200px;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;min-height:200px;margin:0">
-            <div style="text-align:center"><p>&#x1F4F7;</p><p style="font-size:12px;margin-top:4px">Add product image</p><div class="add-btn" style="margin-top:8px">+ Upload</div></div>
+          <div style="flex:0 0 200px;min-height:200px;margin:0;display:flex;align-items:center;justify-content:center">
+            <img src="A1.webp" alt="Ultimate Omega 2X Product" style="max-width:100%;height:auto;max-height:200px;border-radius:8px;filter:drop-shadow(0 4px 12px rgba(0,0,0,0.15))">
           </div>
           <div style="flex:1;min-width:200px">
             <p style="margin-bottom:12px"><strong>Ultimate Omega 2X</strong> — 60 Soft Gels (30 servings)</p>
@@ -2118,7 +2173,7 @@ const pageContent = {
       <div class="hint-card"><div class="hint-title">&#x1F3AF; Best Campaign Use</div><div class="hint-text">Link this to <strong>retargeting ads, email campaigns for warm leads</strong>, and direct branded search traffic.</div></div>
       <div class="hint-card"><div class="hint-title">&#x1F4B0; Visitor Mindset</div><div class="hint-text">"I'm ready to buy, but I need to feel confident about this purchase." — Your job is to remove doubt and create urgency.</div></div>
       <h4 style="margin-top:20px">Suggestions</h4>
-      <div class="suggestion-card"><div class="sug-title">&#x26A0; Add product images</div><div class="sug-text">Buyers need to <em>see</em> what they're getting. Upload a product photo — it can increase conversion rates by 30%+ on supplement pages.</div></div>
+      <div class="hint-card"><div class="hint-title">&#x2705; Product image added</div><div class="hint-text">The product photo is in place — buyers can now see exactly what they're getting. This can increase conversion rates by 30%+ on supplement pages.</div></div>
       <div class="suggestion-card"><div class="sug-title">&#x26A0; Duplicate CTA at bottom</div><div class="sug-text">Many visitors scroll the entire page before deciding. Your bottom section needs the same buy button to catch them.</div></div>
       <div class="hint-card"><div class="hint-title">&#x2705; Urgency element is effective</div><div class="hint-text">The countdown timer and limited-time discount create real motivation to act now. The trust signals below address the biggest purchase hesitation points.</div></div>
       <div class="hint-card"><div class="hint-title">&#x2705; Pricing is clear</div><div class="hint-text">Showing the original price crossed out next to the sale price is proven to boost conversions. The savings amount makes the value tangible.</div></div>`
@@ -2162,6 +2217,10 @@ const pageContent = {
         <div class="section-hint-icon" title="Give them a reason to re-engage beyond discounts">?</div>
         <h3>New Since Your Last Visit</h3>
         <p>Check out what we've been working on — new products and improved formulations.</p>
+        <div style="margin:16px 0;text-align:center;background:linear-gradient(135deg,#F3EAFF,#EEF2FF);border-radius:var(--radius);padding:16px">
+          <img src="A2.webp" alt="New Look, Same Great Formula" style="max-width:100%;height:auto;max-height:140px;border-radius:8px">
+          <p style="font-size:12px;color:var(--text-light);margin-top:6px">Fresh new look — same trusted quality</p>
+        </div>
         <div class="product-grid">
           <div class="product-card">
             <div class="p-image">&#x1F48A;</div>
