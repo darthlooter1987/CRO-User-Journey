@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRD v2.0 — CRO User Journey | Revmatics</title>
+<style>
+  :root {
+    --primary: #2E5090;
+    --primary-light: #4A7BC7;
+    --primary-dark: #1E3A6E;
+    --accent: #00B4D8;
+    --accent2: #F77F00;
+    --success: #06D6A0;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --text: #1E293B;
+    --text-light: #64748B;
+    --border: #E2E8F0;
+    --radius: 10px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  .topbar {
+    background: var(--primary-dark);
+    color: white;
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 14px;
+  }
+  .topbar .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; }
+  .topbar .sep { opacity: 0.4; }
+  .topbar .doc-type { opacity: 0.8; }
+  .topbar a { color: rgba(255,255,255,0.7); text-decoration: none; margin-left: auto; font-size: 13px; transition: color 0.2s; }
+  .topbar a:hover { color: white; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white;
+    padding: 60px 40px 48px;
+    text-align: center;
+  }
+  .hero .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .hero h1 { font-size: 36px; font-weight: 800; margin-bottom: 12px; line-height: 1.2; }
+  .hero .subtitle { font-size: 16px; opacity: 0.8; max-width: 600px; margin: 0 auto 28px; }
+  .hero .meta-row {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    font-size: 13px;
+    opacity: 0.7;
+    flex-wrap: wrap;
+  }
+  .hero .meta-row span strong { opacity: 1; font-weight: 600; color: white; }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    box-shadow: var(--shadow);
+  }
+  .toc h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 16px; font-weight: 600; }
+  .toc ol { padding-left: 20px; }
+  .toc ol li { margin-bottom: 8px; }
+  .toc ol li a { color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+  .toc ol li a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+  .section { margin-bottom: 56px; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--primary-light);
+    margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section p { font-size: 15px; color: var(--text); margin-bottom: 14px; }
+  .section ul, .section ol { padding-left: 22px; margin-bottom: 16px; }
+  .section ul li, .section ol li { font-size: 15px; margin-bottom: 8px; color: var(--text); }
+
+  .callout {
+    background: #EEF4FF;
+    border-left: 4px solid var(--primary);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--primary-dark);
+  }
+  .callout strong { display: block; margin-bottom: 4px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow);
+  }
+  .card .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .card .card-icon { font-size: 22px; }
+  .card h3 { font-size: 15px; font-weight: 700; color: var(--text); }
+  .card p { font-size: 13px; color: var(--text-light); line-height: 1.6; }
+  .card .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tag-awareness { background: #4A7BC7; color: white; }
+  .tag-consideration { background: #F77F00; color: white; }
+  .tag-conversion { background: #06D6A0; color: #0a3d2e; }
+  .tag-loyalty { background: #9B5DE5; color: white; }
+
+  .user-story-box {
+    background: linear-gradient(135deg, #F0F4FF, #E8F0FF);
+    border: 1px solid #C7D7F8;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    margin: 24px 0;
+  }
+  .user-story-box h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); margin-bottom: 12px; }
+  .user-story-box p { font-size: 15px; color: var(--primary-dark); font-style: italic; line-height: 1.8; }
+
+  .funnel-row {
+    display: flex;
+    gap: 0;
+    margin: 24px 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .funnel-stage {
+    flex: 1;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .funnel-stage h4 { font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .funnel-stage p { font-size: 11px; color: rgba(255,255,255,0.85); line-height: 1.4; }
+  .fs-1 { background: #4A7BC7; }
+  .fs-2 { background: #F77F00; }
+  .fs-3 { background: #06A87C; }
+  .fs-4 { background: #9B5DE5; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  thead { background: var(--primary); color: white; }
+  thead th { padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 13px 16px; color: var(--text); }
+  tbody tr:hover { background: #F8FAFC; }
+
+  .status-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 10px;
+    border-radius: 12px;
+  }
+  .status-v1 { background: #DBEAFE; color: #1D4ED8; }
+  .status-future { background: #F3F4F6; color: #6B7280; }
+  .status-must { background: #DCFCE7; color: #166534; }
+  .status-should { background: #FEF9C3; color: #854D0E; }
+  .status-nice { background: #F3F4F6; color: #374151; }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 32px;
+    transition: gap 0.2s;
+  }
+  .back-link:hover { gap: 12px; }
+
+  @media (max-width: 640px) {
+    .card-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+    .container { padding: 32px 16px 60px; }
+    .funnel-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="logo">Revmatics</span>
+  <span class="sep">|</span>
+  <span class="doc-type">Product Requirements Document</span>
+  <a href="index.html">← Back to Version Library</a>
+</div>
+
+<div class="hero">
+  <div class="badge">PRD — Version 2.0</div>
+  <h1>CRO User Journey<br>Fit-for-Purpose Landing Pages</h1>
+  <p class="subtitle">A smart landing page generator for Shopify merchants — powered by funnel stage intelligence</p>
+  <div class="meta-row">
+    <span>Version: <strong>2.0</strong></span>
+    <span>Status: <strong>Showcase Dashboard Redesign</strong></span>
+    <span>Date: <strong>April 2026</strong></span>
+    <span>Author: <strong>Revmatics / Alex</strong></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <a href="index.html" class="back-link">← Version Library</a>
+
+  <!-- Table of Contents -->
+  <div class="toc">
+    <h2>Table of Contents</h2>
+    <ol>
+      <li><a href="#changelog">What Changed in v2.0</a></li>
+      <li><a href="#overview">Overview &amp; Problem Statement</a></li>
+      <li><a href="#user-story">Primary User Story</a></li>
+      <li><a href="#funnel">The Purchase Funnel Model</a></li>
+      <li><a href="#pages">The Four Fit-for-Purpose Pages</a></li>
+      <li><a href="#flow">Product Flow (Updated)</a></li>
+      <li><a href="#requirements">Functional Requirements (Updated)</a></li>
+      <li><a href="#ux">UX &amp; Design Principles (Updated)</a></li>
+      <li><a href="#non-functional">Non-Functional Requirements</a></li>
+      <li><a href="#scope">Out of Scope — v2.0</a></li>
+      <li><a href="#success">Success Metrics</a></li>
+    </ol>
+  </div>
+
+  <!-- 0. CHANGELOG -->
+  <div class="section" id="changelog">
+    <div class="section-label">What's New</div>
+    <h2>What Changed in v2.0</h2>
+    <div class="callout">
+      <strong>Key Change</strong>
+      The Campaign Funnel dashboard screen has been completely redesigned. The old small funnel cards with readiness bars have been replaced by four large showcase cards with rich visual previews of each generated landing page — creating an immediate "a-ha" moment for the merchant. The guided tooltip tour has been upgraded to a 4-step walkthrough that visits each card individually.
+    </div>
+    <p>Specific changes in this version:</p>
+    <ul>
+      <li><strong>Showcase Cards:</strong> Four large, visually rich cards replace the old horizontal funnel strip. Each card contains a scaled-down preview of the actual generated landing page (hero section, content blocks, CTAs, trust signals) — so the merchant immediately sees that real, tailored pages were built for them.</li>
+      <li><strong>Staggered Reveal Animation:</strong> When the dashboard loads, the four cards animate in one by one with a slide-up + fade effect, building anticipation. A subtle confetti burst fires after the last card appears to create a moment of delight.</li>
+      <li><strong>Enhanced Guided Tour:</strong> The 3-step scaffold walkthrough has been expanded to a 4-step tour — one step per page. Each tooltip explains what's already great about the generated page and specifically what the merchant needs to add (with time estimates). The overlay uses a modern backdrop blur effect.</li>
+      <li><strong>Readiness Scoring (per card):</strong> Each showcase card shows a prominent readiness score (e.g., "8 out of 10") in a floating badge, plus a clear summary of remaining items ("2 items to add — testimonial &amp; brand story").</li>
+      <li><strong>2x2 Grid Layout:</strong> The four cards are arranged in a 2-column grid instead of the previous 4-across horizontal strip, giving each card much more visual real estate and making the page previews legible at a glance.</li>
+      <li><strong>Tour Overlay Redesign:</strong> The tour uses a modern frosted-glass overlay with larger, more readable tooltips that include a highlighted callout box for the specific action items the merchant needs to complete.</li>
+    </ul>
+  </div>
+
+  <!-- 1. Overview -->
+  <div class="section" id="overview">
+    <div class="section-label">Section 1</div>
+    <h2>Overview &amp; Problem Statement</h2>
+    <p>Small business owners using Shopify are often running paid or organic marketing campaigns without a clear understanding of <em>why</em> different campaigns need different landing pages. They tend to send all traffic to the same page — typically the homepage or a product page — regardless of where the customer is in their purchase journey.</p>
+    <p>This results in low conversion rates, high bounce rates, and wasted ad spend, because a customer who has never heard of the brand requires a fundamentally different experience than one who is ready to buy.</p>
+    <div class="callout">
+      <strong>The Core Insight</strong>
+      Different stages of the customer journey require different emotional jobs to be done. A single landing page cannot optimally serve all of them. CRO (Conversion Rate Optimisation) means serving the <em>right</em> message at the <em>right</em> moment.
+    </div>
+    <p>Revmatics solves this by generating fit-for-purpose landing pages tailored to the merchant's funnel stage — starting with just a URL input. The tool reads the merchant's site, understands their brand and product, and creates purpose-built pages for each stage of the customer journey.</p>
+  </div>
+
+  <!-- 2. User Story -->
+  <div class="section" id="user-story">
+    <div class="section-label">Section 2</div>
+    <h2>Primary User Story</h2>
+    <div class="user-story-box">
+      <h3>Primary User Story</h3>
+      <p>"As a small business owner with a Shopify account, I need to be educated on marketing activities in order for me to see the value in using the CRO tool. I need to understand what the stages of a purchase funnel are and why I am using different landing pages to facilitate different outcomes in different campaigns."</p>
+    </div>
+    <p>This user story reflects two intertwined needs:</p>
+    <ul>
+      <li><strong>Education:</strong> The merchant must first understand <em>why</em> different landing pages exist before they trust the tool enough to use it.</li>
+      <li><strong>Execution:</strong> Once convinced, they need a frictionless path to actually generating those pages for their store.</li>
+    </ul>
+    <p>The v1.0 mock-up focuses primarily on the educational onboarding experience and the URL-input-to-page-generation flow, establishing the product's core value proposition.</p>
+  </div>
+
+  <!-- 3. Funnel Model -->
+  <div class="section" id="funnel">
+    <div class="section-label">Section 3</div>
+    <h2>The Purchase Funnel Model</h2>
+    <p>The product is built around a four-stage purchase funnel model. Each stage represents a distinct moment in the customer's relationship with the brand, and each requires a landing page engineered for a different psychological and commercial outcome.</p>
+    <div class="funnel-row">
+      <div class="funnel-stage fs-1">
+        <h4>Awareness</h4>
+        <p>Customer discovers the brand for the first time</p>
+      </div>
+      <div class="funnel-stage fs-2">
+        <h4>Consideration</h4>
+        <p>Customer evaluates and compares options</p>
+      </div>
+      <div class="funnel-stage fs-3">
+        <h4>Conversion</h4>
+        <p>Customer is ready to buy — remove friction</p>
+      </div>
+      <div class="funnel-stage fs-4">
+        <h4>Loyalty</h4>
+        <p>Post-purchase retention and advocacy</p>
+      </div>
+    </div>
+    <p>The tool generates one optimised landing page per funnel stage, each with distinct copy strategy, CTA structure, social proof placement, and visual hierarchy.</p>
+  </div>
+
+  <!-- 4. The Four Pages -->
+  <div class="section" id="pages">
+    <div class="section-label">Section 4</div>
+    <h2>The Four Fit-for-Purpose Pages</h2>
+    <div class="card-grid">
+      <div class="card">
+        <span class="tag tag-awareness">Awareness</span>
+        <div class="card-header">
+          <span class="card-icon">🌱</span>
+          <h3>Awareness Landing Page</h3>
+        </div>
+        <p>Designed for cold audiences encountering the brand for the first time. Leads with brand story and problem framing. Minimal commitment ask. Goal: build curiosity and trust.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-consideration">Consideration</span>
+        <div class="card-header">
+          <span class="card-icon">🔍</span>
+          <h3>Consideration Landing Page</h3>
+        </div>
+        <p>For audiences in research mode. Leads with differentiation, comparison, and social proof. Goal: establish why this brand beats alternatives.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-conversion">Conversion</span>
+        <div class="card-header">
+          <span class="card-icon">⚡</span>
+          <h3>Conversion Landing Page</h3>
+        </div>
+        <p>For high-intent audiences ready to buy. Removes friction, surfaces guarantees, urgency signals, and a dominant CTA. Goal: close the sale.</p>
+      </div>
+      <div class="card">
+        <span class="tag tag-loyalty">Loyalty</span>
+        <div class="card-header">
+          <span class="card-icon">💜</span>
+          <h3>Loyalty / Retention Page</h3>
+        </div>
+        <p>For existing customers. Focuses on repeat purchase incentives, referral mechanics, and community. Goal: reduce churn and increase LTV.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Product Flow -->
+  <div class="section" id="flow">
+    <div class="section-label">Section 5</div>
+    <h2>Product Flow — v2.0</h2>
+    <p>The v2.0 user journey follows a six-step flow (Steps 1-4 unchanged from v1.0, Step 5 redesigned):</p>
+    <ol>
+      <li><strong>URL Input (Screen 1):</strong> The merchant enters their Shopify store URL on the landing page. The hero section educates them on the four page types before they input anything.</li>
+      <li><strong>Site Analysis (Screen 2):</strong> The tool crawls the merchant's site in real-time, extracting brand voice, product information, colour palette, and key selling points. A live progress indicator keeps the user engaged.</li>
+      <li><strong>Brand Summary (Screen 3):</strong> The extracted brand intelligence is surfaced to the merchant for review and light editing — ensuring the generated pages reflect their actual identity.</li>
+      <li><strong>Page Selection (Screen 4):</strong> The merchant selects which funnel stage(s) they want to build a landing page for, with plain-English explanations of each stage's purpose.</li>
+      <li><strong>Showcase Dashboard (Screen 5 — REDESIGNED in v2.0):</strong> The four generated pages are presented as large showcase cards in a 2x2 grid. Each card contains a miniaturised but visually rich preview of the actual page content, creating an immediate "wow" moment. Cards reveal with staggered animations, followed by an automated 4-step guided tour that walks the merchant through each page — explaining what's great and what they need to add. Clicking any card opens the full page editor.</li>
+      <li><strong>Export &amp; Publish (Screen 6):</strong> The merchant can export the page to Shopify, download as HTML, or schedule a later activation.</li>
+    </ol>
+    <div class="callout">
+      <strong>Design Principle</strong>
+      Every screen in the flow includes contextual education — the merchant should leave each step understanding not just what happened, but why it helps them convert better.
+    </div>
+  </div>
+
+  <!-- 6. Functional Requirements -->
+  <div class="section" id="requirements">
+    <div class="section-label">Section 6</div>
+    <h2>Functional Requirements</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Requirement</th>
+          <th>Priority</th>
+          <th>Version</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FR-01</td>
+          <td>Accept a Shopify store URL as primary input</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-02</td>
+          <td>Display educational content about funnel stages before input</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-03</td>
+          <td>Simulate real-time site analysis with progress feedback</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-04</td>
+          <td>Display extracted brand intelligence for merchant review</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-05</td>
+          <td>Allow merchant to select one or more funnel stages</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-06</td>
+          <td>Generate a contextualised preview of each selected landing page</td>
+          <td><span class="status-badge status-must">Must Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-07</td>
+          <td>Provide mobile/desktop preview toggle</td>
+          <td><span class="status-badge status-should">Should Have</span></td>
+          <td><span class="status-badge status-v1">v1.0</span></td>
+        </tr>
+        <tr>
+          <td>FR-08</td>
+          <td>Export page to Shopify via API</td>
+          <td><span class="status-badge status-should">Should Have</span></td>
+          <td><span class="status-badge status-future">Future</span></td>
+        </tr>
+        <tr>
+          <td>FR-09</td>
+          <td>Allow inline editing of generated page copy</td>
+          <td><span class="status-badge status-should">Should Have</span></td>
+          <td><span class="status-badge status-future">Future</span></td>
+        </tr>
+        <tr>
+          <td>FR-10</td>
+          <td>A/B test scheduling across funnel stages</td>
+          <td><span class="status-badge status-nice">Nice to Have</span></td>
+          <td><span class="status-badge status-future">Future</span></td>
+        </tr>
+        <tr>
+          <td>FR-11</td>
+          <td>Performance analytics dashboard per page</td>
+          <td><span class="status-badge status-nice">Nice to Have</span></td>
+          <td><span class="status-badge status-future">Future</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 7. UX Principles -->
+  <div class="section" id="ux">
+    <div class="section-label">Section 7</div>
+    <h2>UX &amp; Design Principles</h2>
+    <ul>
+      <li><strong>Education-first:</strong> Every screen teaches the merchant something about CRO and funnel strategy, not just task completion.</li>
+      <li><strong>Progressive disclosure:</strong> Complexity is introduced only as needed. The URL input is the sole entry point — everything follows naturally from there.</li>
+      <li><strong>Brand-reflective output:</strong> Generated pages should feel like they were hand-crafted for the specific merchant, not generic templates.</li>
+      <li><strong>Trust through transparency:</strong> The site analysis step shows the merchant exactly what data was extracted and allows corrections — building confidence in the tool.</li>
+      <li><strong>Mobile-first preview:</strong> Given that Shopify merchants' customers are predominantly mobile, the preview defaults to mobile view.</li>
+      <li><strong>Jargon avoidance:</strong> All labels and tooltips use plain business language ("the page that turns browsers into buyers") rather than marketing-speak ("high-converting bottom-of-funnel asset").</li>
+    </ul>
+  </div>
+
+  <!-- 8. Non-Functional -->
+  <div class="section" id="non-functional">
+    <div class="section-label">Section 8</div>
+    <h2>Non-Functional Requirements</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Requirement</th>
+          <th>Target</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Performance</td>
+          <td>Site analysis and page generation time</td>
+          <td>Under 15 seconds end-to-end</td>
+        </tr>
+        <tr>
+          <td>Compatibility</td>
+          <td>Browser support</td>
+          <td>Chrome, Safari, Firefox, Edge (last 2 major versions)</td>
+        </tr>
+        <tr>
+          <td>Responsive</td>
+          <td>Tool UI usability on mobile</td>
+          <td>Fully usable on 375px+ screens</td>
+        </tr>
+        <tr>
+          <td>Accessibility</td>
+          <td>WCAG compliance level</td>
+          <td>AA (minimum)</td>
+        </tr>
+        <tr>
+          <td>Security</td>
+          <td>Merchant URL data handling</td>
+          <td>Not stored beyond session without consent</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9. Out of Scope -->
+  <div class="section" id="scope">
+    <div class="section-label">Section 9</div>
+    <h2>Out of Scope — v2.0</h2>
+    <ul>
+      <li>Live Shopify publishing integration (API connection)</li>
+      <li>Real site crawling and scraping (mocked in v1.0)</li>
+      <li>User authentication and saved projects</li>
+      <li>A/B testing infrastructure</li>
+      <li>Analytics and performance tracking per generated page</li>
+      <li>Multi-language / internationalisation</li>
+      <li>Team collaboration features</li>
+      <li>Custom domain publishing</li>
+    </ul>
+  </div>
+
+  <!-- 10. Success Metrics -->
+  <div class="section" id="success">
+    <div class="section-label">Section 10</div>
+    <h2>Success Metrics</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>Target (v1.0 Mock-up)</th>
+          <th>How Measured</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Flow completion rate</td>
+          <td>&gt; 60% complete all 6 screens</td>
+          <td>Session recording / analytics</td>
+        </tr>
+        <tr>
+          <td>Time-to-first-page-preview</td>
+          <td>&lt; 2 minutes from URL input</td>
+          <td>Session duration tracking</td>
+        </tr>
+        <tr>
+          <td>Education comprehension</td>
+          <td>&gt; 70% can name 3 funnel stages unprompted</td>
+          <td>Post-session survey</td>
+        </tr>
+        <tr>
+          <td>Merchant satisfaction</td>
+          <td>NPS &gt; 40 in user testing</td>
+          <td>In-product NPS survey</td>
+        </tr>
+        <tr>
+          <td>Page generation accuracy</td>
+          <td>&gt; 80% feel pages reflect their brand</td>
+          <td>Post-generation survey</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div style="background: var(--primary-dark); color: rgba(255,255,255,0.6); text-align: center; padding: 24px; font-size: 13px;">
+  Revmatics · CRO User Journey PRD · v2.0 · April 2026 &nbsp;|&nbsp;
+  <a href="index.html" style="color: rgba(255,255,255,0.8); text-decoration: none;">← Version Library</a>
+</div>
+
+</body>
+</html>
