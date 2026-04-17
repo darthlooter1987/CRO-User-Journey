@@ -107,39 +107,52 @@
             z-index: 90;
         }
 
-        .sidebar-nav {
-            list-style: none;
+        .sidebar-section {
+            padding: 0 16px;
+            margin-bottom: 24px;
         }
 
-        .sidebar-nav li {
-            margin: 0;
+        .sidebar-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding: 0 8px;
         }
 
-        .sidebar-nav a {
+        .sidebar-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 14px 20px;
-            color: var(--text);
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: var(--text-light);
             text-decoration: none;
             font-size: 14px;
-            transition: all 0.15s ease;
-            border-left: 3px solid transparent;
+            transition: all 0.2s;
+            cursor: pointer;
         }
 
-        .sidebar-nav a:hover {
-            background: rgba(46, 80, 144, 0.04);
+        .sidebar-link:hover {
+            background: var(--bg);
+            color: var(--text);
         }
 
-        .sidebar-nav a.active {
-            color: var(--primary);
-            background: rgba(46, 80, 144, 0.08);
-            border-left-color: var(--primary);
+        .sidebar-link.active {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
         }
 
-        .sidebar-nav-icon {
-            font-size: 16px;
-            opacity: 0.6;
+        .sidebar-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
         }
 
         .sidebar-workspace {
@@ -569,15 +582,21 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar">
-        <ul class="sidebar-nav">
-            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">📊</span>Dashboard</a></li>
-            <li><a href="cro-reporting-v2-screen1.html" class="active"><span class="sidebar-nav-icon">📄</span>Landing Pages</a></li>
-            <li><a href="cro-reporting-v2-screen3.html"><span class="sidebar-nav-icon">🧪</span>Experiments</a></li>
-            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">📈</span>Analytics</a></li>
-            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">🎨</span>Templates</a></li>
-            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">⚙️</span>Settings</a></li>
-        </ul>
-        <div class="sidebar-workspace">Omega Supplements</div>
+        <div class="sidebar-section">
+            <div class="sidebar-label">Primary</div>
+            <a href="cro-reporting-v2-screen1.html" class="sidebar-link active">
+                <span class="sidebar-icon">📊</span>
+                Landing Pages
+            </a>
+            <a href="cro-reporting-v2-screen2.html" class="sidebar-link">
+                <span class="sidebar-icon">📈</span>
+                Analytics
+            </a>
+            <a href="cro-reporting-v2-screen3.html" class="sidebar-link">
+                <span class="sidebar-icon">🧪</span>
+                Experiments
+            </a>
+        </div>
     </div>
 
     <!-- MAIN CONTENT -->
