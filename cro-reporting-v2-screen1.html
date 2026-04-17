@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Pages - Revmatics CRO</title>
+    <style>
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --awareness: #4A7BC7;
+            --differentiation: #F77F00;
+            --conversion: #06D6A0;
+            --loyalty: #9B5DE5;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* ===== TOP NAV ===== */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+        }
+
+        .topnav-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .topnav-left .brand {
+            color: var(--primary);
+        }
+
+        .topnav-left .product {
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        .topnav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            bottom: 0;
+            width: 220px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            overflow-y: auto;
+            z-index: 90;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(46, 80, 144, 0.04);
+        }
+
+        .sidebar-nav a.active {
+            color: var(--primary);
+            background: rgba(46, 80, 144, 0.08);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar-nav-icon {
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
+        .sidebar-workspace {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            font-size: 12px;
+            color: var(--text-light);
+            border-top: 1px solid var(--border);
+
+            padding-top: 16px;
+            word-break: break-word;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            position: fixed;
+            left: 220px;
+            top: 56px;
+            right: 0;
+            bottom: 0;
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .content {
+            padding: 32px;
+            max-width: 1100px;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            gap: 24px;
+        }
+
+        .page-header-left h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .page-header-left p {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .page-header-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ===== CONTROLS ROW ===== */
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .date-range-btn {
+            background: var(--card);
+            color: var(--text);
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .date-range-btn:hover {
+            background: var(--bg);
+            border-color: var(--primary);
+        }
+
+        .filter-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            background: var(--card);
+            color: var(--text);
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--primary);
+            background: rgba(46, 80, 144, 0.02);
+        }
+
+        /* ===== SUMMARY STRIP ===== */
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: all 0.15s ease;
+        }
+
+        .summary-card:hover {
+            border-color: var(--primary-light);
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ===== TABLE ===== */
+        .table-container {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:nth-child(5),
+        th:nth-child(6),
+        th:nth-child(7),
+        th:nth-child(8) {
+            text-align: right;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            height: 60px;
+            transition: background 0.15s ease;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #FAFBFC;
+        }
+
+        tbody tr:hover {
+            background: rgba(46, 80, 144, 0.03);
+        }
+
+        td {
+            padding: 16px 20px;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .col-page {
+            width: 30%;
+        }
+
+        .page-name {
+            font-weight: 500;
+            color: var(--text);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .page-product {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .col-type {
+            width: 12%;
+        }
+
+        .col-traffic {
+            width: 10%;
+        }
+
+        .col-status {
+            width: 14%;
+        }
+
+        .col-sessions {
+            width: 12%;
+            text-align: right;
+        }
+
+        .col-rate {
+            width: 10%;
+            text-align: right;
+        }
+
+        .col-revenue {
+            width: 12%;
+            text-align: right;
+        }
+
+        .col-updated {
+            width: 14%;
+            text-align: right;
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        /* ===== BADGES & PILLS ===== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-strong {
+            background: rgba(6, 214, 160, 0.12);
+            color: var(--success);
+        }
+
+        .badge-average {
+            background: rgba(46, 80, 144, 0.12);
+            color: var(--primary);
+        }
+
+        .badge-weak {
+            background: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+        }
+
+        .badge-needs-data {
+            background: rgba(100, 116, 139, 0.12);
+            color: var(--text-light);
+        }
+
+        .badge-winner {
+            background: rgba(6, 214, 160, 0.12);
+            color: var(--success);
+        }
+
+        .badge-losing {
+            background: rgba(239, 68, 68, 0.12);
+            color: #EF4444;
+        }
+
+        .badge-inconclusive {
+            background: rgba(255, 209, 102, 0.12);
+            color: #F59E0B;
+        }
+
+        .badge-not-enough {
+            background: rgba(100, 116, 139, 0.12);
+            color: var(--text-light);
+        }
+
+        .badge-secondary {
+            display: block;
+            font-size: 10px;
+            font-weight: 400;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+
+        .type-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .type-awareness {
+            background: rgba(74, 123, 199, 0.15);
+            color: var(--awareness);
+        }
+
+        .type-differentiation {
+            background: rgba(247, 127, 0, 0.15);
+            color: var(--differentiation);
+        }
+
+        .type-conversion {
+            background: rgba(6, 214, 160, 0.15);
+            color: var(--conversion);
+        }
+
+        .type-loyalty {
+            background: rgba(155, 93, 229, 0.15);
+            color: var(--loyalty);
+        }
+
+        .type-lead {
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--accent);
+        }
+
+        .type-education {
+            background: rgba(247, 127, 0, 0.15);
+            color: var(--differentiation);
+        }
+
+        .type-retargeting {
+            background: rgba(74, 123, 199, 0.15);
+            color: var(--awareness);
+        }
+
+        .traffic-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .action-dots {
+            opacity: 0;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+        }
+
+        tbody tr:hover .action-dots {
+            opacity: 0.6;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .summary-strip {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                left: 180px;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .summary-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAV -->
+    <div class="topnav">
+        <div class="topnav-left">
+            <span class="brand">Revmatics</span>
+            <span class="product">CRO</span>
+        </div>
+        <div class="topnav-right">
+            <div class="avatar">AD</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <ul class="sidebar-nav">
+            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">📊</span>Dashboard</a></li>
+            <li><a href="cro-reporting-v2-screen1.html" class="active"><span class="sidebar-nav-icon">📄</span>Landing Pages</a></li>
+            <li><a href="cro-reporting-v2-screen3.html"><span class="sidebar-nav-icon">🧪</span>Experiments</a></li>
+            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">📈</span>Analytics</a></li>
+            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">🎨</span>Templates</a></li>
+            <li><a href="cro-reporting-v2-screen1.html"><span class="sidebar-nav-icon">⚙️</span>Settings</a></li>
+        </ul>
+        <div class="sidebar-workspace">Omega Supplements</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <div class="content">
+            <!-- PAGE HEADER -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>Landing Pages</h1>
+                    <p>Track performance, compare variants, and identify what to scale</p>
+                </div>
+                <div class="page-header-right">
+                    <button class="btn-primary">Create Landing Page</button>
+                </div>
+            </div>
+
+            <!-- CONTROLS ROW -->
+            <div class="controls-row">
+                <button class="date-range-btn">📅 Last 30 days</button>
+                <div class="filter-pills">
+                    <button class="filter-pill">All Products</button>
+                    <button class="filter-pill">All Types</button>
+                    <button class="filter-pill">All Traffic</button>
+                    <button class="filter-pill">All Status</button>
+                </div>
+            </div>
+
+            <!-- SUMMARY STRIP -->
+            <div class="summary-strip">
+                <div class="summary-card">
+                    <div class="summary-label">Total Pages</div>
+                    <div class="summary-value">12</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Live Tests</div>
+                    <div class="summary-value">3</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Strong</div>
+                    <div class="summary-value">5</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Weak</div>
+                    <div class="summary-value">2</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Needs Data</div>
+                    <div class="summary-value">2</div>
+                </div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-page">Page</th>
+                            <th class="col-type">Type</th>
+                            <th class="col-traffic">Traffic</th>
+                            <th class="col-status">Status</th>
+                            <th class="col-sessions">Sessions</th>
+                            <th class="col-rate">Conv. Rate</th>
+                            <th class="col-revenue">Revenue</th>
+                            <th class="col-updated">Updated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Omega 2X – Conversion LP</span>
+                                <span class="page-product">Omega 2X Fish Oil</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-conversion">Conversion</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Paid</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-strong">Strong</div>
+                            </td>
+                            <td class="col-sessions">18,420</td>
+                            <td class="col-rate">4.7%</td>
+                            <td class="col-revenue">$48,200</td>
+                            <td class="col-updated">2h ago</td>
+                        </tr>
+
+                        <!-- Row 2 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Omega 2X – Comparison LP</span>
+                                <span class="page-product">Omega 2X Fish Oil</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-differentiation">Differentiation</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Paid</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-inconclusive">
+                                    Inconclusive
+                                    <span class="badge-secondary">Live test</span>
+                                </div>
+                            </td>
+                            <td class="col-sessions">16,355</td>
+                            <td class="col-rate">3.9%</td>
+                            <td class="col-revenue">$34,100</td>
+                            <td class="col-updated">1h ago</td>
+                        </tr>
+
+                        <!-- Row 3 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Omega 2X – Loyalty LP</span>
+                                <span class="page-product">Omega 2X Fish Oil</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-loyalty">Loyalty</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Organic</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-strong">Strong</div>
+                            </td>
+                            <td class="col-sessions">6,840</td>
+                            <td class="col-rate">6.2%</td>
+                            <td class="col-revenue">$22,600</td>
+                            <td class="col-updated">5h ago</td>
+                        </tr>
+
+                        <!-- Row 4 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Kids Multi – Awareness LP</span>
+                                <span class="page-product">Kids Multivitamin Gummies</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-awareness">Awareness</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Mixed</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-weak">Weak</div>
+                            </td>
+                            <td class="col-sessions">9,120</td>
+                            <td class="col-rate">1.8%</td>
+                            <td class="col-revenue">$7,380</td>
+                            <td class="col-updated">3h ago</td>
+                        </tr>
+
+                        <!-- Row 5 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Sleep Support – Lead Capture LP</span>
+                                <span class="page-product">Sleep Support Formula</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-lead">Lead Capture</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Organic</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-needs-data">Needs data</div>
+                            </td>
+                            <td class="col-sessions">1,240</td>
+                            <td class="col-rate">2.1%</td>
+                            <td class="col-revenue">$1,170</td>
+                            <td class="col-updated">1d ago</td>
+                        </tr>
+
+                        <!-- Row 6 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Omega 2X – Retargeting LP</span>
+                                <span class="page-product">Omega 2X Fish Oil</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-retargeting">Retargeting</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Paid</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-average">Average</div>
+                            </td>
+                            <td class="col-sessions">4,680</td>
+                            <td class="col-rate">3.4%</td>
+                            <td class="col-revenue">$8,750</td>
+                            <td class="col-updated">6h ago</td>
+                        </tr>
+
+                        <!-- Row 7 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Probiotic Plus – Education LP</span>
+                                <span class="page-product">Probiotic Plus</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-education">Product Education</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Organic</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-average">
+                                    Average
+                                    <span class="badge-secondary">Completed test</span>
+                                </div>
+                            </td>
+                            <td class="col-sessions">7,890</td>
+                            <td class="col-rate">3.1%</td>
+                            <td class="col-revenue">$11,025</td>
+                            <td class="col-updated">12h ago</td>
+                        </tr>
+
+                        <!-- Row 8 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Sleep Support – Conversion LP</span>
+                                <span class="page-product">Sleep Support Formula</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-conversion">Conversion</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Paid</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-winner">
+                                    ⭐ Winner
+                                    <span class="badge-secondary">Completed test</span>
+                                </div>
+                            </td>
+                            <td class="col-sessions">14,200</td>
+                            <td class="col-rate">5.3%</td>
+                            <td class="col-revenue">$41,400</td>
+                            <td class="col-updated">4h ago</td>
+                        </tr>
+
+                        <!-- Row 9 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Kids Multi – Lead Capture LP</span>
+                                <span class="page-product">Kids Multivitamin Gummies</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-lead">Lead Capture</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Mixed</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-not-enough">
+                                    Not enough data
+                                    <span class="badge-secondary">Live test</span>
+                                </div>
+                            </td>
+                            <td class="col-sessions">2,340</td>
+                            <td class="col-rate">2.8%</td>
+                            <td class="col-revenue">$2,925</td>
+                            <td class="col-updated">8h ago</td>
+                        </tr>
+
+                        <!-- Row 10 -->
+                        <tr>
+                            <td class="col-page">
+                                <span class="page-name">Probiotic Plus – Awareness LP</span>
+                                <span class="page-product">Probiotic Plus</span>
+                            </td>
+                            <td class="col-type">
+                                <span class="type-pill type-awareness">Awareness</span>
+                            </td>
+                            <td class="col-traffic">
+                                <span class="traffic-label">Paid</span>
+                            </td>
+                            <td class="col-status">
+                                <div class="badge badge-losing">
+                                    Losing
+                                    <span class="badge-secondary">Live test</span>
+                                </div>
+                            </td>
+                            <td class="col-sessions">11,560</td>
+                            <td class="col-rate">2.2%</td>
+                            <td class="col-revenue">$11,430</td>
+                            <td class="col-updated">30m ago</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

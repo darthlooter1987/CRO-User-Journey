@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO Reporting — PRD v2.0 | Revmatics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        /* Sticky Topbar */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #2E5090;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .topbar-left {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar-right a {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .topbar-right a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .hero-content {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .hero-meta-item strong {
+            color: #2E5090;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc h2 {
+            font-size: 1.2rem;
+            color: #2E5090;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .toc ol {
+            margin-left: 1.5rem;
+            color: #555;
+            line-height: 2;
+        }
+
+        .toc a {
+            color: #2E5090;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 3rem 0 1.5rem 0;
+            padding-left: 1.25rem;
+            border-left: 4px solid #2E5090;
+            position: relative;
+        }
+
+        .section-number {
+            color: #2E5090;
+            font-weight: 600;
+        }
+
+        /* Subsection Headings */
+        .subsection-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2E5090;
+            margin: 2rem 0 1rem 0;
+            position: relative;
+        }
+
+        /* Text Blocks */
+        .section-content {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-content strong {
+            color: #2E5090;
+        }
+
+        .section-content em {
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Critical Content Alert */
+        .critical-alert {
+            background: #f0f4ff;
+            border-left: 4px solid #d32f2f;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .critical-alert .alert-label {
+            font-weight: 700;
+            color: #d32f2f;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .critical-alert p {
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+
+        .critical-alert p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* User Story Cards */
+        .user-story-card {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .user-story-card.highlighted {
+            border-left: 4px solid #2E5090;
+        }
+
+        .story-id {
+            display: inline-block;
+            background: #2E5090;
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .story-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .story-text-box {
+            background: #f9fafc;
+            border-left: 3px solid #2E5090;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-style: italic;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .acceptance-criteria-label {
+            font-weight: 600;
+            color: #2E5090;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .acceptance-list {
+            list-style: none;
+            margin: 0;
+        }
+
+        .acceptance-list li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.6rem;
+            color: #555;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .acceptance-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2E5090;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Data Model Definitions */
+        .definition-group {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            border: 1px solid #e0e6ed;
+        }
+
+        .definition-group dt {
+            font-weight: 600;
+            color: #2E5090;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .definition-group dt:first-child {
+            margin-top: 0;
+        }
+
+        .definition-group dd {
+            color: #555;
+            margin-left: 0;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .definition-list {
+            margin: 0;
+        }
+
+        .definition-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .definition-item strong {
+            color: #2E5090;
+        }
+
+        /* Tables */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+
+        .reference-table thead {
+            background: #2E5090;
+            color: white;
+        }
+
+        .reference-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .reference-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e6ed;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .reference-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .reference-table tbody tr:hover {
+            background: #f9fafc;
+        }
+
+        /* Flow Steps */
+        .flow-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .flow-step-number {
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2E5090;
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .flow-step-content {
+            padding-top: 0.25rem;
+        }
+
+        /* Out of Scope Section */
+        .out-of-scope {
+            background: #fff8f0;
+            border: 1px solid #ffe0cc;
+            border-radius: 6px;
+            padding: 1.75rem;
+            margin: 2rem 0;
+        }
+
+        .out-of-scope h3 {
+            color: #d97706;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .out-of-scope ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .out-of-scope li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.6rem;
+            color: #666;
+            position: relative;
+        }
+
+        .out-of-scope li:before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        /* Mockup Links */
+        .mockup-link {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e6ed;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .mockup-link strong {
+            color: #2E5090;
+        }
+
+        .mockup-link a {
+            color: #2E5090;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .mockup-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e6ed;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-meta {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .topbar-right {
+                width: 100%;
+            }
+
+            .section-heading {
+                font-size: 1.4rem;
+            }
+
+            .user-story-card {
+                padding: 1.5rem;
+            }
+
+            .reference-table {
+                font-size: 0.85rem;
+            }
+
+            .reference-table th,
+            .reference-table td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Utility Classes */
+        .highlight-text {
+            color: #2E5090;
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .badge-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .badge-green {
+            background: #f1f8e9;
+            color: #558b2f;
+        }
+
+        .badge-orange {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .badge-purple {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        /* Metric Grid */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 6px;
+            border: 1px solid #e0e6ed;
+            text-align: center;
+        }
+
+        .metric-card-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2E5090;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">Revmatics | Product Requirements Document v2.0</div>
+        <div class="topbar-right">
+            <a href="index.html">← Back to Index</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>CRO Reporting PRD v2.0</h1>
+            <p class="subtitle">Landing Page Analytics & Experiment Decision Engine</p>
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <strong>Version:</strong> 2.0
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Date:</strong> April 2026
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Author:</strong> Revmatics / Alex
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#overview">Product Overview</a></li>
+                <li><a href="#primary-story">Primary User Story</a></li>
+                <li><a href="#analytics-logic">Analytical Logic & Status Model</a></li>
+                <li><a href="#flow-overview">Product Flow Overview</a></li>
+                <li><a href="#screen-specs">Screen Specifications & User Stories</a></li>
+                <li><a href="#nonfunctional">Non-Functional Requirements</a></li>
+                <li><a href="#metrics-reference">Required Metrics Reference</a></li>
+                <li><a href="#out-of-scope">Out of Scope</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: Product Overview -->
+        <h2 id="overview" class="section-heading"><span class="section-number">1.</span> Product Overview</h2>
+        <div class="section-content">
+            <p>Revmatics CRO Reporting is a decision-first analytics dashboard for the Revmatics landing page platform. It enables marketers to monitor landing page performance, compare A/B test variants, and make confident optimization decisions. The product is designed around clarity over complexity — surfacing the answer first, then supporting it with progressive analytical depth.</p>
+            <p>It supports both standalone landing pages and pages enrolled in structured A/B experiments, with distinct status models for each context.</p>
+            <p><strong>Design Philosophy:</strong> The interface follows the Revmatics design language — spacious, clean, premium, with progressive disclosure. Answer first, analysis second, detail on demand.</p>
+            <p>The product consists of three core screens:</p>
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li><strong>All Landing Pages</strong> — portfolio view for scanning and triaging</li>
+                <li><strong>Single Landing Page Analytics</strong> — deep performance diagnosis</li>
+                <li><strong>Experiment Comparison</strong> — data-driven variant decisions</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: Primary User Story -->
+        <h2 id="primary-story" class="section-heading"><span class="section-number">2.</span> Primary User Story</h2>
+        <div class="user-story-card highlighted">
+            <div class="story-text-box">
+                "As a marketer managing multiple landing pages for my products, I need a dashboard that tells me which pages are performing well and which need attention, so I can make quick, confident decisions about what to scale, what to test, and what to replace — without needing to be a data analyst."
+            </div>
+        </div>
+
+        <!-- Section 3: Analytical Logic & Status Model -->
+        <h2 id="analytics-logic" class="section-heading"><span class="section-number">3.</span> Analytical Logic & Status Model</h2>
+
+        <div class="critical-alert">
+            <div class="alert-label">Critical: Status Model Rules</div>
+            <p><strong>A single landing page with no tested alternative must NEVER be called a "winner".</strong> A page is only a winner if it has outperformed another page in a structured comparison.</p>
+            <p><strong>Standalone pages</strong> use Performance Status: Strong / Average / Weak / Needs data</p>
+            <p><strong>Pages inside A/B tests</strong> use Experiment Status: Winner / Losing / Inconclusive / Not enough data</p>
+        </div>
+
+        <div class="section-content">
+            <h3 class="subsection-heading">Traffic Context Model</h3>
+            <p>Every landing page carries a Traffic Context tag: <span class="highlight-text">Paid</span>, <span class="highlight-text">Organic</span>, or <span class="highlight-text">Mixed</span>.</p>
+            <ul style="margin-left: 1.5rem; color: #555; margin-top: 1rem;">
+                <li><strong>Paid pages</strong> emphasize spend efficiency metrics (Spend, CPC, CPA, ROAS, Revenue per Visit)</li>
+                <li><strong>Organic pages</strong> emphasize engagement metrics (Bounce Rate, Scroll Depth, CTA CTR, Time on Page, Returning Visitors)</li>
+                <li><strong>Mixed pages</strong> show both sets but maintain readability</li>
+            </ul>
+        </div>
+
+        <div class="section-content">
+            <h3 class="subsection-heading">Supported Page Types</h3>
+            <p style="margin-bottom: 1rem;">The dashboard supports eight page type categories:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
+                <span class="badge badge-blue">Awareness</span>
+                <span class="badge badge-green">Conversion</span>
+                <span class="badge badge-orange">Differentiation</span>
+                <span class="badge badge-purple">Loyalty</span>
+                <span class="badge badge-blue">Lead Capture</span>
+                <span class="badge badge-green">Product Education</span>
+                <span class="badge badge-orange">Retargeting</span>
+                <span class="badge badge-purple">Other</span>
+            </div>
+        </div>
+
+        <div class="section-content">
+            <h3 class="subsection-heading">Experiment States</h3>
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li>No test</li>
+                <li>Live test</li>
+                <li>Completed test</li>
+                <li>Paused test</li>
+            </ul>
+        </div>
+
+        <!-- Section 4: Product Flow Overview -->
+        <h2 id="flow-overview" class="section-heading"><span class="section-number">4.</span> Product Flow Overview</h2>
+        <div class="section-content">
+            <div class="flow-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">User opens the All Landing Pages view to scan their portfolio</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">Summary strip provides at-a-glance health metrics (total pages, live experiments, strong/weak/needs-data counts)</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">Filters allow narrowing by product, page type, traffic context, campaign, device, source, status, experiment state</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">User clicks a page to open the Single Landing Page Analytics view</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">Hero summary card immediately communicates performance status with plain-language explanation</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">KPI cards, trend charts, funnel analysis, behavior insights, and segment breakdowns provide diagnostic depth</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">7</div>
+                <div class="flow-step-content">Recommendations suggest actionable next steps</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">8</div>
+                <div class="flow-step-content">If a page is part of an experiment, user navigates to the Experiment Comparison view</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">9</div>
+                <div class="flow-step-content">Experiment summary card communicates the leading variant, uplift, and confidence in under 10 seconds</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">10</div>
+                <div class="flow-step-content">Side-by-side variant cards (no tabs) allow direct metric comparison</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">11</div>
+                <div class="flow-step-content">Variant difference panel explains what changed between versions</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">12</div>
+                <div class="flow-step-content">Statistical analysis module shows confidence progress toward significance threshold</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">13</div>
+                <div class="flow-step-content">Segment winner breakdown reveals whether results hold across different audiences</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">14</div>
+                <div class="flow-step-content">Recommendation panel provides blunt, actionable guidance (declare winner, continue test, pause variant)</div>
+            </div>
+        </div>
+
+        <!-- Section 5: Screen Specifications & User Stories -->
+        <h2 id="screen-specs" class="section-heading"><span class="section-number">5.</span> Screen Specifications & User Stories</h2>
+
+        <!-- US-01 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-01</div>
+            <h3 class="story-title">All Landing Pages Portfolio View</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to see all my landing pages in one place so I can quickly identify which pages are performing well, which need attention, and which have active experiments."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Sticky top navigation with Revmatics branding, global search, notifications, and user avatar</li>
+                <li>Left sidebar with navigation: Dashboard, Landing Pages (active), Experiments, Analytics, Templates, Settings</li>
+                <li>Page title "Landing Pages" with subtitle and "Create Landing Page" CTA</li>
+                <li>Summary strip showing: total landing pages, live experiments, strong performers, weak performers, pages needing data</li>
+                <li>Filter row with: Product, Page Type, Traffic Context, Campaign, Experiment State, Status, Device, Source/Channel filters</li>
+                <li>Rich inventory table/grid showing: page name, product, page type tag, traffic context badge, campaign, status badge, experiment state, sessions, conversion rate, conversions, revenue, last updated, quick actions</li>
+                <li>Page type tags use distinct colors (Awareness blue, Conversion green, Differentiation orange, Loyalty purple, etc.)</li>
+                <li>Status badges follow the Performance Status / Experiment Status logic correctly</li>
+                <li>Quick actions per row: View dashboard, Open experiment, Create variant, Duplicate, Pause, Archive</li>
+                <li>Table rows have hover states and scannable visual hierarchy</li>
+                <li>Design matches existing Revmatics product aesthetic — same typography, colors, card styling</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-reporting-v2-screen1.html">cro-reporting-v2-screen1.html</a>
+            </div>
+        </div>
+
+        <!-- US-02 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-02</div>
+            <h3 class="story-title">Single Landing Page Analytics — Hero Summary & Performance Status</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to immediately understand whether a landing page is performing well or poorly, with a plain-language explanation, so I don't have to interpret raw numbers myself."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Breadcrumb navigation: Landing Pages > Product > Page Name</li>
+                <li>Page header with name, product, page type tag, traffic context badge, source tags, campaign</li>
+                <li>Hero summary card with: status badge (Strong/Average/Weak/Needs data), headline ("Performance is Strong"), supporting explanation, benchmark comparison, data sufficiency note, suggested next action</li>
+                <li>Status card has visual accent (colored left border) matching the status</li>
+                <li>Date range selector and compare-to-previous toggle</li>
+                <li>Action buttons: Create Variant, Duplicate Page, Export Report</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-reporting-v2-screen2.html">cro-reporting-v2-screen2.html</a>
+            </div>
+        </div>
+
+        <!-- US-03 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-03</div>
+            <h3 class="story-title">Single Landing Page Analytics — KPI Cards & Paid/Organic Emphasis</h3>
+            <div class="story-text-box">
+                "As a marketer running paid campaigns, I want to see spend efficiency metrics prominently, and when viewing organic pages I want engagement metrics prioritized."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>5 focused KPI cards: Sessions, Conversion Rate, Revenue, CPA, ROAS (no sparklines)</li>
+                <li>Each KPI card shows: metric name, large value, change vs previous period (indicator only — no sparklines)</li>
+                <li>For Paid pages: emphasized metrics row with Spend, CPC, ROAS, CPA (visually distinct with tinted background, compact layout)</li>
+                <li>For Organic pages: engagement metrics get top billing alongside core conversions</li>
+                <li>Paid media metrics shown as compact inline bar, not full cards</li>
+                <li>Single dual-axis trend chart instead of multiple charts</li>
+            </ul>
+        </div>
+
+        <!-- US-04 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-04</div>
+            <h3 class="story-title">Single Landing Page Analytics — Trends, Funnel & Behavior</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to see how my page is trending over time, where users drop off in the funnel, and what behavioral patterns might explain performance."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Performance Trends section with single dual-axis chart: sessions and conversion rate over time</li>
+                <li>Date range toggles: 7D, 30D, 90D, Custom</li>
+                <li>Conversion Funnel: visual funnel showing Sessions → CTA Clicks → Form Starts → Form Completions → Purchases, with counts, percentages, and drop-off rates between steps</li>
+                <li>Largest drop-off highlighted with accent color and explanatory note</li>
+                <li>Behavior Insights: grid of insight cards with metric values and plain-language interpretations</li>
+                <li>Segment Breakdown: expandable/collapsible section with tabs for Device, Source, Campaign, Geography, New vs Returning</li>
+                <li>Each segment shows sessions, conversion rate, conversions, bounce rate, revenue</li>
+            </ul>
+        </div>
+
+        <!-- US-05 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-05</div>
+            <h3 class="story-title">Single Landing Page Analytics — Recommendations & Next Actions</h3>
+            <div class="story-text-box">
+                "As a marketer, I want the dashboard to tell me what to do next based on the data, so I can take action without deep analysis."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Insights card with 3-5 plain-language findings (e.g., "Mobile conversion rate is 33% lower than desktop")</li>
+                <li>Recommended Next Steps section with action cards: Create Variant, Improve Form, Review Mobile Layout, Launch A/B Test, Export Report</li>
+                <li>Each action card has a title and short description</li>
+                <li>Low-data states: muted charts, gray "Needs data" badge, cautious copy, CTA to drive more traffic</li>
+            </ul>
+        </div>
+
+        <!-- US-06 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-06</div>
+            <h3 class="story-title">Experiment Comparison — Summary & Decision Surface</h3>
+            <div class="story-text-box">
+                "As a marketer running an A/B test, I want to know within 10 seconds which variant is winning, by how much, and whether I can trust the result."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Experiment header with: name, product, page type, traffic context, start date, status (Live/Completed/Paused), control variant, variant count</li>
+                <li>Actions: Adjust Traffic Split, Pause Test, Declare Winner, Create New Variant, Export Report</li>
+                <li>Experiment Summary Card (above the fold): leading variant, uplift %, confidence %, total sessions, days running, sample adequacy, recommended action</li>
+                <li>Summary card is immediately readable in under 10 seconds</li>
+                <li>Possible status states: Winner, Losing, Inconclusive, Not enough data</li>
+                <li>Traffic split shown inline within experiment summary card</li>
+                <li>Single conversion rate trend chart (not multiple chart types)</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-reporting-v2-screen3.html">cro-reporting-v2-screen3.html</a>
+            </div>
+        </div>
+
+        <!-- US-07 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-07</div>
+            <h3 class="story-title">Experiment Comparison — Side-by-Side Variant Cards</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to see all variants displayed simultaneously so I can compare their performance without switching between tabs."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>All variants visible side by side (NO tabs)</li>
+                <li>Each variant card shows: name, Control/Variant label, thumbnail preview, traffic share %, sessions, conversion rate, conversions, revenue, bounce rate, CTA CTR, avg time on page, scroll depth, uplift vs control, confidence, status badge</li>
+                <li>Leading variant highlighted with: stronger border, status color, subtle glow, "Leading" tag</li>
+                <li>Delta indicators show differences vs control (colored green/red with arrows)</li>
+            </ul>
+        </div>
+
+        <!-- US-08 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-08</div>
+            <h3 class="story-title">Experiment Comparison — Statistical Analysis & Traffic Split</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to understand the statistical reliability of the test results so I know whether to act now or keep testing."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Uplift + Confidence module: uplift %, confidence %, sample adequacy, whether test should continue, estimated reliability</li>
+                <li>Visual confidence meter: horizontal bar filled to current confidence level, threshold line at 95%</li>
+                <li>Traffic Split module: visual percentage bars per variant, allocation percentages, "Adjust Split" control</li>
+                <li>Clear plain-language recommendations: "Continue until 95% confidence or 10,000 sessions"</li>
+            </ul>
+        </div>
+
+        <!-- US-09 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-09</div>
+            <h3 class="story-title">Experiment Comparison — Funnel, Trends & Variant Differences</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to understand what's different between variants and where in the funnel one variant outperforms the other."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Side-by-side comparison funnels for each variant</li>
+                <li>Funnel steps: Sessions → CTA Clicks → Form Starts → Form Completions → Purchases</li>
+                <li>Green highlights where one variant outperforms</li>
+                <li>Single conversion rate trend chart with overlaid lines per variant</li>
+                <li>Variant Difference Panel: side-by-side thumbnails, list of changes with tags (Headline, Hero image, CTA copy, CTA color, Social proof, etc.), written summary of what changed</li>
+                <li>Purpose: show whether the winner is stable and reveal what might be causing the difference</li>
+            </ul>
+        </div>
+
+        <!-- US-10 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-10</div>
+            <h3 class="story-title">Experiment Comparison — Segment Winners & Declare Winner</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to know if a variant wins across all segments or only in specific ones, and I want a clear path to declare a winner when ready."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Segment Winner Breakdown table: for each segment (Desktop, Mobile, Paid source, Geography, New vs Returning), show winning variant, conversion rates for each, uplift, confidence</li>
+                <li>Low-confidence segments visually muted</li>
+                <li>Recommendation panel with blunt actionable guidance</li>
+                <li>Declare Winner modal: select winner, options to send 100% traffic, archive losers, create follow-up test, keep historical data</li>
+                <li>Warning text about irreversibility</li>
+                <li>Cancel and Confirm buttons</li>
+            </ul>
+        </div>
+
+        <!-- Section 6: Non-Functional Requirements -->
+        <h2 id="nonfunctional" class="section-heading"><span class="section-number">6.</span> Non-Functional Requirements</h2>
+        <div class="section-content">
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li><strong>Performance:</strong> The dashboard must load in under 3 seconds</li>
+                <li><strong>Responsiveness:</strong> All screens must be desktop-first but responsive to tablet widths</li>
+                <li><strong>Interactivity:</strong> Charts must be interactive (hover tooltips, smooth animations)</li>
+                <li><strong>Language:</strong> The interface must be usable by marketers, not just analysts — plain language everywhere</li>
+                <li><strong>Scannability:</strong> Status badges and key decisions must be scannable in under 10 seconds</li>
+                <li><strong>Progressive Disclosure:</strong> answer first (above fold), analysis second (below fold), detail third (collapsed/lower)</li>
+                <li><strong>Accessibility:</strong> Proper contrast ratios, keyboard navigable, screen reader friendly labels</li>
+            </ul>
+        </div>
+
+        <!-- Section 7: Required Metrics Reference -->
+        <h2 id="metrics-reference" class="section-heading"><span class="section-number">7.</span> Required Metrics Reference</h2>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>Core Traffic & Conversion</th>
+                    <th>Engagement & Behavior</th>
+                    <th>Paid Media</th>
+                    <th>Experiment Analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <ul style="margin: 0; padding-left: 1.25rem; list-style: disc; color: #555;">
+                            <li>Sessions</li>
+                            <li>Unique Visitors</li>
+                            <li>Conversion Rate</li>
+                            <li>Total Conversions</li>
+                            <li>Revenue</li>
+                            <li>Lead Value</li>
+                            <li>Revenue per Visit</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul style="margin: 0; padding-left: 1.25rem; list-style: disc; color: #555;">
+                            <li>Bounce Rate</li>
+                            <li>CTA Click-Through Rate</li>
+                            <li>Avg Time on Page</li>
+                            <li>Scroll Depth</li>
+                            <li>Exit Rate</li>
+                            <li>Form Abandonment Rate</li>
+                            <li>Returning Visitor Rate</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul style="margin: 0; padding-left: 1.25rem; list-style: disc; color: #555;">
+                            <li>Spend</li>
+                            <li>CPC</li>
+                            <li>CPM</li>
+                            <li>CPA</li>
+                            <li>ROAS</li>
+                            <li>Cost per Landing Page View</li>
+                            <li>Conversion Value</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <ul style="margin: 0; padding-left: 1.25rem; list-style: disc; color: #555;">
+                            <li>Uplift %</li>
+                            <li>Confidence Level</li>
+                            <li>Sample Size Adequacy</li>
+                            <li>Traffic Split %</li>
+                            <li>Days Running</li>
+                            <li>Statistical Status</li>
+                            <li>Winning Variant</li>
+                            <li>Stability Over Time</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Section 8: Out of Scope -->
+        <h2 id="out-of-scope" class="section-heading"><span class="section-number">8.</span> Out of Scope</h2>
+        <div class="out-of-scope">
+            <h3>Version 2.0 Exclusions</h3>
+            <ul>
+                <li>Real-time data streaming (batch updates are acceptable)</li>
+                <li>Multi-variate testing beyond A/B/C</li>
+                <li>Automated traffic allocation optimization</li>
+                <li>Integration with external analytics platforms (Google Analytics, Mixpanel)</li>
+                <li>Custom metric builder</li>
+                <li>Automated winner declaration without user confirmation</li>
+                <li>Historical experiment archives beyond 90 days</li>
+                <li>White-label or client-facing reports</li>
+            </ul>
+        </div>
+
+        <!-- Technical Notes -->
+        <h2 class="section-heading"><span class="section-number">9.</span> Technical Notes</h2>
+        <div class="section-content">
+            <h3 class="subsection-heading">Implementation Approach</h3>
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li>Self-contained product, built on Revmatics platform infrastructure</li>
+                <li>Data integration with Revmatics analytics backend</li>
+                <li>Real-time KPI updates via WebSocket or polling mechanism</li>
+                <li>Chart rendering using Chart.js for trend visualization</li>
+                <li>Responsive design with mobile-first CSS approach for tablet and below</li>
+                <li>Progressive enhancement: core analytics function with optional interactive features</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>CRO Reporting — Product Requirements Document v2.0</p>
+        <p>Revmatics | April 2026</p>
+    </div>
+
+</body>
+</html>

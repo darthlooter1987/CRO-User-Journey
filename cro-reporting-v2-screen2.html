@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Omega 2X – Conversion LP Analytics | Revmatics</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2E5090;
+      --primary-light: #4A7BC7;
+      --primary-dark: #1E3A6E;
+      --accent: #00B4D8;
+      --accent2: #F77F00;
+      --success: #06D6A0;
+      --warning: #FFD166;
+      --bg: #F8FAFC;
+      --card: #FFFFFF;
+      --text: #1E293B;
+      --text-light: #64748B;
+      --border: #E2E8F0;
+      --radius: 12px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* ============================================================
+       TOP NAV (56px fixed)
+       ============================================================ */
+    .topnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background-color: var(--card);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .topnav-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
+
+    .topnav-left-brand {
+      color: var(--primary);
+      font-size: 16px;
+    }
+
+    .topnav-left-sub {
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .topnav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ============================================================
+       LEFT SIDEBAR (220px fixed)
+       ============================================================ */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 56px;
+      width: 220px;
+      height: calc(100vh - 56px);
+      background-color: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      margin-bottom: 32px;
+    }
+
+    .sidebar-title {
+      padding: 0 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-link {
+      padding: 10px 20px;
+      font-size: 14px;
+      color: var(--text-light);
+      text-decoration: none;
+      display: block;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-link:hover {
+      background-color: var(--bg);
+      color: var(--primary);
+    }
+
+    .sidebar-link.active {
+      background-color: var(--bg);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       MAIN CONTENT AREA
+       ============================================================ */
+    .main {
+      margin-left: 220px;
+      margin-top: 56px;
+      padding: 32px;
+      min-height: calc(100vh - 56px);
+      background-color: var(--bg);
+    }
+
+    /* ============================================================
+       BREADCRUMB
+       ============================================================ */
+    .breadcrumb {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 24px;
+    }
+
+    .breadcrumb a {
+      color: var(--primary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============================================================
+       PAGE HEADER
+       ============================================================ */
+    .page-header {
+      margin-bottom: 32px;
+    }
+
+    .page-header-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .page-header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-outline {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      background-color: transparent;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--bg);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .date-range-btn {
+      padding: 6px 12px;
+      background-color: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .date-range-btn:hover {
+      background-color: var(--bg);
+    }
+
+    .tags-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      background-color: var(--bg);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-light);
+      border: 1px solid var(--border);
+    }
+
+    .tag.product {
+      color: var(--primary);
+      border-color: var(--primary-light);
+      background-color: rgba(46, 80, 144, 0.05);
+    }
+
+    .tag.type {
+      color: var(--success);
+      border-color: var(--success);
+      background-color: rgba(6, 214, 160, 0.05);
+    }
+
+    .tag.traffic {
+      color: var(--accent2);
+      border-color: var(--accent2);
+      background-color: rgba(247, 127, 0, 0.05);
+    }
+
+    .tag.source {
+      color: var(--accent);
+      border-color: var(--accent);
+      background-color: rgba(0, 180, 216, 0.05);
+    }
+
+    /* ============================================================
+       HERO SUMMARY CARD
+       ============================================================ */
+    .hero-card {
+      background-color: var(--card);
+      border-left: 4px solid var(--success);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 28px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero-left {
+      flex: 1;
+    }
+
+    .hero-status {
+      display: inline-block;
+      background-color: rgba(6, 214, 160, 0.15);
+      color: var(--success);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .hero-headline {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .hero-supporting {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .hero-benchmark {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    .hero-right {
+      text-align: right;
+      max-width: 280px;
+      margin-left: 24px;
+    }
+
+    .hero-suggestion {
+      font-size: 13px;
+      color: var(--text-light);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       KPI CARDS ROW
+       ============================================================ */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .kpi-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .change-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .change-badge.positive {
+      background-color: rgba(6, 214, 160, 0.15);
+      color: var(--success);
+    }
+
+    .change-badge.negative {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+    }
+
+    .change-badge.positive.green-is-good {
+      background-color: rgba(6, 214, 160, 0.15);
+      color: var(--success);
+    }
+
+    /* ============================================================
+       PAID MEDIA CALLOUT
+       ============================================================ */
+    .paid-media-bar {
+      background: linear-gradient(90deg, rgba(0, 180, 216, 0.08), transparent);
+      border: 1px solid rgba(0, 180, 216, 0.2);
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .paid-media-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      text-align: center;
+    }
+
+    .paid-media-item {
+      padding: 0;
+    }
+
+    .paid-media-label {
+      font-size: 11px;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .paid-media-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* ============================================================
+       SECTION HEADER
+       ============================================================ */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      margin-top: 28px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary-dark);
+    }
+
+    .toggle-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toggle-pill {
+      padding: 6px 12px;
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-pill.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .toggle-pill:hover:not(.active) {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ============================================================
+       CHART CONTAINER
+       ============================================================ */
+    .chart-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 320px;
+      margin-top: 16px;
+    }
+
+    /* ============================================================
+       FUNNEL SECTION
+       ============================================================ */
+    .funnel-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .funnel-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .funnel-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .funnel-label {
+      width: 140px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .funnel-bar-container {
+      flex: 1;
+      margin: 0 16px;
+      position: relative;
+    }
+
+    .funnel-bar {
+      height: 32px;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--primary-light), var(--primary));
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      color: white;
+      font-size: 12px;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .funnel-stats {
+      width: 120px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .funnel-count {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .funnel-percentage {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    .funnel-callout {
+      background-color: var(--bg);
+      border-left: 3px solid var(--accent2);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 16px;
+    }
+
+    /* ============================================================
+       INSIGHTS GRID
+       ============================================================ */
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .insight-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .insight-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .insight-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .insight-note {
+      font-size: 12px;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    /* ============================================================
+       SEGMENTS TABLE
+       ============================================================ */
+    .segments-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .segment-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .segment-tab {
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .segment-tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .segment-tab:hover {
+      color: var(--primary);
+    }
+
+    .segment-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .segment-table th {
+      background-color: var(--bg);
+      padding: 12px 0;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-light);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.5px;
+    }
+
+    .segment-table td {
+      padding: 16px 0;
+      font-size: 13px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .segment-table td:first-child {
+      font-weight: 500;
+    }
+
+    /* ============================================================
+       RECOMMENDATIONS
+       ============================================================ */
+    .recommendations-card {
+      background-color: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 28px;
+    }
+
+    .recommendations-list {
+      list-style: none;
+    }
+
+    .recommendations-list li {
+      padding: 12px 0;
+      padding-left: 24px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.6;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .recommendations-list li:last-child {
+      border-bottom: none;
+    }
+
+    .recommendations-list li:before {
+      content: '•';
+      position: absolute;
+      left: 8px;
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* ============================================================
+       NEXT ACTIONS
+       ============================================================ */
+    .next-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+      margin-bottom: 32px;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      box-shadow: 0 8px 24px rgba(46, 80, 144, 0.2);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1400px) {
+      .kpi-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .insights-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .paid-media-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-right {
+        margin-left: 0;
+        margin-top: 16px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .main {
+        padding: 16px;
+      }
+
+      .kpi-row {
+        grid-template-columns: 1fr;
+      }
+
+      .insights-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .paid-media-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header-top {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .page-header-actions {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-outline {
+        width: 100%;
+      }
+
+      .funnel-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .funnel-label,
+      .funnel-stats {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP NAV -->
+  <div class="topnav">
+    <div class="topnav-left">
+      <span class="topnav-left-brand">Revmatics</span>
+      <span class="topnav-left-sub">CRO</span>
+    </div>
+    <div class="topnav-right">
+      <div class="avatar">AD</div>
+    </div>
+  </div>
+
+  <!-- LEFT SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Menu</div>
+      <a href="cro-reporting-v2-screen1.html" class="sidebar-link">Landing Pages</a>
+      <a href="cro-reporting-v2-screen3.html" class="sidebar-link">Experiments</a>
+      <a href="#" class="sidebar-link">Reports</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">Analytics</div>
+      <a href="#" class="sidebar-link active">Landing Pages</a>
+      <a href="#" class="sidebar-link">Traffic Sources</a>
+      <a href="#" class="sidebar-link">Audiences</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main">
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb">
+      <a href="cro-reporting-v2-screen1.html">Landing Pages</a> > <a href="#">Omega 2X Fish Oil</a> >
+      <span>Conversion LP</span>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <div class="page-header-top">
+        <h1 class="page-title">Omega 2X – Conversion LP</h1>
+        <div class="page-header-actions">
+          <button class="btn-outline">Create Variant</button>
+          <button class="btn-outline">Export</button>
+          <button class="date-range-btn">Last 30 days</button>
+        </div>
+      </div>
+      <div class="tags-row">
+        <span class="tag product">Omega 2X Fish Oil</span>
+        <span class="tag type">Conversion</span>
+        <span class="tag traffic">Paid Traffic</span>
+        <span class="tag source">Meta Ads</span>
+        <span class="tag">Meta Spring Sale</span>
+      </div>
+    </div>
+
+    <!-- HERO SUMMARY CARD -->
+    <div class="hero-card">
+      <div class="hero-left">
+        <div class="hero-status">Strong</div>
+        <div class="hero-headline">Performance is Strong</div>
+        <div class="hero-supporting">Conversion rate is above target and CTA engagement is healthy.</div>
+        <div class="hero-benchmark">4.7% conversion rate vs 3.5% target</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-suggestion">Suggested: Create a variant to test a stronger hero section</div>
+      </div>
+    </div>
+
+    <!-- KPI CARDS ROW -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Sessions</div>
+        <div class="kpi-value">18.4K</div>
+        <span class="change-badge positive">
+          <span>↑</span> +12.3%
+        </span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-value">4.7%</div>
+        <span class="change-badge positive">
+          <span>↑</span> +0.4pp
+        </span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Revenue</div>
+        <div class="kpi-value">$48.2K</div>
+        <span class="change-badge positive">
+          <span>↑</span> +18.6%
+        </span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPA</div>
+        <div class="kpi-value">$7.97</div>
+        <span class="change-badge positive green-is-good">
+          <span>↓</span> -11.3%
+        </span>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-value">3.6x</div>
+        <span class="change-badge positive">
+          <span>↑</span> +0.4x
+        </span>
+      </div>
+    </div>
+
+    <!-- PAID MEDIA CALLOUT -->
+    <div class="paid-media-bar">
+      <div class="paid-media-grid">
+        <div class="paid-media-item">
+          <div class="paid-media-label">Spend</div>
+          <div class="paid-media-value">$6,900</div>
+        </div>
+        <div class="paid-media-item">
+          <div class="paid-media-label">CPC</div>
+          <div class="paid-media-value">$0.37</div>
+        </div>
+        <div class="paid-media-item">
+          <div class="paid-media-label">Cost per View</div>
+          <div class="paid-media-value">$0.37</div>
+        </div>
+        <div class="paid-media-item">
+          <div class="paid-media-label">Rev/Visit</div>
+          <div class="paid-media-value">$2.62</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERFORMANCE TRENDS -->
+    <div class="chart-card">
+      <div class="section-header">
+        <h2 class="section-title">Trends</h2>
+        <div class="toggle-pills">
+          <button class="toggle-pill">7D</button>
+          <button class="toggle-pill active">30D</button>
+          <button class="toggle-pill">90D</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <canvas id="trendsChart"></canvas>
+      </div>
+    </div>
+
+    <!-- CONVERSION FUNNEL -->
+    <div class="funnel-card">
+      <h2 class="section-title">Funnel</h2>
+      <div style="margin-top: 20px;">
+        <div class="funnel-item">
+          <div class="funnel-label">Sessions</div>
+          <div class="funnel-bar-container">
+            <div class="funnel-bar" style="width: 100%;">100%</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-count">18,420</div>
+            <div class="funnel-percentage">100%</div>
+          </div>
+        </div>
+        <div class="funnel-item">
+          <div class="funnel-label">CTA Clicks</div>
+          <div class="funnel-bar-container">
+            <div class="funnel-bar" style="width: 12.9%;">12.9%</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-count">2,376</div>
+            <div class="funnel-percentage">12.9%</div>
+          </div>
+        </div>
+        <div class="funnel-item">
+          <div class="funnel-label">Form Starts</div>
+          <div class="funnel-bar-container">
+            <div class="funnel-bar" style="width: 8.0%;">8.0%</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-count">1,478</div>
+            <div class="funnel-percentage">8.0%</div>
+          </div>
+        </div>
+        <div class="funnel-item">
+          <div class="funnel-label">Form Completions</div>
+          <div class="funnel-bar-container">
+            <div class="funnel-bar" style="width: 5.5%;">5.5%</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-count">1,012</div>
+            <div class="funnel-percentage">5.5%</div>
+          </div>
+        </div>
+        <div class="funnel-item">
+          <div class="funnel-label">Purchases</div>
+          <div class="funnel-bar-container">
+            <div class="funnel-bar" style="width: 4.7%;">4.7%</div>
+          </div>
+          <div class="funnel-stats">
+            <div class="funnel-count">866</div>
+            <div class="funnel-percentage">4.7%</div>
+          </div>
+        </div>
+      </div>
+      <div class="funnel-callout">87% of visitors don't click the CTA — consider testing button copy or placement</div>
+    </div>
+
+    <!-- INSIGHTS GRID -->
+    <div>
+      <h2 class="section-title" style="margin-bottom: 20px;">Insights</h2>
+      <div class="insights-grid">
+        <div class="insight-card">
+          <div class="insight-label">Bounce Rate</div>
+          <div class="insight-value">38.4%</div>
+          <div class="insight-note">Below 45% average. Good first impression.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Scroll Depth</div>
+          <div class="insight-value">64%</div>
+          <div class="insight-note">Most visitors see the CTA.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Avg Time</div>
+          <div class="insight-value">1m 42s</div>
+          <div class="insight-note">Healthy engagement.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">CTA CTR</div>
+          <div class="insight-value">12.9%</div>
+          <div class="insight-note">Above average. CTA is effective.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Exit Rate</div>
+          <div class="insight-value">22.1%</div>
+          <div class="insight-note">Low. Users continue through funnel.</div>
+        </div>
+        <div class="insight-card">
+          <div class="insight-label">Form Abandon</div>
+          <div class="insight-value">31.5%</div>
+          <div class="insight-note">Consider reducing form fields.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEGMENTS TABLE -->
+    <div class="segments-card">
+      <h2 class="section-title">Segments</h2>
+      <div class="segment-tabs">
+        <button class="segment-tab active">Device</button>
+        <button class="segment-tab">Source</button>
+        <button class="segment-tab">Geography</button>
+      </div>
+      <table class="segment-table">
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>Sessions</th>
+            <th>Conv Rate</th>
+            <th>Revenue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Desktop</td>
+            <td>10,840</td>
+            <td>5.4%</td>
+            <td>$32,500</td>
+          </tr>
+          <tr>
+            <td>Mobile</td>
+            <td>6,280</td>
+            <td>3.6%</td>
+            <td>$12,500</td>
+          </tr>
+          <tr>
+            <td>Tablet</td>
+            <td>1,300</td>
+            <td>4.2%</td>
+            <td>$3,200</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="recommendations-card">
+      <h2 class="section-title">Recommendations</h2>
+      <ul class="recommendations-list">
+        <li>Mobile conversion is 33% lower than desktop — review mobile form UX and responsive design</li>
+        <li>CTA clicks are healthy but form step loses 31.5% — test shorter form or progress indicators</li>
+        <li>Consider A/B testing a stronger hero headline to boost initial engagement</li>
+        <li>Scroll depth at 64% is good — most users see the value prop, but form placement may need adjustment</li>
+      </ul>
+    </div>
+
+    <!-- NEXT ACTIONS -->
+    <div class="next-actions">
+      <button class="btn-primary">Create Variant</button>
+      <button class="btn-outline">Launch A/B Test</button>
+      <button class="btn-outline">Export Report</button>
+    </div>
+  </div>
+
+  <script>
+    // Trends Chart - Dual Axis
+    const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+
+    // Generate 30-day data
+    const daysLabels = Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`);
+    const sessionsData = Array.from({ length: 30 }, () =>
+      Math.floor(Math.random() * 800 + 400)
+    );
+    const conversionData = Array.from({ length: 30 }, () =>
+      (Math.random() * 1.5 + 3).toFixed(2)
+    );
+
+    const trendsChart = new Chart(trendsCtx, {
+      type: 'line',
+      data: {
+        labels: daysLabels,
+        datasets: [
+          {
+            label: 'Sessions',
+            data: sessionsData,
+            yAxisID: 'y',
+            borderColor: 'transparent',
+            backgroundColor: 'rgba(74, 123, 199, 0.1)',
+            fill: true,
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            borderWidth: 2,
+            tension: 0.4,
+          },
+          {
+            label: 'Conversion Rate (%)',
+            data: conversionData,
+            yAxisID: 'y1',
+            borderColor: 'rgb(6, 214, 160)',
+            backgroundColor: 'transparent',
+            pointRadius: 0,
+            pointHoverRadius: 0,
+            borderWidth: 2.5,
+            tension: 0.4,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+            labels: {
+              font: {
+                size: 12,
+              },
+              usePointStyle: true,
+              padding: 16,
+              color: '#64748B',
+            },
+          },
+          tooltip: {
+            backgroundColor: 'rgba(30, 41, 59, 0.95)',
+            padding: 12,
+            titleFont: { size: 13, weight: 600 },
+            bodyFont: { size: 12 },
+            borderRadius: 8,
+          },
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            grid: {
+              color: 'rgba(241, 245, 249, 0.5)',
+              drawBorder: false,
+            },
+            ticks: {
+              color: '#64748B',
+              font: { size: 12 },
+            },
+            title: {
+              display: true,
+              text: 'Sessions',
+              font: { size: 12, weight: 600 },
+              color: '#64748B',
+            },
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            grid: {
+              drawOnChartArea: false,
+            },
+            ticks: {
+              color: '#06D6A0',
+              font: { size: 12 },
+            },
+            title: {
+              display: true,
+              text: 'Conversion Rate (%)',
+              font: { size: 12, weight: 600 },
+              color: '#06D6A0',
+            },
+          },
+          x: {
+            grid: {
+              color: 'rgba(241, 245, 249, 0.3)',
+              drawBorder: false,
+            },
+            ticks: {
+              color: '#64748B',
+              font: { size: 11 },
+              maxTicksLimit: 10,
+            },
+          },
+        },
+      },
+    });
+
+    // Toggle pills functionality
+    document.querySelectorAll('.toggle-pill').forEach((pill) => {
+      pill.addEventListener('click', function () {
+        document
+          .querySelectorAll('.toggle-pill')
+          .forEach((p) => p.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // Segment tabs functionality
+    document.querySelectorAll('.segment-tab').forEach((tab) => {
+      tab.addEventListener('click', function () {
+        document
+          .querySelectorAll('.segment-tab')
+          .forEach((t) => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
