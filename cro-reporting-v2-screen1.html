@@ -49,48 +49,55 @@
             height: 56px;
             background: var(--card);
             border-bottom: 1px solid var(--border);
-            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+            padding: 0 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 24px;
             z-index: 100;
+            box-shadow: var(--shadow);
         }
 
         .topnav-left {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            font-size: 16px;
+            gap: 12px;
         }
 
-        .topnav-left .brand {
+        .logo {
+            font-weight: 700;
+            font-size: 16px;
             color: var(--primary);
         }
 
-        .topnav-left .product {
-            color: var(--text-light);
-            font-weight: 400;
+        .logo-divider {
+            color: var(--border);
+            font-weight: 300;
+        }
+
+        .topnav-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
         }
 
         .topnav-right {
             display: flex;
+            gap: 20px;
             align-items: center;
-            gap: 16px;
         }
 
         .avatar {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
-            background: var(--primary-light);
+            background: var(--primary);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
             font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
         }
 
         /* ===== SIDEBAR ===== */
@@ -572,8 +579,9 @@
     <!-- TOP NAV -->
     <div class="topnav">
         <div class="topnav-left">
-            <span class="brand">Revmatics</span>
-            <span class="product">CRO</span>
+            <span class="logo">Revmatics</span>
+            <span class="logo-divider">/</span>
+            <span class="topnav-title">CRO</span>
         </div>
         <div class="topnav-right">
             <div class="avatar">AD</div>

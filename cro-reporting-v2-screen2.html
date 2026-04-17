@@ -44,51 +44,56 @@
       left: 0;
       right: 0;
       height: 56px;
-      background-color: var(--card);
+      background: var(--card);
       border-bottom: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      padding: 0 32px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 24px;
+      align-items: center;
       z-index: 100;
+      box-shadow: var(--shadow);
     }
 
     .topnav-left {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+    }
+
+    .logo {
       font-weight: 700;
-    }
-
-    .topnav-left-brand {
-      color: var(--primary);
       font-size: 16px;
+      color: var(--primary);
     }
 
-    .topnav-left-sub {
-      color: var(--text-light);
-      font-size: 13px;
-      font-weight: 400;
+    .logo-divider {
+      color: var(--border);
+      font-weight: 300;
+    }
+
+    .topnav-title {
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
     }
 
     .topnav-right {
       display: flex;
+      gap: 20px;
       align-items: center;
-      gap: 16px;
     }
 
     .avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), var(--accent));
+      background: var(--primary);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
       font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
     }
 
@@ -843,8 +848,9 @@
   <!-- TOP NAV -->
   <div class="topnav">
     <div class="topnav-left">
-      <span class="topnav-left-brand">Revmatics</span>
-      <span class="topnav-left-sub">CRO</span>
+      <span class="logo">Revmatics</span>
+      <span class="logo-divider">/</span>
+      <span class="topnav-title">CRO</span>
     </div>
     <div class="topnav-right">
       <div class="avatar">AD</div>
