@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO Reporting - Revmatics</title>
+    <style>
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --danger: #FF6B6B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --awareness: #4A7BC7;
+            --differentiation: #F77F00;
+            --conversion: #06D6A0;
+            --loyalty: #9B5DE5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* ===== TOP NAV ===== */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .topnav-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .logo-divider {
+            color: var(--border);
+            font-weight: 300;
+        }
+
+        .topnav-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+        }
+
+        .topnav-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .search-bar {
+            width: 320px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar::placeholder {
+            color: var(--text-light);
+        }
+
+        .search-bar:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(74, 123, 199, 0.1);
+        }
+
+        .topnav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .icon-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .icon-btn:hover {
+            color: var(--primary);
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 220px;
+            height: calc(100vh - 56px);
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 24px 0;
+            overflow-y: auto;
+            z-index: 99;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            padding: 0 16px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+            background: rgba(46, 80, 144, 0.04);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(46, 80, 144, 0.08);
+            border-left: 3px solid var(--primary);
+            padding-left: 13px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 220px;
+            margin-top: 56px;
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+            background: var(--bg);
+        }
+
+        .screen {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== SCREEN 1: LANDING PAGES ===== */
+        .screen-header {
+            margin-bottom: 28px;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .screen-subtitle {
+            font-size: 15px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .screen-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            gap: 16px;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .date-picker {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-picker:hover {
+            border-color: var(--primary-light);
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(46, 80, 144, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg);
+            border-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* ===== SUMMARY STRIP ===== */
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .summary-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* ===== FILTERS ===== */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--card);
+            color: var(--text);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            border-color: var(--primary-light);
+            background: rgba(74, 123, 199, 0.04);
+        }
+
+        /* ===== TABLE ===== */
+        .table-container {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        th:hover {
+            background: rgba(46, 80, 144, 0.04);
+        }
+
+        .sort-indicator {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 12px;
+            color: var(--primary-light);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--border);
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(46, 80, 144, 0.02);
+        }
+
+        td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+
+        .page-name {
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .page-name:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .page-product {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .badge-awareness {
+            background: rgba(74, 123, 199, 0.1);
+            color: var(--awareness);
+        }
+
+        .badge-differentiation {
+            background: rgba(247, 127, 0, 0.1);
+            color: var(--differentiation);
+        }
+
+        .badge-conversion {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+        }
+
+        .badge-loyalty {
+            background: rgba(155, 93, 229, 0.1);
+            color: var(--loyalty);
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-status-average {
+            background: rgba(74, 123, 199, 0.1);
+            color: var(--awareness);
+        }
+
+        .badge-status-strong {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+        }
+
+        .badge-status-inconclusive {
+            background: rgba(255, 209, 102, 0.1);
+            color: #D59E0F;
+        }
+
+        .icon-tag {
+            margin-right: 4px;
+        }
+
+        .experiment-link {
+            color: var(--success);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .experiment-link:hover {
+            color: #04AA88;
+            text-decoration: underline;
+        }
+
+        .metric {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .metric-change {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-left: 4px;
+        }
+
+        .metric-change.positive {
+            color: var(--success);
+        }
+
+        .metric-change.negative {
+            color: var(--danger);
+        }
+
+        /* ===== SCREEN 2: SINGLE PAGE ANALYTICS ===== */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb span {
+            color: var(--text-light);
+            margin: 0 6px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .page-header-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(74, 123, 199, 0.1);
+            color: var(--primary);
+        }
+
+        .page-header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .page-header-right .date-picker {
+            align-self: flex-end;
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .hero-card {
+            background: var(--card);
+            border-left: 4px solid var(--conversion);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .hero-card-title .badge-status {
+            margin: 0;
+        }
+
+        .hero-card-message {
+            font-size: 15px;
+            color: var(--text);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .hero-card-detail {
+            font-size: 14px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .kpi-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .kpi-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .kpi-change {
+            font-size: 13px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .kpi-change.negative {
+            color: var(--danger);
+        }
+
+        .inline-bar {
+            background: var(--card);
+            padding: 14px 16px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 28px;
+            font-weight: 500;
+        }
+
+        .inline-bar span {
+            color: var(--text-light);
+            margin-right: 8px;
+        }
+
+        .chart-container {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            max-height: 300px;
+        }
+
+        .funnel {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .funnel-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 20px;
+        }
+
+        .funnel-stage {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .funnel-stage-bar {
+            flex: 1;
+            height: 36px;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            position: relative;
+        }
+
+        .funnel-stage-drop {
+            font-size: 12px;
+            color: var(--danger);
+            font-weight: 600;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .insight-card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .insight-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .insight-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .recommendations {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .recommendations-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .recommendations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            padding: 10px 0;
+            font-size: 14px;
+            color: var(--text);
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .recommendations li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-light);
+            font-weight: bold;
+        }
+
+        .next-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        /* ===== SCREEN 3: EXPERIMENT ===== */
+        .experiment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .experiment-header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .experiment-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 16px;
+        }
+
+        .status-live {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--conversion);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .experiment-summary {
+            background: var(--card);
+            border-left: 4px solid var(--conversion);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-metrics {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .summary-metric {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-metric-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .summary-metric-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .variant-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .variant-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 2px solid var(--border);
+            padding: 24px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .variant-card.leading {
+            border-color: var(--conversion);
+            background: linear-gradient(135deg, rgba(6, 214, 160, 0.03) 0%, transparent 100%);
+        }
+
+        .variant-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--text-light);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .variant-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .variant-tag {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .variant-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .variant-metric {
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .variant-metric-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .variant-metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .variant-metric-change {
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .variant-metric-change.negative {
+            color: var(--danger);
+        }
+
+        .confidence-meter {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .confidence-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .confidence-bar {
+            display: flex;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--accent));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .confidence-threshold {
+            position: absolute;
+            top: -6px;
+            right: 0;
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 600;
+            transform: translateX(50%);
+        }
+
+        .confidence-text {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .confidence-current {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .changes-panel {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            margin-bottom: 28px;
+        }
+
+        .changes-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .change-item {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .change-item:last-child {
+            border-bottom: none;
+        }
+
+        .change-label {
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .change-value {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .segments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 13px;
+        }
+
+        .segments-table thead {
+            background: var(--bg);
+        }
+
+        .segments-table th {
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .segments-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .segment-winner {
+            background: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 64px rgba(0, 0, 0, 0.2);
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        @media (max-width: 1400px) {
+            .summary-strip,
+            .kpi-grid {
+                grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            }
+
+            .insights-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .topnav-center {
+                display: none;
+            }
+
+            .summary-strip,
+            .kpi-grid,
+            .variant-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .screen {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAV -->
+    <div class="topnav">
+        <div class="topnav-left">
+            <span class="logo">Revmatics</span>
+            <span class="logo-divider">/</span>
+            <span class="topnav-title">CRO</span>
+        </div>
+        <div class="topnav-center" id="topnav-search-container" style="display: none;">
+            <input type="text" class="search-bar" placeholder="Search landing pages...">
+        </div>
+        <div class="topnav-right">
+            <button class="icon-btn">🔔</button>
+            <div class="avatar">AD</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-label">PRIMARY</div>
+            <ul class="sidebar-nav">
+                <li>
+                    <div class="nav-item active" onclick="showScreen('pages')">
+                        <span>📊</span>
+                        <span>Landing Pages</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- SCREEN 1: ALL LANDING PAGES -->
+        <div class="screen active" id="screen-pages">
+            <div class="screen-header">
+                <h1 class="screen-title">Landing Pages</h1>
+                <p class="screen-subtitle">Track performance, compare variants, and identify what to scale</p>
+            </div>
+
+            <div class="screen-toolbar">
+                <div class="toolbar-left">
+                    <button class="date-picker">📅 Last 30 days</button>
+                </div>
+                <div class="toolbar-right">
+                    <button class="btn btn-primary">+ Create Landing Page</button>
+                </div>
+            </div>
+
+            <!-- SUMMARY STRIP -->
+            <div class="summary-strip">
+                <div class="summary-card">
+                    <div class="summary-value">4</div>
+                    <div class="summary-label">Total Landing Pages</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">1</div>
+                    <div class="summary-label">Live Experiments</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">2</div>
+                    <div class="summary-label">Strong Performers</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">0</div>
+                    <div class="summary-label">Weak Performers</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">0</div>
+                    <div class="summary-label">Needs Data</div>
+                </div>
+            </div>
+
+            <!-- FILTERS -->
+            <div class="filter-row">
+                <div class="filter-pill">Product</div>
+                <div class="filter-pill">Page Type</div>
+                <div class="filter-pill">Traffic Context</div>
+                <div class="filter-pill">Campaign</div>
+                <div class="filter-pill">Experiment State</div>
+                <div class="filter-pill">Status</div>
+                <div class="filter-pill">Device</div>
+                <div class="filter-pill">Source/Channel</div>
+            </div>
+
+            <!-- TABLE -->
+            <div class="table-container">
+                <table id="landing-pages-table">
+                    <thead>
+                        <tr>
+                            <th onclick="sortTable(0)">PAGE NAME <span class="sort-indicator" data-column="0"></span></th>
+                            <th>PAGE TYPE</th>
+                            <th>TRAFFIC</th>
+                            <th>CAMPAIGN</th>
+                            <th>STATUS</th>
+                            <th>EXPERIMENT</th>
+                            <th onclick="sortTable(6)" class="metric">SESSIONS <span class="sort-indicator" data-column="6"></span></th>
+                            <th onclick="sortTable(7)" class="metric">CONV. RATE <span class="sort-indicator" data-column="7"></span></th>
+                            <th onclick="sortTable(8)" class="metric">CONVERSIONS <span class="sort-indicator" data-column="8"></span></th>
+                            <th onclick="sortTable(9)" class="metric">REVENUE <span class="sort-indicator" data-column="9"></span></th>
+                            <th onclick="sortTable(10)" class="metric">LAST UPDATED <span class="sort-indicator" data-column="10"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        <!-- Rows populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: SINGLE PAGE ANALYTICS -->
+        <div class="screen" id="screen-analytics">
+            <a class="back-link" onclick="showScreen('pages')">← Back to Landing Pages</a>
+            <div class="breadcrumb">
+                <a onclick="showScreen('pages')">Landing Pages</a>
+                <span>></span>
+                <a>Omega 2X Fish Oil</a>
+                <span>></span>
+                <span>Conversion LP</span>
+            </div>
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>Omega 2X – Conversion LP</h1>
+                    <div class="page-header-tags">
+                        <span class="tag">Conversion</span>
+                        <span class="tag">Paid</span>
+                        <span class="tag">Meta Ads</span>
+                        <span class="tag">Meta Spring Sale</span>
+                    </div>
+                </div>
+                <div class="page-header-right">
+                    <button class="date-picker">📅 Last 30 days</button>
+                    <div class="page-header-actions">
+                        <button class="btn btn-outline">Create Variant</button>
+                        <button class="btn btn-outline">Export</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HERO SUMMARY -->
+            <div class="hero-card">
+                <div class="hero-card-title">
+                    <span class="badge-status badge-status-inconclusive">Inconclusive</span>
+                </div>
+                <div class="hero-card-message">Performance is trending positive but A/B test is still running</div>
+                <div class="hero-card-detail">
+                    4.7% conversion rate vs 3.5% target<br>
+                    <strong>Suggested:</strong> Wait for experiment to reach 95% confidence before making changes
+                </div>
+            </div>
+
+            <!-- KPI CARDS -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Sessions</div>
+                    <div class="kpi-value">18,420</div>
+                    <div class="kpi-change">+12.3%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Conversion Rate</div>
+                    <div class="kpi-value">4.7%</div>
+                    <div class="kpi-change">+0.4pp</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Revenue</div>
+                    <div class="kpi-value">$48,200</div>
+                    <div class="kpi-change">+18.6%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">CPA</div>
+                    <div class="kpi-value">$7.97</div>
+                    <div class="kpi-change negative">-11.3%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">ROAS</div>
+                    <div class="kpi-value">3.6x</div>
+                    <div class="kpi-change">+0.4x</div>
+                </div>
+            </div>
+
+            <!-- PAID MEDIA BAR -->
+            <div class="inline-bar">
+                <span>💰 Spend:</span> $6,900 <span style="margin-left: 16px;">| CPC:</span> $0.37
+                <span style="margin-left: 16px;">| Cost/View:</span> $0.37 <span style="margin-left: 16px;">| Rev/Visit:</span> $2.62
+            </div>
+
+            <!-- TRENDS CHART -->
+            <div class="chart-container">
+                <div class="chart-title">Sessions & Conversion Rate (Last 30 days)</div>
+                <canvas id="trend-chart" width="400" height="300"></canvas>
+            </div>
+
+            <!-- FUNNEL -->
+            <div class="funnel">
+                <div class="funnel-title">Conversion Funnel</div>
+                <div class="funnel-stage">
+                    <div class="funnel-stage-bar" style="width: 100%;">Sessions <strong style="margin-left: auto;">18,420</strong></div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-stage-bar" style="width: 85%;">CTA Clicks <strong style="margin-left: auto;">2,376</strong></div>
+                    <div class="funnel-stage-drop">-12.9%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-stage-bar" style="width: 62%;">Form Starts <strong style="margin-left: auto;">1,478</strong></div>
+                    <div class="funnel-stage-drop">-37.8%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-stage-bar" style="width: 55%;">Form Completions <strong style="margin-left: auto;">1,012</strong></div>
+                    <div class="funnel-stage-drop">-31.5%</div>
+                </div>
+                <div class="funnel-stage">
+                    <div class="funnel-stage-bar" style="width: 47%;">Purchases <strong style="margin-left: auto;">866</strong></div>
+                    <div class="funnel-stage-drop">-14.4%</div>
+                </div>
+            </div>
+
+            <!-- INSIGHTS -->
+            <div class="insights-grid">
+                <div class="insight-card">
+                    <div class="insight-label">Bounce Rate</div>
+                    <div class="insight-value">38.4%</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-label">Scroll Depth</div>
+                    <div class="insight-value">64%</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-label">Avg Time</div>
+                    <div class="insight-value">1m 42s</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-label">CTA CTR</div>
+                    <div class="insight-value">12.9%</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-label">Exit Rate</div>
+                    <div class="insight-value">22.1%</div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-label">Form Abandon</div>
+                    <div class="insight-value">31.5%</div>
+                </div>
+            </div>
+
+            <!-- RECOMMENDATIONS -->
+            <div class="recommendations">
+                <div class="recommendations-title">Recommendations</div>
+                <ul>
+                    <li>Wait for A/B test to reach 95% confidence before declaring a winner</li>
+                    <li>High form abandonment (31.5%) suggests friction—simplify or add progress indicator</li>
+                    <li>CTA CTR is strong at 12.9%; test hero image changes to lift the 38% bounce rate</li>
+                </ul>
+            </div>
+
+            <!-- NEXT ACTIONS -->
+            <div class="next-actions">
+                <button class="btn btn-outline">Add to Favorites</button>
+                <button class="btn btn-outline">View Detailed Report</button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: EXPERIMENT COMPARISON -->
+        <div class="screen" id="screen-experiment">
+            <a class="back-link" onclick="showScreen('pages')">← Back to Landing Pages</a>
+            <div class="breadcrumb">
+                <a onclick="showScreen('pages')">Landing Pages</a>
+                <span>></span>
+                <a>Omega 2X Fish Oil</a>
+                <span>></span>
+                <a>Conversion LP</a>
+                <span>></span>
+                <span>Hero Test</span>
+            </div>
+
+            <div class="experiment-header">
+                <div class="experiment-header-left">
+                    <h1>Omega 2X – Conversion LP: Hero Test</h1>
+                    <div class="experiment-meta">
+                        <span>Conversion</span> • <span>Paid</span> • <span>Started Mar 15, 2026</span>
+                    </div>
+                    <div class="status-live">
+                        <span class="pulse"></span>
+                        Live
+                    </div>
+                </div>
+                <div class="page-header-right">
+                    <div class="page-header-actions">
+                        <button class="btn btn-outline">Pause Test</button>
+                        <button class="btn btn-primary" onclick="toggleDeclareWinnerModal()">Declare Winner</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPERIMENT SUMMARY -->
+            <div class="experiment-summary">
+                <div class="hero-card-message">Variant B is leading by +14.3% with 92% confidence</div>
+                <div class="summary-metrics">
+                    <div class="summary-metric">
+                        <div class="summary-metric-value">+14.3%</div>
+                        <div class="summary-metric-label">Uplift</div>
+                    </div>
+                    <div class="summary-metric">
+                        <div class="summary-metric-value">92%</div>
+                        <div class="summary-metric-label">Confidence</div>
+                    </div>
+                    <div class="summary-metric">
+                        <div class="summary-metric-value">16,355</div>
+                        <div class="summary-metric-label">Sessions</div>
+                    </div>
+                    <div class="summary-metric">
+                        <div class="summary-metric-value">33</div>
+                        <div class="summary-metric-label">Days</div>
+                    </div>
+                    <div class="summary-metric">
+                        <div class="summary-metric-value">50/50</div>
+                        <div class="summary-metric-label">Split</div>
+                    </div>
+                </div>
+                <div class="hero-card-detail" style="margin-top: 16px;">
+                    Continue test until 95% confidence or 10,000 sessions per variant
+                </div>
+            </div>
+
+            <!-- VARIANT CARDS -->
+            <div class="variant-cards">
+                <div class="variant-card">
+                    <div class="variant-label">Control (A)</div>
+                    <div class="variant-name">Original Hero</div>
+                    <div class="variant-metrics">
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Sessions</div>
+                            <div class="variant-metric-value">8,240</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Conv Rate</div>
+                            <div class="variant-metric-value">4.2%</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Conversions</div>
+                            <div class="variant-metric-value">346</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Revenue</div>
+                            <div class="variant-metric-value">$18,900</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Bounce</div>
+                            <div class="variant-metric-value">41.2%</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">CTA CTR</div>
+                            <div class="variant-metric-value">11.4%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="variant-card leading">
+                    <div class="variant-label">Variant (B)</div>
+                    <div class="variant-name">
+                        Bold Hero
+                        <span class="variant-tag">Leading</span>
+                    </div>
+                    <div class="variant-metrics">
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Sessions</div>
+                            <div class="variant-metric-value">8,115</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Conv Rate</div>
+                            <div class="variant-metric-value">4.8%</div>
+                            <div class="variant-metric-change">+0.6pp</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Conversions</div>
+                            <div class="variant-metric-value">389</div>
+                            <div class="variant-metric-change">+12.4%</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Revenue</div>
+                            <div class="variant-metric-value">$21,200</div>
+                            <div class="variant-metric-change">+12.3%</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">Bounce</div>
+                            <div class="variant-metric-value">35.8%</div>
+                            <div class="variant-metric-change">-5.4pp</div>
+                        </div>
+                        <div class="variant-metric">
+                            <div class="variant-metric-label">CTA CTR</div>
+                            <div class="variant-metric-value">14.1%</div>
+                            <div class="variant-metric-change">+2.7pp</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONFIDENCE METER -->
+            <div class="confidence-meter">
+                <div class="confidence-title">Statistical Confidence</div>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: 92%;"></div>
+                    <div class="confidence-threshold">95%</div>
+                </div>
+                <div class="confidence-text">
+                    Current: <span class="confidence-current">92% confidence</span> • Target: 95% to declare winner
+                </div>
+            </div>
+
+            <!-- CONVERSION RATE CHART -->
+            <div class="chart-container">
+                <div class="chart-title">Conversion Rate Over Time</div>
+                <canvas id="experiment-chart" width="400" height="300"></canvas>
+            </div>
+
+            <!-- WHAT CHANGED -->
+            <div class="changes-panel">
+                <div class="changes-title">What Changed</div>
+                <div class="change-item">
+                    <div class="change-label">Headline</div>
+                    <div class="change-value">product-focused → benefit-driven</div>
+                </div>
+                <div class="change-item">
+                    <div class="change-label">Hero Image</div>
+                    <div class="change-value">lifestyle → product closeup</div>
+                </div>
+                <div class="change-item">
+                    <div class="change-label">CTA Copy</div>
+                    <div class="change-value">"Buy Now" → "Start Your Health Journey"</div>
+                </div>
+                <div class="change-item">
+                    <div class="change-label">CTA Color</div>
+                    <div class="change-value">blue → orange</div>
+                </div>
+                <div class="change-item">
+                    <div class="change-label">Social Proof</div>
+                    <div class="change-value">added "12,000+ customers" badge</div>
+                </div>
+            </div>
+
+            <!-- SEGMENT WINNERS -->
+            <div class="chart-container">
+                <div class="chart-title">Segment Winners</div>
+                <table class="segments-table">
+                    <thead>
+                        <tr>
+                            <th>Segment</th>
+                            <th>Control Conv</th>
+                            <th>Variant Conv</th>
+                            <th>Uplift</th>
+                            <th>Winner</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Desktop</td>
+                            <td>4.5%</td>
+                            <td>5.1%</td>
+                            <td>+13.3%</td>
+                            <td><span class="segment-winner">Variant B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile</td>
+                            <td>3.8%</td>
+                            <td>4.5%</td>
+                            <td>+18.4%</td>
+                            <td><span class="segment-winner">Variant B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Meta Ads</td>
+                            <td>4.1%</td>
+                            <td>4.9%</td>
+                            <td>+19.5%</td>
+                            <td><span class="segment-winner">Variant B</span></td>
+                        </tr>
+                        <tr>
+                            <td>Google Ads</td>
+                            <td>4.3%</td>
+                            <td>4.7%</td>
+                            <td>+9.3%</td>
+                            <td><span class="segment-winner">Variant B</span></td>
+                        </tr>
+                        <tr>
+                            <td>US Traffic</td>
+                            <td>4.6%</td>
+                            <td>5.3%</td>
+                            <td>+15.2%</td>
+                            <td><span class="segment-winner">Variant B</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- RECOMMENDATIONS -->
+            <div class="recommendations" style="margin-top: 28px;">
+                <div class="recommendations-title">Recommendations</div>
+                <ul>
+                    <li>Variant B shows consistent wins across all segments, particularly on mobile (+18.4%)</li>
+                    <li>Reach 95% confidence (3% more data) before declaring winner to ensure statistical rigor</li>
+                    <li>If declaring winner now, plan rollout to 100% traffic within 2-3 days of test completion</li>
+                </ul>
+            </div>
+
+            <!-- NEXT ACTIONS -->
+            <div class="next-actions" style="margin-top: 28px; margin-bottom: 40px;">
+                <button class="btn btn-outline">View Detailed Report</button>
+                <button class="btn btn-outline">Check Statistical Power</button>
+                <button class="btn btn-primary" onclick="toggleDeclareWinnerModal()">Declare Winner</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DECLARE WINNER MODAL -->
+    <div class="modal" id="declare-winner-modal">
+        <div class="modal-content">
+            <div class="modal-title">Declare Winner</div>
+            <div class="modal-subtitle">
+                Are you sure you want to declare Variant B (Bold Hero) as the winner? This will start the rollout process to 100% of traffic.
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="toggleDeclareWinnerModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmWinner()">Declare Winner</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        // DATA
+        const landingPages = [
+            {
+                name: "Omega 2X – Awareness LP",
+                product: "Omega 2X Fish Oil",
+                pageType: "Awareness",
+                pageTypeColor: "awareness",
+                traffic: "Paid",
+                trafficIcon: "$",
+                campaign: "Meta Brand Awareness",
+                status: "Average",
+                statusType: "average",
+                experiment: null,
+                sessions: 9120,
+                convRate: 1.8,
+                conversions: 164,
+                revenue: 7380,
+                lastUpdated: "3 hours ago",
+                lastUpdatedMs: Date.now() - 3 * 3600 * 1000
+            },
+            {
+                name: "Omega 2X – Differentiation LP",
+                product: "Omega 2X Fish Oil",
+                pageType: "Differentiation",
+                pageTypeColor: "differentiation",
+                traffic: "Paid",
+                trafficIcon: "$",
+                campaign: "Google Brand Defense",
+                status: "Strong",
+                statusType: "strong",
+                experiment: null,
+                sessions: 12450,
+                convRate: 3.8,
+                conversions: 473,
+                revenue: 25100,
+                lastUpdated: "5 hours ago",
+                lastUpdatedMs: Date.now() - 5 * 3600 * 1000
+            },
+            {
+                name: "Omega 2X – Conversion LP",
+                product: "Omega 2X Fish Oil",
+                pageType: "Conversion",
+                pageTypeColor: "conversion",
+                traffic: "Paid",
+                trafficIcon: "$",
+                campaign: "Meta Spring Sale",
+                status: "Inconclusive",
+                statusType: "inconclusive",
+                experiment: "Live test",
+                sessions: 18420,
+                convRate: 4.7,
+                conversions: 866,
+                revenue: 48200,
+                lastUpdated: "2 hours ago",
+                lastUpdatedMs: Date.now() - 2 * 3600 * 1000
+            },
+            {
+                name: "Omega 2X – Loyalty LP",
+                product: "Omega 2X Fish Oil",
+                pageType: "Loyalty",
+                pageTypeColor: "loyalty",
+                traffic: "Organic",
+                trafficIcon: "🌿",
+                campaign: "Email Winback",
+                status: "Strong",
+                statusType: "strong",
+                experiment: null,
+                sessions: 6840,
+                convRate: 6.2,
+                conversions: 424,
+                revenue: 22600,
+                lastUpdated: "5 hours ago",
+                lastUpdatedMs: Date.now() - 5 * 3600 * 1000
+            }
+        ];
+
+        let currentSort = { column: 6, ascending: false }; // Default: Sessions descending
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+            // Only show search in screen 1
+            document.getElementById('topnav-search-container').style.display = 'flex';
+        });
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            const sorted = [...landingPages].sort((a, b) => {
+                let aVal, bVal;
+
+                switch(currentSort.column) {
+                    case 0: // Page Name
+                        aVal = a.name.toLowerCase();
+                        bVal = b.name.toLowerCase();
+                        break;
+                    case 6: // Sessions
+                        aVal = a.sessions;
+                        bVal = b.sessions;
+                        break;
+                    case 7: // Conv Rate
+                        aVal = a.convRate;
+                        bVal = b.convRate;
+                        break;
+                    case 8: // Conversions
+                        aVal = a.conversions;
+                        bVal = b.conversions;
+                        break;
+                    case 9: // Revenue
+                        aVal = a.revenue;
+                        bVal = b.revenue;
+                        break;
+                    case 10: // Last Updated
+                        aVal = a.lastUpdatedMs;
+                        bVal = b.lastUpdatedMs;
+                        break;
+                    default:
+                        return 0;
+                }
+
+                if (aVal < bVal) return currentSort.ascending ? -1 : 1;
+                if (aVal > bVal) return currentSort.ascending ? 1 : -1;
+                return 0;
+            });
+
+            sorted.forEach(page => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>
+                        <a class="page-name" onclick="showScreen('analytics'); event.preventDefault();">${page.name}</a>
+                        <div class="page-product">${page.product}</div>
+                    </td>
+                    <td><span class="badge badge-${page.pageTypeColor}">${page.pageType}</span></td>
+                    <td><span class="icon-tag">${page.trafficIcon}</span>${page.traffic}</td>
+                    <td>${page.campaign}</td>
+                    <td><span class="badge-status badge-status-${page.statusType}">${page.status}</span></td>
+                    <td>
+                        ${page.experiment ? `<a class="experiment-link" onclick="showScreen('experiment'); event.preventDefault();">🟢 ${page.experiment}</a>` : '—'}
+                    </td>
+                    <td class="metric">${page.sessions.toLocaleString()}</td>
+                    <td class="metric">${page.convRate}%</td>
+                    <td class="metric">${page.conversions.toLocaleString()}</td>
+                    <td class="metric">$${page.revenue.toLocaleString()}</td>
+                    <td class="metric">${page.lastUpdated}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            updateSortIndicators();
+        }
+
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.ascending = !currentSort.ascending;
+            } else {
+                currentSort.column = column;
+                currentSort.ascending = true;
+            }
+            renderTable();
+        }
+
+        function updateSortIndicators() {
+            document.querySelectorAll('.sort-indicator').forEach(span => {
+                span.textContent = '';
+            });
+
+            const active = document.querySelector(`.sort-indicator[data-column="${currentSort.column}"]`);
+            if (active) {
+                active.textContent = currentSort.ascending ? '▲' : '▼';
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+            });
+
+            const screen = document.getElementById('screen-' + screenId);
+            if (screen) {
+                screen.classList.add('active');
+
+                // Initialize charts when screens are shown
+                if (screenId === 'analytics') {
+                    setTimeout(() => {
+                        if (!window.trendChart) {
+                            initTrendChart();
+                        }
+                    }, 50);
+                } else if (screenId === 'experiment') {
+                    setTimeout(() => {
+                        if (!window.experimentChart) {
+                            initExperimentChart();
+                        }
+                    }, 50);
+                }
+            }
+
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        function initTrendChart() {
+            const ctx = document.getElementById('trend-chart');
+            if (!ctx) return;
+
+            const dates = [];
+            const sessions = [];
+            const convRates = [];
+
+            for (let i = 30; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'}));
+
+                const baseSession = 600;
+                const trend = (30 - i) * 10;
+                sessions.push(baseSession + trend + Math.random() * 200);
+
+                const baseRate = 3.5;
+                const rateGrowth = (30 - i) * 0.04;
+                convRates.push(baseRate + rateGrowth + (Math.random() - 0.5) * 0.3);
+            }
+
+            window.trendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Sessions',
+                            data: sessions,
+                            borderColor: '#4A7BC7',
+                            backgroundColor: 'rgba(74, 123, 199, 0.05)',
+                            yAxisID: 'y',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointBackgroundColor: '#4A7BC7'
+                        },
+                        {
+                            label: 'Conv Rate (%)',
+                            data: convRates,
+                            borderColor: '#06D6A0',
+                            yAxisID: 'y1',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointBackgroundColor: '#06D6A0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { size: 12, weight: 600 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: { display: true, text: 'Sessions', font: { size: 12, weight: 600 } },
+                            ticks: { color: '#4A7BC7' }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: { display: true, text: 'Conv Rate (%)', font: { size: 12, weight: 600 } },
+                            ticks: { color: '#06D6A0' },
+                            grid: { drawOnChartArea: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initExperimentChart() {
+            const ctx = document.getElementById('experiment-chart');
+            if (!ctx) return;
+
+            const dates = [];
+            const controlRates = [];
+            const variantRates = [];
+
+            for (let i = 33; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'}));
+
+                const progress = (33 - i) / 33;
+                const controlBase = 4.0;
+                const variantBase = 3.8 + progress * 1.0;
+
+                controlRates.push(controlBase + (Math.random() - 0.5) * 0.4);
+                variantRates.push(variantBase + (Math.random() - 0.5) * 0.4);
+            }
+
+            window.experimentChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Control (A)',
+                            data: controlRates,
+                            borderColor: '#64748B',
+                            backgroundColor: 'rgba(100, 116, 139, 0.05)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointBackgroundColor: '#64748B'
+                        },
+                        {
+                            label: 'Variant B',
+                            data: variantRates,
+                            borderColor: '#06D6A0',
+                            backgroundColor: 'rgba(6, 214, 160, 0.05)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4,
+                            pointRadius: 2,
+                            pointBackgroundColor: '#06D6A0'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: { size: 12, weight: 600 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 3,
+                            max: 6,
+                            title: { display: true, text: 'Conversion Rate (%)', font: { size: 12, weight: 600 } },
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toFixed(1) + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleDeclareWinnerModal() {
+            const modal = document.getElementById('declare-winner-modal');
+            modal.classList.toggle('active');
+        }
+
+        function confirmWinner() {
+            toggleDeclareWinnerModal();
+            alert('Winner declared! Variant B rollout has been initiated.');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('declare-winner-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
