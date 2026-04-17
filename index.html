@@ -697,11 +697,59 @@
       </div>
     </div>
 
-    <div class="empty-state">
-      <div class="empty-icon">&#x1F4CA;</div>
-      <h3>In the works</h3>
-      <p>The Reporting product is currently being prototyped. Mock-ups and PRDs will appear here as versions are created.</p>
-      <span class="coming-badge">&#x1F6E0; In the Works</span>
+    <div class="version-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:120px;">Version</th>
+            <th style="width:180px;">Links</th>
+            <th>What Was Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- VERSION 1.0 -->
+          <tr>
+            <td>
+              <div class="v-badge">
+                <span class="v-dot"></span>
+                v1.0
+              </div>
+              <div class="v-date">April 2026</div>
+              <div><span class="v-status status-current">Current</span></div>
+            </td>
+            <td>
+              <div class="link-cell">
+                <a href="cro-screen1-all-pages.html" class="link-btn link-btn-mockup" target="_blank">
+                  &#x1F5A5; Screen 1: All Pages
+                </a>
+                <a href="cro-screen2-single-page.html" class="link-btn link-btn-mockup" target="_blank">
+                  &#x1F5A5; Screen 2: Analytics
+                </a>
+                <a href="cro-screen3-experiment.html" class="link-btn link-btn-mockup" target="_blank">
+                  &#x1F5A5; Screen 3: Experiment
+                </a>
+                <a href="prd-cro-reporting-v1.0.html" class="link-btn link-btn-prd" target="_blank">
+                  &#x1F4C4; PRD
+                </a>
+              </div>
+            </td>
+            <td>
+              <ul class="changes-list">
+                <li class="first">Initial version — complete 3-screen CRO Reporting dashboard mock-up.</li>
+                <li class="new">Screen 1: All Landing Pages portfolio view with 10 realistic entries, summary strip, filters, and rich inventory table</li>
+                <li class="new">Screen 2: Single Landing Page Analytics with hero summary card, 15 KPI cards with Chart.js sparklines, paid media metrics, trend charts, conversion funnel, behavior insights, segment breakdowns, AI recommendations, and next actions</li>
+                <li class="new">Screen 3: A/B Experiment Comparison with decision-first summary card, side-by-side variant comparison (no tabs), confidence meter, comparison funnel, time trends, variant difference panel, segment winner breakdown, and Declare Winner modal</li>
+                <li class="new">Dual status model: Performance Status (Strong/Average/Weak/Needs data) for standalone pages, Experiment Status (Winner/Losing/Inconclusive/Not enough data) for tested pages</li>
+                <li class="new">Traffic context awareness: Paid pages emphasize spend efficiency metrics, Organic pages emphasize engagement metrics</li>
+                <li class="new">Interactive Chart.js charts throughout Screens 2 and 3</li>
+                <li class="new">Cross-linked navigation between all 3 screens via shared sidebar</li>
+              </ul>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
     </div>
   </div>
 

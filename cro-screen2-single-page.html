@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omega 2X – Conversion LP | Revmatics CRO Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* ===== TOP NAVIGATION ===== */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 56px;
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            gap: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span {
+            color: var(--accent);
+        }
+
+        .nav-search {
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .nav-search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background-color: var(--bg);
+            color: var(--text-light);
+            font-size: 14px;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .nav-search input::placeholder {
+            color: var(--text-light);
+        }
+
+        .nav-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            background-color: var(--bg);
+            border: none;
+            font-size: 18px;
+        }
+
+        .nav-icon:hover {
+            background-color: #EBEBF0;
+        }
+
+        .nav-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 240px;
+            height: calc(100vh - 56px);
+            background-color: var(--card);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .sidebar-section {
+            padding: 12px 0;
+        }
+
+        .sidebar-section-title {
+            padding: 8px 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            font-size: 14px;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+            display: block;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-item.active {
+            background-color: #EBF4FF;
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background-color: var(--border);
+            margin: 12px 0;
+        }
+
+        .sidebar-workspace {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            padding: 12px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .workspace-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .workspace-name {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 32px 40px;
+            min-height: calc(100vh - 56px);
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            display: flex;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb-item {
+            cursor: pointer;
+        }
+
+        .breadcrumb-item:hover {
+            color: var(--primary);
+        }
+
+        .breadcrumb-separator {
+            margin: 0 4px;
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+            gap: 24px;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .page-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .tag.product {
+            background-color: #F0F4FF;
+            color: var(--primary);
+            border-color: #D4E1F5;
+        }
+
+        .tag.conversion {
+            background-color: #D4F4DD;
+            color: #16A34A;
+            border-color: #A7E5B8;
+        }
+
+        .tag.paid {
+            background-color: #FFF1E6;
+            color: #D97706;
+            border-color: #FBCF8F;
+        }
+
+        .tag.source {
+            background-color: #F3E8FF;
+            color: #7C3AED;
+            border-color: #E9D5FF;
+        }
+
+        .tag.campaign {
+            background-color: #F8FAFC;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--card);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Inter', system-ui, sans-serif;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background-color: var(--bg);
+            border-color: #CBD5E1;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .date-range-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .compare-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .compare-toggle input {
+            cursor: pointer;
+        }
+
+        /* ===== HERO SUMMARY CARD ===== */
+        .hero-card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 32px;
+            margin-bottom: 32px;
+            border-left: 4px solid var(--success);
+            box-shadow: var(--shadow);
+        }
+
+        .hero-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background-color: #D4F4DD;
+            color: #16A34A;
+        }
+
+        .hero-headline {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .hero-text {
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 700px;
+        }
+
+        .hero-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .hero-metric {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hero-metric-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .hero-action {
+            margin-top: 16px;
+            padding: 12px 16px;
+            background-color: #EBF4FF;
+            border-radius: 8px;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* ===== KPI CARDS ROW ===== */
+        .kpi-section {
+            margin-bottom: 32px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .kpi-name {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-info {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .kpi-change {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .kpi-change.positive {
+            color: var(--success);
+        }
+
+        .kpi-change.negative {
+            color: var(--error);
+        }
+
+        .kpi-arrow {
+            font-size: 16px;
+        }
+
+        .kpi-chart {
+            height: 60px;
+            margin-top: 12px;
+        }
+
+        /* ===== PAID MEDIA KPI SECTION ===== */
+        .paid-media-section {
+            background-color: #F0F4FF;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #D4E1F5;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #D4E1F5;
+        }
+
+        .paid-media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+        }
+
+        .paid-kpi {
+            background-color: var(--card);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #E9D5FF;
+        }
+
+        .paid-kpi-name {
+            font-size: 11px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .paid-kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .paid-kpi-change {
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .paid-kpi-change.positive {
+            color: var(--success);
+        }
+
+        .paid-kpi-change.negative {
+            color: var(--error);
+        }
+
+        /* ===== SECTION HEADERS ===== */
+        .section-header {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-header-icon {
+            font-size: 20px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab {
+            padding: 12px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            margin-bottom: -1px;
+        }
+
+        .tab:hover {
+            color: var(--text);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* ===== PERFORMANCE TREND CARDS ===== */
+        .trend-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .trend-card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .trend-card-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .trend-chart {
+            height: 300px;
+            position: relative;
+        }
+
+        /* ===== FUNNEL SECTION ===== */
+        .funnel-section {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .funnel-container {
+            margin-top: 24px;
+        }
+
+        .funnel-step {
+            margin-bottom: 16px;
+        }
+
+        .funnel-step-bar {
+            background: linear-gradient(90deg, var(--primary-light), var(--primary-dark));
+            border-radius: 6px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .funnel-step-bar:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(46, 80, 144, 0.3);
+        }
+
+        .funnel-step-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .funnel-step-name {
+            font-weight: 600;
+        }
+
+        .funnel-step-metrics {
+            display: flex;
+            gap: 16px;
+        }
+
+        .funnel-metric {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .funnel-dropoff {
+            font-size: 12px;
+            color: var(--error);
+            font-weight: 600;
+            text-align: right;
+            margin-bottom: 12px;
+        }
+
+        .funnel-highlight {
+            background: linear-gradient(90deg, #FCA5A5, #DC2626);
+            position: relative;
+        }
+
+        .funnel-note {
+            background-color: #FEE2E2;
+            border-left: 3px solid var(--error);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #991B1B;
+            margin-top: 20px;
+        }
+
+        /* ===== BEHAVIOR INSIGHTS ===== */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .insight-card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .insight-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .insight-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .insight-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        /* ===== SEGMENT BREAKDOWN ===== */
+        .segment-section {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+        }
+
+        .segment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .segment-table thead {
+            background-color: var(--bg);
+        }
+
+        .segment-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .segment-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .segment-table tr:hover {
+            background-color: var(--bg);
+        }
+
+        .segment-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .segment-metric {
+            color: var(--text);
+        }
+
+        .segment-metric.positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .segment-metric.negative {
+            color: var(--error);
+            font-weight: 600;
+        }
+
+        /* ===== AI INSIGHTS ===== */
+        .ai-insights-section {
+            background: linear-gradient(135deg, #F0F4FF, #F5F3FF);
+            border-radius: var(--radius);
+            border: 1px solid #D4E1F5;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .ai-insights-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .ai-icon {
+            font-size: 20px;
+        }
+
+        .insights-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .insights-list li {
+            padding: 12px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            border-bottom: 1px solid rgba(46, 80, 144, 0.1);
+        }
+
+        .insights-list li:last-child {
+            border-bottom: none;
+        }
+
+        .insights-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* ===== NEXT ACTIONS ===== */
+        .actions-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .action-card {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            border-color: var(--primary);
+        }
+
+        .action-card.primary {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .action-card.primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .action-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .action-title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: inherit;
+        }
+
+        .action-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .action-card.primary .action-desc {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1200px) {
+            .trend-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+            }
+
+            .header-right {
+                justify-content: flex-start;
+                width: 100%;
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+        <div class="nav-logo">Rev<span>matics</span></div>
+        <div class="nav-search">
+            <input type="text" placeholder="Search pages, campaigns...">
+        </div>
+        <div class="nav-icons">
+            <button class="nav-icon" title="Notifications">🔔</button>
+            <div class="nav-avatar" title="User Profile">AD</div>
+        </div>
+    </nav>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Dashboard</div>
+            <a href="cro-screen1-all-pages.html" class="sidebar-item">Dashboard</a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Analytics</div>
+            <a href="cro-screen1-all-pages.html" class="sidebar-item">Landing Pages</a>
+            <a href="cro-screen3-experiment.html" class="sidebar-item">Experiments</a>
+            <div class="sidebar-item">Analytics</div>
+        </div>
+
+        <div class="sidebar-divider"></div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-title">Tools</div>
+            <div class="sidebar-item">Templates</div>
+            <div class="sidebar-item">Settings</div>
+        </div>
+
+        <div class="sidebar-workspace">
+            <div class="workspace-label">Workspace</div>
+            <div class="workspace-name">Omega Supplements</div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- BREADCRUMB -->
+        <div class="breadcrumb">
+            <span class="breadcrumb-item">Landing Pages</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item">Omega 2X Fish Oil</span>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item">Conversion LP</span>
+        </div>
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <div class="header-left">
+                <h1 class="page-title">Omega 2X – Conversion LP</h1>
+                <div class="page-tags">
+                    <span class="tag product">Omega 2X Fish Oil</span>
+                    <span class="tag conversion">Conversion</span>
+                    <span class="tag paid">Paid</span>
+                    <span class="tag source">Meta Ads</span>
+                    <span class="tag campaign">Meta Spring Sale</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn date-range-btn">
+                    📅 Last 30 days
+                    <span>▼</span>
+                </button>
+                <label class="compare-toggle">
+                    <input type="checkbox">
+                    Compare to previous
+                </label>
+                <button class="btn">Create Variant</button>
+                <button class="btn">Duplicate</button>
+                <button class="btn">Export Report</button>
+            </div>
+        </div>
+
+        <!-- HERO SUMMARY CARD -->
+        <div class="hero-card">
+            <div class="hero-header">
+                <span class="status-badge">Strong ✓</span>
+            </div>
+            <h2 class="hero-headline">Performance is Strong</h2>
+            <p class="hero-text">
+                Conversion rate is above target and CTA engagement is healthy. Traffic volume is sufficient for directional confidence.
+            </p>
+            <div class="hero-metrics">
+                <div class="hero-metric">
+                    <span class="hero-metric-label">Conversion Rate vs Target</span>
+                    <span class="hero-metric-value">4.7% vs 3.5%</span>
+                </div>
+                <div class="hero-metric">
+                    <span class="hero-metric-label">Data Based On</span>
+                    <span class="hero-metric-value">18,420 sessions</span>
+                </div>
+            </div>
+            <div class="hero-action">
+                💡 Suggested Action: Create a variant to test a stronger hero section
+            </div>
+        </div>
+
+        <!-- PRIMARY KPI CARDS - ROW 1 -->
+        <div class="kpi-section">
+            <div class="kpi-grid">
+                <!-- Sessions -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Sessions</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">18,420</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+12.3%</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-sessions"></div>
+                </div>
+
+                <!-- Unique Visitors -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Unique Visitors</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">15,976</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+10.8%</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-visitors"></div>
+                </div>
+
+                <!-- Conversion Rate -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Conversion Rate</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">4.7%</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+0.4pp</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-conv-rate"></div>
+                </div>
+
+                <!-- Total Conversions -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Total Conversions</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">866</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+15.2%</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-conversions"></div>
+                </div>
+
+                <!-- Revenue -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Revenue</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">$48,200</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+18.6%</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-revenue"></div>
+                </div>
+            </div>
+
+            <!-- PRIMARY KPI CARDS - ROW 2 -->
+            <div class="kpi-grid">
+                <!-- Bounce Rate -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Bounce Rate</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">38.4%</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↓</span>
+                        <span>-2.1pp</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-bounce"></div>
+                </div>
+
+                <!-- CTA Click Rate -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">CTA Click Rate</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">12.9%</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+1.4pp</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-cta"></div>
+                </div>
+
+                <!-- Avg Time on Page -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Avg Time on Page</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">1m 42s</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+8s</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-time"></div>
+                </div>
+
+                <!-- Scroll Depth -->
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-name">Scroll Depth</span>
+                        <div class="kpi-info">ℹ</div>
+                    </div>
+                    <div class="kpi-value">64%</div>
+                    <div class="kpi-change positive">
+                        <span class="kpi-arrow">↑</span>
+                        <span>+3pp</span>
+                    </div>
+                    <div class="kpi-chart" id="chart-scroll"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAID MEDIA KPI SECTION -->
+        <div class="paid-media-section">
+            <div class="section-title">📊 Paid Media Performance</div>
+            <div class="paid-media-grid">
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">Spend</div>
+                    <div class="paid-kpi-value">$6,900</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↑</span>
+                        <span>+5.2%</span>
+                    </div>
+                </div>
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">Cost Per Click</div>
+                    <div class="paid-kpi-value">$0.37</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↓</span>
+                        <span>-8.1%</span>
+                    </div>
+                </div>
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">Cost Per Acquisition</div>
+                    <div class="paid-kpi-value">$7.97</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↓</span>
+                        <span>-11.3%</span>
+                    </div>
+                </div>
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">ROAS</div>
+                    <div class="paid-kpi-value">3.6x</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↑</span>
+                        <span>+0.4x</span>
+                    </div>
+                </div>
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">Revenue per Visit</div>
+                    <div class="paid-kpi-value">$2.62</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↑</span>
+                        <span>+5.8%</span>
+                    </div>
+                </div>
+                <div class="paid-kpi">
+                    <div class="paid-kpi-name">Cost per LP View</div>
+                    <div class="paid-kpi-value">$0.37</div>
+                    <div class="paid-kpi-change positive">
+                        <span>↓</span>
+                        <span>-3.2%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERFORMANCE TRENDS -->
+        <div class="section-header">
+            📈 Performance Trends
+        </div>
+        <div class="tabs">
+            <div class="tab active">7D</div>
+            <div class="tab">14D</div>
+            <div class="tab">30D (Current)</div>
+            <div class="tab">90D</div>
+            <div class="tab">Custom</div>
+        </div>
+        <div class="trend-cards">
+            <div class="trend-card">
+                <div class="trend-card-title">Sessions & Conversion Rate (30D)</div>
+                <div class="trend-chart" id="trend-chart-1"></div>
+            </div>
+            <div class="trend-card">
+                <div class="trend-card-title">Revenue & Bounce Rate (30D)</div>
+                <div class="trend-chart" id="trend-chart-2"></div>
+            </div>
+        </div>
+
+        <!-- FUNNEL SECTION -->
+        <div class="section-header">
+            🔄 Conversion Funnel
+        </div>
+        <div class="funnel-section">
+            <div class="funnel-container">
+                <!-- Sessions to CTA -->
+                <div class="funnel-step">
+                    <div class="funnel-step-label">
+                        <span class="funnel-step-name">Sessions</span>
+                        <span class="funnel-step-metrics">
+                            <span class="funnel-metric">18,420</span>
+                            <span class="funnel-metric">100%</span>
+                        </span>
+                    </div>
+                    <div class="funnel-step-bar" style="width: 100%;"></div>
+                </div>
+
+                <div class="funnel-dropoff">↓ Drop: 87.1%</div>
+
+                <!-- CTA Clicks -->
+                <div class="funnel-step">
+                    <div class="funnel-step-label">
+                        <span class="funnel-step-name">CTA Clicks</span>
+                        <span class="funnel-step-metrics">
+                            <span class="funnel-metric">2,376</span>
+                            <span class="funnel-metric">12.9%</span>
+                        </span>
+                    </div>
+                    <div class="funnel-step-bar funnel-highlight" style="width: 12.9%;"></div>
+                </div>
+
+                <div class="funnel-dropoff">↓ Drop: 37.8%</div>
+
+                <!-- Form Starts -->
+                <div class="funnel-step">
+                    <div class="funnel-step-label">
+                        <span class="funnel-step-name">Form Starts</span>
+                        <span class="funnel-step-metrics">
+                            <span class="funnel-metric">1,478</span>
+                            <span class="funnel-metric">7.9%</span>
+                        </span>
+                    </div>
+                    <div class="funnel-step-bar" style="width: 7.9%;"></div>
+                </div>
+
+                <div class="funnel-dropoff">↓ Drop: 31.5%</div>
+
+                <!-- Form Completions -->
+                <div class="funnel-step">
+                    <div class="funnel-step-label">
+                        <span class="funnel-step-name">Form Completions</span>
+                        <span class="funnel-step-metrics">
+                            <span class="funnel-metric">1,012</span>
+                            <span class="funnel-metric">5.5%</span>
+                        </span>
+                    </div>
+                    <div class="funnel-step-bar" style="width: 5.5%;"></div>
+                </div>
+
+                <div class="funnel-dropoff">↓ Drop: 14.4%</div>
+
+                <!-- Purchases -->
+                <div class="funnel-step">
+                    <div class="funnel-step-label">
+                        <span class="funnel-step-name">Purchases</span>
+                        <span class="funnel-step-metrics">
+                            <span class="funnel-metric">866</span>
+                            <span class="funnel-metric">4.7%</span>
+                        </span>
+                    </div>
+                    <div class="funnel-step-bar" style="width: 4.7%;"></div>
+                </div>
+
+                <div class="funnel-note">
+                    ⚠️ <strong>Biggest drop occurs between Sessions and CTA Clicks:</strong> 87.1% of visitors don't engage with the CTA. Consider testing stronger copy, repositioning, or visual design changes.
+                </div>
+            </div>
+        </div>
+
+        <!-- BEHAVIOR INSIGHTS -->
+        <div class="section-header">
+            🎯 Behavior Insights
+        </div>
+        <div class="insights-grid">
+            <div class="insight-card">
+                <div class="insight-icon">⚡</div>
+                <div class="insight-name">Bounce Rate</div>
+                <div class="insight-value">38.4%</div>
+                <div class="insight-text">Below industry average of 45%. Good first impression and page relevance.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">👁️</div>
+                <div class="insight-name">Scroll Depth</div>
+                <div class="insight-value">64%</div>
+                <div class="insight-text">Most visitors see the CTA section. Consider moving social proof higher for better impact.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">⏱️</div>
+                <div class="insight-name">Avg Time on Page</div>
+                <div class="insight-value">1m 42s</div>
+                <div class="insight-text">Healthy engagement suggests your content resonates well with visitors.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">🖱️</div>
+                <div class="insight-name">CTA Click Rate</div>
+                <div class="insight-value">12.9%</div>
+                <div class="insight-text">Above average. Your CTA copy and placement are effective at driving engagement.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">🚪</div>
+                <div class="insight-name">Exit Rate</div>
+                <div class="insight-value">22.1%</div>
+                <div class="insight-text">Low exit rate suggests users continue through the conversion funnel naturally.</div>
+            </div>
+
+            <div class="insight-card">
+                <div class="insight-icon">❌</div>
+                <div class="insight-name">Form Abandonment</div>
+                <div class="insight-value">31.5%</div>
+                <div class="insight-text">Form step causes significant drop. Consider reducing required fields or simplifying flow.</div>
+            </div>
+        </div>
+
+        <!-- SEGMENT BREAKDOWN -->
+        <div class="section-header">
+            📊 Segment Breakdown
+        </div>
+        <div class="segment-section">
+            <div class="tabs">
+                <div class="tab active">Device</div>
+                <div class="tab">Source</div>
+                <div class="tab">Campaign</div>
+                <div class="tab">Geography</div>
+                <div class="tab">New vs Returning</div>
+            </div>
+
+            <table class="segment-table">
+                <thead>
+                    <tr>
+                        <th>Segment</th>
+                        <th>Sessions</th>
+                        <th>Conv Rate</th>
+                        <th>Conversions</th>
+                        <th>Bounce Rate</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="segment-name">Desktop</td>
+                        <td class="segment-metric">10,840</td>
+                        <td class="segment-metric positive">5.4%</td>
+                        <td class="segment-metric">585</td>
+                        <td class="segment-metric positive">32.1%</td>
+                        <td class="segment-metric">$32,500</td>
+                    </tr>
+                    <tr>
+                        <td class="segment-name">Mobile</td>
+                        <td class="segment-metric">6,280</td>
+                        <td class="segment-metric negative">3.6%</td>
+                        <td class="segment-metric">226</td>
+                        <td class="segment-metric negative">46.8%</td>
+                        <td class="segment-metric">$12,500</td>
+                    </tr>
+                    <tr>
+                        <td class="segment-name">Tablet</td>
+                        <td class="segment-metric">1,300</td>
+                        <td class="segment-metric">4.2%</td>
+                        <td class="segment-metric">55</td>
+                        <td class="segment-metric">39.2%</td>
+                        <td class="segment-metric">$3,200</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- AI INSIGHTS -->
+        <div class="ai-insights-section">
+            <div class="section-header">
+                <span class="ai-icon">✨</span>
+                AI Insights & Recommendations
+            </div>
+            <ul class="insights-list">
+                <li>Mobile conversion rate is 33% lower than desktop — review mobile layout, form UX, and button sizing for better mobile experience.</li>
+                <li>Paid traffic from Meta generates high click volume (18K sessions) but form completion could improve — test reducing form fields.</li>
+                <li>CTA is attracting clicks at 12.9%, but the form step causes 31.5% abandonment — your messaging works, funnel needs optimization.</li>
+                <li>Consider A/B testing a shorter form variant (3-4 fields instead of current) to improve completion rate and lower CPA.</li>
+                <li>Scroll depth of 64% suggests content below the fold is being read — test moving CTA higher or creating multiple CTAs at different scroll points.</li>
+            </ul>
+        </div>
+
+        <!-- NEXT ACTIONS -->
+        <div class="section-header">
+            🚀 Recommended Next Steps
+        </div>
+        <div class="actions-container">
+            <div class="action-card primary">
+                <div class="action-icon">🧪</div>
+                <div class="action-title">Create Variant</div>
+                <div class="action-desc">Test a new hero section or stronger CTA copy</div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">📝</div>
+                <div class="action-title">Improve Form</div>
+                <div class="action-desc">Reduce form fields to lower abandonment rate</div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">📱</div>
+                <div class="action-title">Review Mobile Layout</div>
+                <div class="action-desc">Address the 33% mobile conversion gap</div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">⚡</div>
+                <div class="action-title">Launch A/B Test</div>
+                <div class="action-desc">Start testing against current performance</div>
+            </div>
+
+            <div class="action-card">
+                <div class="action-icon">📤</div>
+                <div class="action-title">Export Report</div>
+                <div class="action-desc">Share findings with your team</div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Chart.js configuration and initialization
+        const chartDefaults = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    padding: 8,
+                    titleFont: { size: 12 },
+                    bodyFont: { size: 11 },
+                    cornerRadius: 4,
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                },
+                y: {
+                    display: false,
+                }
+            }
+        };
+
+        // Sparkline data
+        const sparklineData = {
+            labels: ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'],
+            sessions: [2100, 2450, 2200, 2800, 2600, 2900, 2620],
+            visitors: [1800, 2100, 1900, 2400, 2250, 2500, 2276],
+            convRate: [4.2, 4.5, 4.1, 4.8, 4.9, 5.1, 4.7],
+            conversions: [88, 94, 90, 135, 131, 148, 123],
+            revenue: [4200, 5200, 4800, 6500, 6200, 7100, 5800],
+            bounce: [42, 40, 41, 38, 37, 36, 38.4],
+            cta: [11.2, 11.8, 11.5, 12.2, 12.5, 12.8, 12.9],
+            time: [95, 105, 98, 110, 115, 105, 102],
+            scroll: [58, 60, 59, 62, 63, 64, 64]
+        };
+
+        // Create sparkline charts
+        function createSparkline(chartId, data, color, isBounce = false) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sparklineData.labels,
+                    datasets: [{
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: color + '15',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: color,
+                        tension: 0.4,
+                    }]
+                },
+                options: {
+                    ...chartDefaults,
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Initialize sparklines
+        createSparkline('chart-sessions', sparklineData.sessions, '#2E5090');
+        createSparkline('chart-visitors', sparklineData.visitors, '#4A7BC7');
+        createSparkline('chart-conv-rate', sparklineData.convRate, '#06D6A0');
+        createSparkline('chart-conversions', sparklineData.conversions, '#00B4D8');
+        createSparkline('chart-revenue', sparklineData.revenue, '#F77F00');
+        createSparkline('chart-bounce', sparklineData.bounce, '#06D6A0', true);
+        createSparkline('chart-cta', sparklineData.cta, '#2E5090');
+        createSparkline('chart-time', sparklineData.time, '#4A7BC7');
+        createSparkline('chart-scroll', sparklineData.scroll, '#00B4D8');
+
+        // Trend chart 1: Sessions & Conversion Rate
+        const trendCtx1 = document.getElementById('trend-chart-1').getContext('2d');
+        new Chart(trendCtx1, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 3', 'Day 5', 'Day 8', 'Day 10', 'Day 12', 'Day 15', 'Day 17', 'Day 20', 'Day 22', 'Day 25', 'Day 27', 'Day 30'],
+                datasets: [
+                    {
+                        label: 'Sessions',
+                        data: [2100, 2350, 2200, 2800, 2600, 2500, 2900, 2700, 2600, 2800, 2900, 2750, 2620],
+                        borderColor: '#2E5090',
+                        backgroundColor: '#2E509015',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#2E5090',
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: 'Conv Rate (%)',
+                        data: [4.2, 4.4, 4.1, 4.8, 4.9, 4.7, 5.1, 4.9, 4.8, 4.9, 5.0, 4.8, 4.7],
+                        borderColor: '#06D6A0',
+                        backgroundColor: '#06D6A015',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#06D6A0',
+                        pointHoverRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { font: { size: 12 }, padding: 16 }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        padding: 12,
+                        titleFont: { size: 12 },
+                        bodyFont: { size: 11 },
+                        cornerRadius: 4,
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#F1F5F9', drawBorder: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#F1F5F9', drawBorder: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } },
+                        title: { display: true, text: 'Sessions', color: '#2E5090' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } },
+                        title: { display: true, text: 'Conv Rate (%)', color: '#06D6A0' }
+                    }
+                }
+            }
+        });
+
+        // Trend chart 2: Revenue & Bounce Rate
+        const trendCtx2 = document.getElementById('trend-chart-2').getContext('2d');
+        new Chart(trendCtx2, {
+            type: 'line',
+            data: {
+                labels: ['Day 1', 'Day 3', 'Day 5', 'Day 8', 'Day 10', 'Day 12', 'Day 15', 'Day 17', 'Day 20', 'Day 22', 'Day 25', 'Day 27', 'Day 30'],
+                datasets: [
+                    {
+                        label: 'Revenue ($)',
+                        data: [4200, 5100, 4800, 6500, 6200, 5800, 7100, 6400, 6200, 6800, 7200, 6600, 5800],
+                        borderColor: '#F77F00',
+                        backgroundColor: '#F77F0015',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#F77F00',
+                        pointHoverRadius: 6,
+                    },
+                    {
+                        label: 'Bounce Rate (%)',
+                        data: [42, 41, 41, 38, 37, 39, 36, 37, 38, 37, 36, 37, 38.4],
+                        borderColor: '#EF4444',
+                        backgroundColor: '#EF444415',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1',
+                        pointRadius: 4,
+                        pointBackgroundColor: '#EF4444',
+                        pointHoverRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: { font: { size: 12 }, padding: 16 }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        padding: 12,
+                        titleFont: { size: 12 },
+                        bodyFont: { size: 11 },
+                        cornerRadius: 4,
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: '#F1F5F9', drawBorder: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        grid: { color: '#F1F5F9', drawBorder: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } },
+                        title: { display: true, text: 'Revenue ($)', color: '#F77F00' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        ticks: { color: '#94A3B8', font: { size: 11 } },
+                        title: { display: true, text: 'Bounce Rate (%)', color: '#EF4444' }
+                    }
+                }
+            }
+        });
+
+        // Add smooth interactions
+        document.querySelectorAll('.kpi-info').forEach(el => {
+            el.style.cursor = 'pointer';
+            el.addEventListener('click', () => {
+                alert('Tooltip: Learn more about this metric');
+            });
+        });
+
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.href) return; // Allow links to work
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.querySelector('.action-title').textContent;
+                alert(`Action initiated: ${title}`);
+            });
+        });
+
+        document.querySelectorAll('.tab').forEach((tab, index) => {
+            tab.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
