@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO 3rd Party Setup - Revmatics</title>
+    <style>
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --danger: #FF6B6B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        /* ===== TOP NAV ===== */
+        .topnav {
+            position: fixed; top: 0; left: 0; right: 0; height: 56px;
+            background: var(--card); border-bottom: 1px solid var(--border);
+            padding: 0 32px; display: flex; justify-content: space-between;
+            align-items: center; z-index: 100; box-shadow: var(--shadow);
+        }
+        .topnav-left { display: flex; align-items: center; gap: 12px; }
+        .logo { font-weight: 700; font-size: 16px; color: var(--primary); }
+        .logo-divider { color: var(--border); font-weight: 300; }
+        .topnav-title { font-weight: 600; font-size: 15px; color: var(--text); }
+        .topnav-center { flex: 1; display: flex; justify-content: center; gap: 8px; }
+        .search-bar {
+            width: 320px; padding: 8px 14px; border: 1px solid var(--border);
+            border-radius: 8px; background: var(--card); color: var(--text);
+            font-size: 14px; outline: none; transition: all 0.2s ease;
+        }
+        .search-bar::placeholder { color: var(--text-light); }
+        .search-bar:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(74, 123, 199, 0.1); }
+        .topnav-right { display: flex; gap: 20px; align-items: center; }
+        .icon-btn {
+            width: 36px; height: 36px; border: none; background: none; cursor: pointer;
+            font-size: 20px; color: var(--text); display: flex; align-items: center;
+            justify-content: center; transition: color 0.2s;
+        }
+        .icon-btn:hover { color: var(--primary); }
+        .avatar {
+            width: 36px; height: 36px; border-radius: 50%; background: var(--primary);
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-weight: 600; font-size: 14px; cursor: pointer;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed; left: 0; top: 56px; width: 220px;
+            height: calc(100vh - 56px); background: var(--card);
+            border-right: 1px solid var(--border); padding: 24px 0;
+            overflow-y: auto; z-index: 99;
+        }
+        .sidebar-section { margin-bottom: 24px; }
+        .sidebar-label {
+            font-size: 11px; text-transform: uppercase; color: var(--text-light);
+            font-weight: 600; letter-spacing: 0.5px; padding: 0 16px; margin-bottom: 12px;
+        }
+        .sidebar-nav { list-style: none; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+            color: var(--text-light); cursor: pointer; transition: all 0.2s ease;
+            font-size: 14px; font-weight: 500;
+        }
+        .nav-item:hover { color: var(--primary); background: rgba(46, 80, 144, 0.04); }
+        .nav-item.active {
+            color: var(--primary); background: rgba(46, 80, 144, 0.08);
+            border-left: 3px solid var(--primary); padding-left: 13px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 220px; margin-top: 56px; height: calc(100vh - 56px);
+            overflow-y: auto; background: var(--bg);
+        }
+        .screen { display: none; padding: 40px; animation: fadeIn 0.3s ease-in; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ===== COMMON ELEMENTS ===== */
+        .screen-header { margin-bottom: 28px; }
+        .screen-title { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .screen-subtitle { font-size: 15px; color: var(--text-light); margin-bottom: 24px; }
+        .screen-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; gap: 16px; }
+        .toolbar-left { display: flex; gap: 12px; align-items: center; }
+        .date-picker {
+            padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px;
+            background: var(--card); color: var(--text); font-size: 13px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .date-picker:hover { border-color: var(--primary-light); }
+        .btn {
+            padding: 10px 16px; border-radius: 8px; border: none; font-size: 14px;
+            font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 12px rgba(46, 80, 144, 0.3); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-outline:hover { background: var(--bg); border-color: var(--primary-light); color: var(--primary); }
+        .btn-warning { background: var(--accent2); color: white; }
+        .btn-warning:hover { background: #E66E00; }
+        .btn-sm { padding: 6px 12px; font-size: 13px; }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 8px; color: var(--primary);
+            text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 16px;
+            cursor: pointer; transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--primary-dark); }
+        .breadcrumb { font-size: 13px; color: var(--text-light); margin-bottom: 20px; }
+        .breadcrumb a { color: var(--text-light); text-decoration: none; cursor: pointer; transition: color 0.2s; }
+        .breadcrumb a:hover { color: var(--primary); }
+        .breadcrumb span { color: var(--text-light); margin: 0 6px; }
+
+        /* SUMMARY STRIP */
+        .summary-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 32px; }
+        .summary-card {
+            background: var(--card); padding: 20px; border-radius: var(--radius);
+            border: 1px solid var(--border); text-align: center;
+        }
+        .summary-value { font-size: 32px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .summary-label { font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+        /* BADGES */
+        .badge { display: inline-block; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .badge-connected { background: rgba(6, 214, 160, 0.1); color: var(--success); }
+        .badge-disconnected { background: rgba(100, 116, 139, 0.1); color: var(--text-light); }
+        .badge-warning { background: rgba(255, 209, 102, 0.1); color: #D59E0F; }
+
+        /* INTEGRATION GRID */
+        .integration-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px; }
+        .integration-card {
+            background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+            padding: 24px; box-shadow: var(--shadow); cursor: pointer; transition: all 0.2s ease;
+        }
+        .integration-card:hover { border-color: var(--primary-light); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+        .integration-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+        .integration-icon {
+            width: 44px; height: 44px; border-radius: 10px; background: rgba(74, 123, 199, 0.1);
+            display: flex; align-items: center; justify-content: center; font-size: 24px;
+        }
+        .integration-name { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .integration-description { font-size: 13px; color: var(--text-light); line-height: 1.5; margin-bottom: 16px; }
+        .integration-meta { font-size: 12px; color: var(--text-light); margin-bottom: 12px; }
+        .integration-actions { display: flex; gap: 8px; }
+        .integration-btn {
+            padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border);
+            background: var(--card); color: var(--primary); font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s; flex: 1; text-align: center;
+        }
+        .integration-btn:hover { background: rgba(46, 80, 144, 0.08); border-color: var(--primary-light); }
+
+        /* CATEGORY SECTION */
+        .category-section { margin-bottom: 40px; }
+        .category-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+
+        /* WIZARD STYLES */
+        .wizard-container { max-width: 900px; margin: 0 auto; }
+        .wizard-progress { margin-bottom: 40px; }
+        .progress-steps {
+            display: flex; align-items: center; gap: 0; margin-bottom: 12px;
+        }
+        .progress-step {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .progress-indicator {
+            width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border);
+            background: var(--card); display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px; color: var(--text-light); margin-bottom: 8px;
+            transition: all 0.2s;
+        }
+        .progress-step.active .progress-indicator {
+            border-color: var(--primary); background: var(--primary); color: white;
+        }
+        .progress-step.completed .progress-indicator {
+            border-color: var(--success); background: var(--success); color: white;
+        }
+        .progress-indicator::after { content: attr(data-step); }
+        .progress-step.completed .progress-indicator::after { content: '✓'; }
+        .progress-label { font-size: 13px; font-weight: 600; color: var(--text-light); text-align: center; }
+        .progress-step.active .progress-label { color: var(--primary); }
+        .progress-step.completed .progress-label { color: var(--success); }
+        .progress-line {
+            position: absolute; top: 22px; height: 2px; background: var(--border);
+            width: calc((100% / 4) - 22px); left: calc((100% / 4) + 22px);
+            transition: background 0.2s;
+        }
+        .progress-line.completed { background: var(--success); }
+        .progress-container { position: relative; }
+
+        /* WIZARD CARD */
+        .wizard-card {
+            background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+            padding: 40px; box-shadow: var(--shadow);
+        }
+        .wizard-title { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .wizard-subtitle { font-size: 15px; color: var(--text-light); margin-bottom: 28px; }
+        .wizard-section { margin-bottom: 28px; }
+        .wizard-section-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .benefit-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .benefit-card {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: 16px; text-align: center;
+        }
+        .benefit-icon { font-size: 24px; margin-bottom: 8px; }
+        .benefit-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+        .benefit-description { font-size: 12px; color: var(--text-light); line-height: 1.4; }
+
+        /* FORM INPUTS */
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+        .form-input {
+            width: 100%; padding: 10px 14px; border: 1px solid var(--border);
+            border-radius: 8px; background: var(--card); color: var(--text);
+            font-size: 14px; outline: none; transition: all 0.2s;
+        }
+        .form-input::placeholder { color: var(--text-light); }
+        .form-input:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(74, 123, 199, 0.1); }
+        .form-help {
+            font-size: 12px; color: var(--text-light); margin-top: 6px; cursor: pointer;
+            text-decoration: underline; transition: color 0.2s;
+        }
+        .form-help:hover { color: var(--primary); }
+        .help-expand {
+            background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: 16px; margin-top: 12px; display: none;
+        }
+        .help-expand.open { display: block; }
+        .help-expand ol { margin-left: 20px; color: var(--text-light); font-size: 13px; line-height: 1.6; }
+        .help-expand li { margin-bottom: 8px; }
+
+        /* TOGGLE SWITCHES */
+        .toggle-list { margin-bottom: 24px; }
+        .toggle-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 16px; background: var(--bg); border-radius: 8px;
+            border: 1px solid var(--border); margin-bottom: 8px;
+        }
+        .toggle-item-label { font-size: 14px; font-weight: 500; color: var(--text); }
+        .toggle-item-meta { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+        .toggle-switch {
+            position: relative; width: 48px; height: 28px;
+            background: var(--border); border-radius: 14px; cursor: pointer;
+            transition: background 0.2s; border: none;
+        }
+        .toggle-switch.active { background: var(--success); }
+        .toggle-switch::after {
+            content: ''; position: absolute; width: 24px; height: 24px;
+            background: white; border-radius: 50%; top: 2px; left: 2px;
+            transition: left 0.2s;
+        }
+        .toggle-switch.active::after { left: 22px; }
+
+        /* EVENT MAPPING TABLE */
+        .event-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        .event-table thead { background: var(--bg); border-bottom: 1px solid var(--border); }
+        .event-table th {
+            padding: 12px 16px; text-align: left; font-weight: 600; font-size: 12px;
+            color: var(--text); text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .event-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+        .event-table tbody tr:hover { background: rgba(46, 80, 144, 0.02); }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; background: rgba(6, 214, 160, 0.1); color: var(--success); }
+
+        /* VERIFICATION CHECKLIST */
+        .checklist { margin-top: 16px; }
+        .checklist-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px;
+            background: var(--bg); border-radius: 8px; margin-bottom: 8px; font-size: 14px;
+        }
+        .checklist-icon { font-size: 18px; }
+        .success-message {
+            background: rgba(6, 214, 160, 0.1); border: 1px solid rgba(6, 214, 160, 0.3);
+            border-radius: 8px; padding: 16px; margin-bottom: 24px;
+            color: var(--success); font-size: 14px; font-weight: 500;
+        }
+
+        /* WIZARD ACTIONS */
+        .wizard-actions {
+            display: flex; justify-content: space-between; gap: 12px;
+            margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--border);
+        }
+        .wizard-actions-left { display: flex; gap: 8px; }
+        .wizard-actions-right { display: flex; gap: 8px; }
+
+        /* DETAIL PAGE STYLES */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+        }
+        .page-header-left h1 { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .page-header-info { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-light); margin-bottom: 16px; }
+        .page-header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+        .page-header-actions { display: flex; gap: 12px; }
+
+        /* KPI GRID */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+        .kpi-card {
+            background: var(--card); padding: 20px; border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+        }
+        .kpi-label { font-size: 13px; color: var(--text-light); font-weight: 500; margin-bottom: 8px; }
+        .kpi-value { font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .kpi-meta { font-size: 12px; color: var(--text-light); }
+
+        /* CHART */
+        .chart-container {
+            background: var(--card); padding: 24px; border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 28px;
+        }
+        .chart-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 20px; }
+        canvas { max-height: 300px; }
+
+        /* TWO-COLUMN LAYOUT */
+        .two-col {
+            display: grid; grid-template-columns: 1fr 320px; gap: 20px; margin-bottom: 28px;
+        }
+        .side-metrics {
+            background: var(--card); padding: 24px; border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow);
+        }
+        .side-metrics h3 {
+            font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 20px;
+        }
+        .metric-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid var(--border);
+        }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-label { font-size: 14px; color: var(--text-light); font-weight: 500; }
+        .metric-value { font-size: 14px; font-weight: 700; color: var(--text); }
+
+        /* TABLE */
+        .table-container {
+            background: var(--card); border-radius: var(--radius); border: 1px solid var(--border);
+            overflow: hidden; box-shadow: var(--shadow); margin-bottom: 28px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        thead { background: var(--bg); border-bottom: 1px solid var(--border); }
+        th {
+            padding: 14px 16px; text-align: left; font-weight: 600; color: var(--text);
+            font-size: 12px; text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        tbody tr { border-bottom: 1px solid var(--border); transition: background 0.2s ease; }
+        tbody tr:hover { background: rgba(46, 80, 144, 0.02); }
+        td { padding: 14px 16px; vertical-align: middle; }
+
+        /* COLLAPSIBLE */
+        .collapsible-section { margin-bottom: 28px; }
+        .collapsible-header {
+            background: var(--card); padding: 20px; border: 1px solid var(--border);
+            border-radius: 12px; cursor: pointer; display: flex;
+            justify-content: space-between; align-items: center; font-weight: 600; color: var(--text);
+            transition: all 0.2s;
+        }
+        .collapsible-header:hover { background: rgba(46, 80, 144, 0.02); }
+        .collapsible-icon { font-size: 16px; transition: transform 0.2s; }
+        .collapsible-header.open .collapsible-icon { transform: rotate(180deg); }
+        .collapsible-content {
+            display: none; background: var(--card); padding: 0 20px 20px;
+            border: 1px solid var(--border); border-top: none; border-radius: 0 0 12px 12px;
+        }
+        .collapsible-content.open { display: block; }
+        .collapsible-item { margin-bottom: 16px; }
+        .collapsible-item-title { font-weight: 600; color: var(--text); margin-bottom: 6px; }
+        .collapsible-item-text { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+        /* RESPONSIVE */
+        @media (max-width: 1400px) {
+            .summary-strip, .kpi-grid, .benefit-cards { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+            .integration-grid { grid-template-columns: repeat(2, 1fr); }
+            .two-col { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; }
+            .topnav-center { display: none; }
+            .summary-strip, .kpi-grid, .integration-grid { grid-template-columns: 1fr; }
+            .screen { padding: 24px; }
+            .benefit-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOP NAV -->
+    <div class="topnav">
+        <div class="topnav-left">
+            <span class="logo">Revmatics</span>
+            <span class="logo-divider">/</span>
+            <span class="topnav-title">CRO</span>
+        </div>
+        <div class="topnav-center" id="topnav-search-container" style="display: none;">
+            <input type="text" class="search-bar" placeholder="Search integrations...">
+        </div>
+        <div class="topnav-right">
+            <button class="icon-btn">🔔</button>
+            <div class="avatar">AD</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-label">PRIMARY</div>
+            <ul class="sidebar-nav">
+                <li><div class="nav-item" onclick="showScreen('pages')"><span>📊</span><span>Landing Pages</span></div></li>
+                <li><div class="nav-item active" onclick="showScreen('integrations')"><span>🔗</span><span>Integrations</span></div></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- ========== SCREEN 1: INTEGRATIONS HUB ========== -->
+        <div class="screen active" id="screen-integrations">
+            <div class="screen-header">
+                <h1 class="screen-title">Integrations</h1>
+                <p class="screen-subtitle">Connect your analytics, pixels, and tracking tools to your landing pages</p>
+            </div>
+            <div class="screen-toolbar">
+                <div class="toolbar-left"><button class="date-picker">📅 Last 30 days</button></div>
+                <div class="toolbar-right"></div>
+            </div>
+            <div class="summary-strip">
+                <div class="summary-card"><div class="summary-value">8</div><div class="summary-label">Total Integrations</div></div>
+                <div class="summary-card"><div class="summary-value">3</div><div class="summary-label">Connected</div></div>
+                <div class="summary-card"><div class="summary-value">4</div><div class="summary-label">Not Connected</div></div>
+                <div class="summary-card"><div class="summary-value">1</div><div class="summary-label">Needs Attention</div></div>
+                <div class="summary-card"><div class="summary-value">4</div><div class="summary-label">Pages Tracked</div></div>
+            </div>
+
+            <!-- ANALYTICS & TAG MANAGEMENT -->
+            <div class="category-section">
+                <h2 class="category-title">Analytics & Tag Management</h2>
+                <div class="integration-grid">
+                    <div class="integration-card" onclick="showScreen('detail')">
+                        <div class="integration-header">
+                            <div class="integration-icon">📊</div>
+                            <span class="badge badge-connected">Connected</span>
+                        </div>
+                        <div class="integration-name">Google Analytics 4</div>
+                        <div class="integration-description">Track visitor behavior, traffic sources, and conversion events across all your landing pages</div>
+                        <div class="integration-meta">4 pages connected • Last sync: 2 min ago</div>
+                    </div>
+                    <div class="integration-card" onclick="showScreen('detail')">
+                        <div class="integration-header">
+                            <div class="integration-icon">🏷️</div>
+                            <span class="badge badge-connected">Connected</span>
+                        </div>
+                        <div class="integration-name">Google Tag Manager</div>
+                        <div class="integration-description">Manage all your tracking tags in one place without editing code</div>
+                        <div class="integration-meta">4 pages connected • Last sync: 5 min ago</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADVERTISING PIXELS -->
+            <div class="category-section">
+                <h2 class="category-title">Advertising Pixels</h2>
+                <div class="integration-grid">
+                    <div class="integration-card" onclick="showScreen('detail')">
+                        <div class="integration-header">
+                            <div class="integration-icon">📱</div>
+                            <span class="badge badge-connected">Connected</span>
+                        </div>
+                        <div class="integration-name">Meta Pixel</div>
+                        <div class="integration-description">Track conversions from Facebook and Instagram ads and build retargeting audiences</div>
+                        <div class="integration-meta">3 pages connected • Last sync: 8 min ago</div>
+                    </div>
+                    <div class="integration-card" onclick="showWizard('google-ads')">
+                        <div class="integration-header">
+                            <div class="integration-icon">🔍</div>
+                            <span class="badge badge-disconnected">Not Connected</span>
+                        </div>
+                        <div class="integration-name">Google Ads</div>
+                        <div class="integration-description">Track Google Ads conversions and optimize your bidding with landing page data</div>
+                        <div class="integration-meta"></div>
+                        <div class="integration-actions">
+                            <div class="integration-btn" onclick="event.stopPropagation(); showWizard('google-ads')">Connect</div>
+                        </div>
+                    </div>
+                    <div class="integration-card" onclick="showWizard('tiktok')">
+                        <div class="integration-header">
+                            <div class="integration-icon">🎵</div>
+                            <span class="badge badge-disconnected">Not Connected</span>
+                        </div>
+                        <div class="integration-name">TikTok Pixel</div>
+                        <div class="integration-description">Measure TikTok ad performance and create custom audiences from landing page visitors</div>
+                        <div class="integration-meta"></div>
+                        <div class="integration-actions">
+                            <div class="integration-btn" onclick="event.stopPropagation(); showWizard('tiktok')">Connect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EMAIL & CRM -->
+            <div class="category-section">
+                <h2 class="category-title">Email & CRM</h2>
+                <div class="integration-grid">
+                    <div class="integration-card" onclick="showWizard('klaviyo')">
+                        <div class="integration-header">
+                            <div class="integration-icon">✉️</div>
+                            <span class="badge badge-warning">Needs Attention</span>
+                        </div>
+                        <div class="integration-name">Klaviyo</div>
+                        <div class="integration-description">Sync landing page leads and purchase data with your email marketing automations</div>
+                        <div class="integration-meta" style="color: #D59E0F;">⚠️ API key expired — reconnect required</div>
+                        <div class="integration-actions">
+                            <div class="integration-btn" onclick="event.stopPropagation(); showWizard('klaviyo')" style="color: var(--accent2);">Reconnect</div>
+                        </div>
+                    </div>
+                    <div class="integration-card" onclick="showWizard('mailchimp')">
+                        <div class="integration-header">
+                            <div class="integration-icon">📧</div>
+                            <span class="badge badge-disconnected">Not Connected</span>
+                        </div>
+                        <div class="integration-name">Mailchimp</div>
+                        <div class="integration-description">Connect landing page signups directly to your Mailchimp audience lists</div>
+                        <div class="integration-meta"></div>
+                        <div class="integration-actions">
+                            <div class="integration-btn" onclick="event.stopPropagation(); showWizard('mailchimp')">Connect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BEHAVIOR & HEATMAPS -->
+            <div class="category-section">
+                <h2 class="category-title">Behavior & Heatmaps</h2>
+                <div class="integration-grid">
+                    <div class="integration-card" onclick="showWizard('hotjar')">
+                        <div class="integration-header">
+                            <div class="integration-icon">🔥</div>
+                            <span class="badge badge-disconnected">Not Connected</span>
+                        </div>
+                        <div class="integration-name">Hotjar</div>
+                        <div class="integration-description">See heatmaps, session recordings, and user feedback on your landing pages</div>
+                        <div class="integration-meta"></div>
+                        <div class="integration-actions">
+                            <div class="integration-btn" onclick="event.stopPropagation(); showWizard('hotjar')">Connect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 2: WIZARD ========== -->
+        <div class="screen" id="screen-wizard">
+            <a class="back-link" onclick="showScreen('integrations')">← Back to Integrations</a>
+            <div class="breadcrumb">
+                <a onclick="showScreen('integrations')">Integrations</a><span>></span>
+                <span id="wizard-breadcrumb">Google Ads</span>
+            </div>
+
+            <div class="wizard-container">
+                <div class="wizard-progress">
+                    <div class="progress-container">
+                        <div class="progress-steps">
+                            <div class="progress-step active" onclick="goToStep(1)" data-step="1">
+                                <div class="progress-indicator" data-step="1"></div>
+                                <div class="progress-label">Learn</div>
+                            </div>
+                            <div class="progress-step" onclick="goToStep(2)" data-step="2">
+                                <div class="progress-indicator" data-step="2"></div>
+                                <div class="progress-label">Connect</div>
+                            </div>
+                            <div class="progress-step" onclick="goToStep(3)" data-step="3">
+                                <div class="progress-indicator" data-step="3"></div>
+                                <div class="progress-label">Configure</div>
+                            </div>
+                            <div class="progress-step" onclick="goToStep(4)" data-step="4">
+                                <div class="progress-indicator" data-step="4"></div>
+                                <div class="progress-label">Verify</div>
+                            </div>
+                        </div>
+                        <div class="progress-line" id="progress-line-1" style="left: 22%;"></div>
+                        <div class="progress-line" id="progress-line-2" style="left: 50%;"></div>
+                        <div class="progress-line" id="progress-line-3" style="left: 78%;"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 1: LEARN -->
+                <div class="wizard-step active" data-step="1">
+                    <div class="wizard-card">
+                        <div class="wizard-title">What is Google Ads Conversion Tracking?</div>
+                        <div class="wizard-subtitle">Plain-language explanation for business owners</div>
+                        <div class="wizard-section">
+                            <p style="font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 24px;">
+                                Google Ads conversion tracking lets you see exactly which ad clicks lead to purchases on your landing pages. Without it, you're spending money on ads but can't tell which ones are actually working.
+                            </p>
+                            <div class="wizard-section-title">Why you need this</div>
+                            <div class="benefit-cards">
+                                <div class="benefit-card">
+                                    <div class="benefit-icon">🎯</div>
+                                    <div class="benefit-title">See which ads drive sales</div>
+                                    <div class="benefit-description">Know exactly which campaigns, ad groups, and keywords lead to actual purchases</div>
+                                </div>
+                                <div class="benefit-card">
+                                    <div class="benefit-icon">⚡</div>
+                                    <div class="benefit-title">Optimize your ad spend</div>
+                                    <div class="benefit-description">Google uses conversion data to show your ads to people most likely to buy</div>
+                                </div>
+                                <div class="benefit-card">
+                                    <div class="benefit-icon">📈</div>
+                                    <div class="benefit-title">Measure real ROI</div>
+                                    <div class="benefit-description">Stop guessing — see your actual return on every dollar spent on Google Ads</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wizard-actions">
+                            <div class="wizard-actions-left">
+                                <a class="form-help" onclick="goToStep(1); showScreen('integrations'); event.preventDefault();">Skip this step</a>
+                            </div>
+                            <div class="wizard-actions-right">
+                                <button class="btn btn-primary" onclick="goToStep(2)">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: CONNECT -->
+                <div class="wizard-step" data-step="2">
+                    <div class="wizard-card">
+                        <div class="wizard-title">Connect your Google Ads account</div>
+                        <div class="wizard-subtitle">Enter your Google Ads Conversion ID</div>
+                        <div class="wizard-section">
+                            <p style="font-size: 14px; color: var(--text); margin-bottom: 20px;">
+                                Enter your Google Ads Conversion ID below. You can find this in your Google Ads account under Tools & Settings → Conversions.
+                            </p>
+                            <div class="form-group">
+                                <label class="form-label">Conversion ID</label>
+                                <input type="text" class="form-input" id="conversion-id" placeholder="AW-123456789">
+                                <div class="form-help" onclick="toggleHelp()">Where do I find this?</div>
+                                <div class="help-expand" id="help-section">
+                                    <ol>
+                                        <li>Log in to Google Ads</li>
+                                        <li>Click <strong>Tools & Settings</strong> in the top menu</li>
+                                        <li>Under <strong>Measurement</strong>, click <strong>Conversions</strong></li>
+                                        <li>Click your conversion action</li>
+                                        <li>Copy the <strong>Conversion ID</strong> (starts with "AW-")</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Conversion Label (Optional)</label>
+                                <input type="text" class="form-input" placeholder="abCdEfGhIj">
+                            </div>
+                        </div>
+                        <div class="wizard-actions">
+                            <div class="wizard-actions-left">
+                                <button class="btn btn-outline" onclick="goToStep(1)">Back</button>
+                            </div>
+                            <div class="wizard-actions-right">
+                                <button class="btn btn-primary" onclick="goToStep(3)">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: CONFIGURE -->
+                <div class="wizard-step" data-step="3">
+                    <div class="wizard-card">
+                        <div class="wizard-title">Choose which pages to track</div>
+                        <div class="wizard-subtitle">Select the landing pages where Google Ads conversion tracking should be active</div>
+                        <div class="wizard-section">
+                            <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                                <a class="form-help" onclick="selectAllPages()">Select All</a>
+                                <span style="color: var(--border);">/</span>
+                                <a class="form-help" onclick="deselectAllPages()">Deselect All</a>
+                            </div>
+                            <div class="toggle-list">
+                                <div class="toggle-item">
+                                    <div>
+                                        <div class="toggle-item-label">Omega 2X – Conversion LP</div>
+                                        <div class="toggle-item-meta">Paid • Meta Spring Sale</div>
+                                    </div>
+                                    <button class="toggle-switch active" onclick="this.classList.toggle('active')"></button>
+                                </div>
+                                <div class="toggle-item">
+                                    <div>
+                                        <div class="toggle-item-label">Omega 2X – Awareness LP</div>
+                                        <div class="toggle-item-meta">Paid • Meta Brand Awareness</div>
+                                    </div>
+                                    <button class="toggle-switch active" onclick="this.classList.toggle('active')"></button>
+                                </div>
+                                <div class="toggle-item">
+                                    <div>
+                                        <div class="toggle-item-label">Omega 2X – Differentiation LP</div>
+                                        <div class="toggle-item-meta">Paid • Google Brand Defense</div>
+                                    </div>
+                                    <button class="toggle-switch active" onclick="this.classList.toggle('active')"></button>
+                                </div>
+                                <div class="toggle-item">
+                                    <div>
+                                        <div class="toggle-item-label">Omega 2X – Loyalty LP</div>
+                                        <div class="toggle-item-meta">Organic • Email Winback</div>
+                                    </div>
+                                    <button class="toggle-switch" onclick="this.classList.toggle('active')"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wizard-section">
+                            <div class="wizard-section-title">Map your conversion events</div>
+                            <p style="font-size: 14px; color: var(--text-light); margin-bottom: 16px;">Tell Google Ads which landing page actions count as conversions</p>
+                            <table class="event-table">
+                                <thead>
+                                    <tr>
+                                        <th>Landing Page Event</th>
+                                        <th>Google Ads Event</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Page View</td>
+                                        <td>page_view</td>
+                                        <td><span class="status-badge">Auto-mapped</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTA Click</td>
+                                        <td>add_to_cart</td>
+                                        <td><span class="status-badge">Auto-mapped</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Form Submit</td>
+                                        <td>generate_lead</td>
+                                        <td><span class="status-badge">Auto-mapped</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Purchase</td>
+                                        <td>purchase</td>
+                                        <td><span class="status-badge">Auto-mapped</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="wizard-actions">
+                            <div class="wizard-actions-left">
+                                <button class="btn btn-outline" onclick="goToStep(2)">Back</button>
+                            </div>
+                            <div class="wizard-actions-right">
+                                <button class="btn btn-primary" onclick="goToStep(4)">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: VERIFY -->
+                <div class="wizard-step" data-step="4">
+                    <div class="wizard-card">
+                        <div class="wizard-title">Verify your connection</div>
+                        <div class="wizard-subtitle">We'll check that Google Ads is receiving data from your landing pages</div>
+                        <div class="wizard-section">
+                            <div class="success-message">
+                                ✅ Google Ads conversion tracking is now active on 3 landing pages. It may take up to 24 hours for conversion data to appear in your Google Ads dashboard.
+                            </div>
+                            <div class="checklist">
+                                <div class="checklist-item">
+                                    <span class="checklist-icon">✅</span>
+                                    <span>Conversion ID format valid</span>
+                                </div>
+                                <div class="checklist-item">
+                                    <span class="checklist-icon">✅</span>
+                                    <span>Tag installed on selected pages</span>
+                                </div>
+                                <div class="checklist-item">
+                                    <span class="checklist-icon">✅</span>
+                                    <span>Test event sent successfully</span>
+                                </div>
+                                <div class="checklist-item">
+                                    <span class="checklist-icon">✅</span>
+                                    <span>Google Ads received the event</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="wizard-actions">
+                            <div class="wizard-actions-left">
+                                <a class="form-help" onclick="showScreen('detail')">View Connection Details</a>
+                            </div>
+                            <div class="wizard-actions-right">
+                                <button class="btn btn-primary" onclick="finishSetup()">Finish Setup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== SCREEN 3: CONNECTION DETAIL ========== -->
+        <div class="screen" id="screen-detail">
+            <a class="back-link" onclick="showScreen('integrations')">← Back to Integrations</a>
+            <div class="breadcrumb">
+                <a onclick="showScreen('integrations')">Integrations</a><span>></span>
+                <span>Google Analytics 4</span>
+            </div>
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>Google Analytics 4</h1>
+                    <div class="page-header-info">
+                        <span class="badge badge-connected">Connected</span>
+                        <span>Connected since Mar 12, 2026</span>
+                    </div>
+                </div>
+                <div class="page-header-right">
+                    <div class="page-header-actions">
+                        <button class="btn btn-outline">Reconnect</button>
+                        <button class="btn btn-outline" style="color: var(--danger);">Disconnect</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-strip">
+                <div class="summary-card"><div class="summary-value">4</div><div class="summary-label">Pages Connected</div></div>
+                <div class="summary-card"><div class="summary-value">48,291</div><div class="summary-label">Events (30d)</div></div>
+                <div class="summary-card"><div class="summary-value">2 min</div><div class="summary-label">Last Sync</div></div>
+                <div class="summary-card"><div class="summary-value">99.8%</div><div class="summary-label">Uptime</div></div>
+            </div>
+
+            <div class="two-col">
+                <div class="chart-container">
+                    <div class="chart-title">Event Activity (Last 30 days)</div>
+                    <canvas id="detail-chart" width="400" height="300"></canvas>
+                </div>
+                <div class="side-metrics">
+                    <h3>Connection Details</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">Measurement ID</span>
+                        <span class="metric-value">G-ABC123XYZ</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Property Name</span>
+                        <span class="metric-value">Revmatics CRO</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Data Stream</span>
+                        <span class="metric-value">Web</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Connected By</span>
+                        <span class="metric-value">Alex</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">API Version</span>
+                        <span class="metric-value">v4</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Status</span>
+                        <span class="metric-value" style="color: var(--success);">Active</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Connected Pages</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Page Name</th>
+                            <th>Page Type</th>
+                            <th>Traffic</th>
+                            <th>Events (30d)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Omega 2X – Conversion LP</strong></td>
+                            <td>Conversion</td>
+                            <td>Paid</td>
+                            <td>18,420</td>
+                            <td>✅ Active</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Omega 2X – Awareness LP</strong></td>
+                            <td>Awareness</td>
+                            <td>Paid</td>
+                            <td>9,120</td>
+                            <td>✅ Active</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Omega 2X – Differentiation LP</strong></td>
+                            <td>Differentiation</td>
+                            <td>Paid</td>
+                            <td>12,450</td>
+                            <td>✅ Active</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Omega 2X – Loyalty LP</strong></td>
+                            <td>Loyalty</td>
+                            <td>Organic</td>
+                            <td>6,840</td>
+                            <td>✅ Active</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-title">Recent Events Log</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Event</th>
+                            <th>Page</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2 min ago</td>
+                            <td>page_view</td>
+                            <td>Conversion LP</td>
+                            <td>Direct</td>
+                        </tr>
+                        <tr>
+                            <td>3 min ago</td>
+                            <td>cta_click</td>
+                            <td>Awareness LP</td>
+                            <td>Meta Ads</td>
+                        </tr>
+                        <tr>
+                            <td>5 min ago</td>
+                            <td>purchase</td>
+                            <td>Conversion LP</td>
+                            <td>Google Ads</td>
+                        </tr>
+                        <tr>
+                            <td>8 min ago</td>
+                            <td>form_submit</td>
+                            <td>Differentiation LP</td>
+                            <td>Google Ads</td>
+                        </tr>
+                        <tr>
+                            <td>12 min ago</td>
+                            <td>page_view</td>
+                            <td>Loyalty LP</td>
+                            <td>Email</td>
+                        </tr>
+                        <tr>
+                            <td>15 min ago</td>
+                            <td>scroll_depth</td>
+                            <td>Conversion LP</td>
+                            <td>Meta Ads</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="collapsible-section">
+                <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                    <span>Troubleshooting</span>
+                    <span class="collapsible-icon">▼</span>
+                </div>
+                <div class="collapsible-content">
+                    <div class="collapsible-item">
+                        <div class="collapsible-item-title">Events not appearing</div>
+                        <div class="collapsible-item-text">Events can take up to 24 hours to appear. Check that your Measurement ID is correct and the tag is installed on the right pages.</div>
+                    </div>
+                    <div class="collapsible-item">
+                        <div class="collapsible-item-title">Duplicate events</div>
+                        <div class="collapsible-item-text">This usually happens when the same tag is installed both directly and via Google Tag Manager. Remove one of the installations.</div>
+                    </div>
+                    <div class="collapsible-item">
+                        <div class="collapsible-item-title">Conversion mismatch</div>
+                        <div class="collapsible-item-text">If your conversion numbers don't match Google Analytics, check your attribution model settings and conversion counting method.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script>
+        let currentStep = 1;
+        let currentWizardIntegration = 'google-ads';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('topnav-search-container').style.display = 'flex';
+        });
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const screen = document.getElementById('screen-' + screenId);
+            if (screen) {
+                screen.classList.add('active');
+                if (screenId === 'detail') {
+                    setTimeout(() => { if (!window.detailChart) initDetailChart(); }, 50);
+                }
+            }
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        function showWizard(integration) {
+            currentWizardIntegration = integration;
+            currentStep = 1;
+            const names = {
+                'google-ads': 'Google Ads',
+                'tiktok': 'TikTok Pixel',
+                'klaviyo': 'Klaviyo',
+                'mailchimp': 'Mailchimp',
+                'hotjar': 'Hotjar'
+            };
+            document.getElementById('wizard-breadcrumb').textContent = names[integration] || 'Integration';
+            resetWizard();
+            showScreen('wizard');
+        }
+
+        function goToStep(step) {
+            if (step <= currentStep || step <= getCompletedSteps()) {
+                currentStep = step;
+                updateWizardUI();
+            } else if (step === currentStep + 1) {
+                currentStep = step;
+                updateWizardUI();
+            }
+        }
+
+        function resetWizard() {
+            currentStep = 1;
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.progress-step').forEach((s, i) => {
+                s.classList.remove('active', 'completed');
+                if (i === 0) s.classList.add('active');
+            });
+            document.querySelectorAll('.progress-line').forEach(l => l.classList.remove('completed'));
+            document.getElementById('conversion-id').value = '';
+            document.querySelector('.help-expand').classList.remove('open');
+            updateWizardUI();
+        }
+
+        function updateWizardUI() {
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+            document.querySelector(`.wizard-step[data-step="${currentStep}"]`).classList.add('active');
+
+            document.querySelectorAll('.progress-step').forEach((s, i) => {
+                s.classList.remove('active', 'completed');
+                if (i + 1 < currentStep) { s.classList.add('completed'); }
+                else if (i + 1 === currentStep) { s.classList.add('active'); }
+            });
+
+            const lines = ['progress-line-1', 'progress-line-2', 'progress-line-3'];
+            lines.forEach((id, i) => {
+                const line = document.getElementById(id);
+                if (i + 1 < currentStep) { line.classList.add('completed'); }
+                else { line.classList.remove('completed'); }
+            });
+        }
+
+        function getCompletedSteps() {
+            return currentStep - 1;
+        }
+
+        function toggleHelp() {
+            document.getElementById('help-section').classList.toggle('open');
+        }
+
+        function selectAllPages() {
+            document.querySelectorAll('.toggle-switch').forEach(s => s.classList.add('active'));
+        }
+
+        function deselectAllPages() {
+            document.querySelectorAll('.toggle-switch').forEach(s => s.classList.remove('active'));
+        }
+
+        function finishSetup() {
+            showScreen('integrations');
+        }
+
+        function toggleCollapsible(header) {
+            header.classList.toggle('open');
+            const content = header.nextElementSibling;
+            content.classList.toggle('open');
+        }
+
+        function initDetailChart() {
+            const ctx = document.getElementById('detail-chart');
+            if (!ctx) return;
+            const dates = [], events = [];
+            for (let i = 30; i >= 0; i--) {
+                const date = new Date(); date.setDate(date.getDate() - i);
+                dates.push(date.toLocaleDateString('en-US', {month: 'short', day: 'numeric'}));
+                events.push(1200 + (30 - i) * 30 + Math.random() * 400);
+            }
+            window.detailChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Events',
+                        data: events,
+                        borderColor: '#4A7BC7',
+                        backgroundColor: 'rgba(74,123,199,0.05)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 2,
+                        pointBackgroundColor: '#4A7BC7'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'top', labels: { usePointStyle: true, padding: 20, font: { size: 12, weight: 600 } } }
+                    },
+                    scales: {
+                        y: { title: { display: true, text: 'Events', font: { size: 12, weight: 600 } } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

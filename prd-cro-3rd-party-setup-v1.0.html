@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO 3rd Party Setup — PRD v1.0 | Revmatics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        /* Sticky Topbar */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: #2E5090;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 0.95rem;
+        }
+
+        .topbar-left {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar-right a {
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .topbar-right a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .hero-content {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.25rem;
+            color: #555;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: #666;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .hero-meta-item strong {
+            color: #2E5090;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .toc h2 {
+            font-size: 1.2rem;
+            color: #2E5090;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .toc ol {
+            margin-left: 1.5rem;
+            color: #555;
+            line-height: 2;
+        }
+
+        .toc a {
+            color: #2E5090;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 3rem 0 1.5rem 0;
+            padding-left: 1.25rem;
+            border-left: 4px solid #2E5090;
+            position: relative;
+        }
+
+        .section-number {
+            color: #2E5090;
+            font-weight: 600;
+        }
+
+        /* Subsection Headings */
+        .subsection-heading {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2E5090;
+            margin: 2rem 0 1rem 0;
+            position: relative;
+        }
+
+        /* Text Blocks */
+        .section-content {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .section-content p {
+            margin-bottom: 1rem;
+        }
+
+        .section-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-content strong {
+            color: #2E5090;
+        }
+
+        .section-content em {
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Critical Content Alert */
+        .critical-alert {
+            background: #f0f4ff;
+            border-left: 4px solid #d32f2f;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        .critical-alert .alert-label {
+            font-weight: 700;
+            color: #d32f2f;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .critical-alert p {
+            color: #333;
+            margin-bottom: 0.75rem;
+        }
+
+        .critical-alert p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* User Story Cards */
+        .user-story-card {
+            background: white;
+            border: 1px solid #e0e6ed;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .user-story-card.highlighted {
+            border-left: 4px solid #2E5090;
+        }
+
+        .story-id {
+            display: inline-block;
+            background: #2E5090;
+            color: white;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .story-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .story-text-box {
+            background: #f9fafc;
+            border-left: 3px solid #2E5090;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+            font-style: italic;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .acceptance-criteria-label {
+            font-weight: 600;
+            color: #2E5090;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .acceptance-list {
+            list-style: none;
+            margin: 0;
+        }
+
+        .acceptance-list li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.6rem;
+            color: #555;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .acceptance-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #2E5090;
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        /* Data Model Definitions */
+        .definition-group {
+            background: white;
+            padding: 1.75rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            border: 1px solid #e0e6ed;
+        }
+
+        .definition-group dt {
+            font-weight: 600;
+            color: #2E5090;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .definition-group dt:first-child {
+            margin-top: 0;
+        }
+
+        .definition-group dd {
+            color: #555;
+            margin-left: 0;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .definition-list {
+            margin: 0;
+        }
+
+        .definition-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .definition-item strong {
+            color: #2E5090;
+        }
+
+        /* Tables */
+        .reference-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+
+        .reference-table thead {
+            background: #2E5090;
+            color: white;
+        }
+
+        .reference-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
+        }
+
+        .reference-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e6ed;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .reference-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .reference-table tbody tr:hover {
+            background: #f9fafc;
+        }
+
+        /* Flow Steps */
+        .flow-step {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .flow-step-number {
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2E5090;
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .flow-step-content {
+            padding-top: 0.25rem;
+        }
+
+        /* Out of Scope Section */
+        .out-of-scope {
+            background: #fff8f0;
+            border: 1px solid #ffe0cc;
+            border-radius: 6px;
+            padding: 1.75rem;
+            margin: 2rem 0;
+        }
+
+        .out-of-scope h3 {
+            color: #d97706;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .out-of-scope ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .out-of-scope li {
+            padding-left: 1.75rem;
+            margin-bottom: 0.6rem;
+            color: #666;
+            position: relative;
+        }
+
+        .out-of-scope li:before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #d97706;
+            font-weight: 600;
+        }
+
+        /* Mockup Links */
+        .mockup-link {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e0e6ed;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .mockup-link strong {
+            color: #2E5090;
+        }
+
+        .mockup-link a {
+            color: #2E5090;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .mockup-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            background: white;
+            padding: 2rem;
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #e0e6ed;
+            margin-top: 4rem;
+        }
+
+        .footer p {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-meta {
+                gap: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .topbar-right {
+                width: 100%;
+            }
+
+            .section-heading {
+                font-size: 1.4rem;
+            }
+
+            .user-story-card {
+                padding: 1.5rem;
+            }
+
+            .reference-table {
+                font-size: 0.85rem;
+            }
+
+            .reference-table th,
+            .reference-table td {
+                padding: 0.75rem;
+            }
+        }
+
+        /* Utility Classes */
+        .highlight-text {
+            color: #2E5090;
+            font-weight: 500;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .badge-blue {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .badge-green {
+            background: #f1f8e9;
+            color: #558b2f;
+        }
+
+        .badge-orange {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .badge-purple {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        /* Metric Grid */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 6px;
+            border: 1px solid #e0e6ed;
+            text-align: center;
+        }
+
+        .metric-card-label {
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-card-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2E5090;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Topbar -->
+    <div class="topbar">
+        <div class="topbar-left">Revmatics | Product Requirements Document v1.0</div>
+        <div class="topbar-right">
+            <a href="index.html">← Back to Index</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="hero-content">
+            <h1>CRO 3rd Party Setup PRD v1.0</h1>
+            <p class="subtitle">Guided Integration Setup for Analytics, Pixels & Tracking Tools</p>
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <strong>Version:</strong> 1.0
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Date:</strong> April 2026
+                </div>
+                <div class="hero-meta-item">
+                    <strong>Author:</strong> Revmatics / Alex
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Table of Contents -->
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ol>
+                <li><a href="#overview">Product Overview</a></li>
+                <li><a href="#primary-story">Primary User Story</a></li>
+                <li><a href="#integration-categories">Integration Categories & Supported Tools</a></li>
+                <li><a href="#flow-overview">Product Flow Overview</a></li>
+                <li><a href="#screen-specs">Screen Specifications & User Stories</a></li>
+                <li><a href="#nonfunctional">Non-Functional Requirements</a></li>
+                <li><a href="#success-metrics">Success Metrics</a></li>
+                <li><a href="#out-of-scope">Out of Scope</a></li>
+            </ol>
+        </div>
+
+        <!-- Section 1: Product Overview -->
+        <h2 id="overview" class="section-heading"><span class="section-number">1.</span> Product Overview</h2>
+        <div class="section-content">
+            <p>The <strong>CRO 3rd Party Setup</strong> is a guided integration experience for the Revmatics landing page platform. It enables small business owners — particularly Shopify merchants — to connect their existing analytics tools, advertising pixels, email platforms, and behavior tracking services to their CRO-generated landing pages.</p>
+            <p>The product is designed around <strong>education and simplicity</strong>. The target user may not understand why they need a Meta Pixel or Google Analytics connected to their landing pages. The setup flow must teach them the value of each integration before asking them to configure it.</p>
+            <p><strong>Design Philosophy:</strong> The interface follows the Revmatics design language — spacious, clean, premium. Each integration connection follows a guided wizard pattern: <em>learn why → connect credentials → configure pages → verify it works</em>. No dead ends, no unexplained jargon.</p>
+            <p>The product consists of three core screens:</p>
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li><strong>Integrations Hub</strong> — portfolio view of all available and connected integrations</li>
+                <li><strong>Guided Setup Wizard</strong> — step-by-step connection flow for each tool</li>
+                <li><strong>Connection Detail</strong> — management and monitoring for connected integrations</li>
+            </ul>
+        </div>
+
+        <!-- Section 2: Primary User Story -->
+        <h2 id="primary-story" class="section-heading"><span class="section-number">2.</span> Primary User Story</h2>
+        <div class="user-story-card highlighted">
+            <div class="story-text-box">
+                "As a small business owner with a Shopify account, I need to connect my advertising and analytics tools to my landing pages so that I can track which campaigns drive real results — but I need the setup process to explain what each tool does and why I need it, because I'm not a technical marketer."
+            </div>
+        </div>
+
+        <!-- Section 3: Integration Categories & Supported Tools -->
+        <h2 id="integration-categories" class="section-heading"><span class="section-number">3.</span> Integration Categories & Supported Tools</h2>
+        <table class="reference-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Tool</th>
+                    <th>Description</th>
+                    <th>Authentication Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2"><strong>Analytics & Tag Management</strong></td>
+                    <td><strong>Google Analytics 4</strong></td>
+                    <td>Track visitor behavior and conversion events</td>
+                    <td>Measurement ID (G-XXXXXXX)</td>
+                </tr>
+                <tr>
+                    <td><strong>Google Tag Manager</strong></td>
+                    <td>Centralized tag management</td>
+                    <td>Container ID (GTM-XXXXXXX)</td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><strong>Advertising Pixels</strong></td>
+                    <td><strong>Meta Pixel</strong></td>
+                    <td>Facebook/Instagram ad conversion tracking and audiences</td>
+                    <td>Pixel ID</td>
+                </tr>
+                <tr>
+                    <td><strong>Google Ads</strong></td>
+                    <td>Google Ads conversion tracking and bidding optimization</td>
+                    <td>Conversion ID (AW-XXXXXXX) + optional Label</td>
+                </tr>
+                <tr>
+                    <td><strong>TikTok Pixel</strong></td>
+                    <td>TikTok ad measurement and audience creation</td>
+                    <td>Pixel ID</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>Email & CRM</strong></td>
+                    <td><strong>Klaviyo</strong></td>
+                    <td>Email marketing automation and lead sync</td>
+                    <td>API Key</td>
+                </tr>
+                <tr>
+                    <td><strong>Mailchimp</strong></td>
+                    <td>Email list management and signup sync</td>
+                    <td>API Key + Audience ID</td>
+                </tr>
+                <tr>
+                    <td><strong>Behavior & Heatmaps</strong></td>
+                    <td><strong>Hotjar</strong></td>
+                    <td>Heatmaps, session recordings, user feedback</td>
+                    <td>Site ID</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Section 4: Product Flow Overview -->
+        <h2 id="flow-overview" class="section-heading"><span class="section-number">4.</span> Product Flow Overview</h2>
+        <div class="section-content">
+            <div class="flow-step">
+                <div class="flow-step-number">1</div>
+                <div class="flow-step-content">User opens the Integrations Hub from the sidebar navigation</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">2</div>
+                <div class="flow-step-content">Summary strip shows integration health at a glance (total, connected, not connected, needs attention)</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">3</div>
+                <div class="flow-step-content">Integration cards grouped by category show status and quick actions</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">4</div>
+                <div class="flow-step-content">User clicks "Connect" on a not-connected integration to enter the Guided Setup Wizard</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">5</div>
+                <div class="flow-step-content">Step 1 (Learn): Plain-language explanation of what the tool does and why the user needs it</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">6</div>
+                <div class="flow-step-content">Step 2 (Connect): Enter credentials with clear instructions on where to find them</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">7</div>
+                <div class="flow-step-content">Step 3 (Configure): Select which landing pages to track and map conversion events</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">8</div>
+                <div class="flow-step-content">Step 4 (Verify): Automated connection test with pass/fail checklist</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">9</div>
+                <div class="flow-step-content">On success, user returns to the Integrations Hub with the tool now showing as Connected</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">10</div>
+                <div class="flow-step-content">User can click any connected integration to view the Connection Detail screen</div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-step-number">11</div>
+                <div class="flow-step-content">Connection Detail shows health metrics, event activity, connected pages, and troubleshooting</div>
+            </div>
+        </div>
+
+        <!-- Section 5: Screen Specifications & User Stories -->
+        <h2 id="screen-specs" class="section-heading"><span class="section-number">5.</span> Screen Specifications & User Stories</h2>
+
+        <!-- US-01 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-01</div>
+            <h3 class="story-title">Integrations Hub — Portfolio View</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to see all my available integrations in one place so I can quickly identify what's connected, what's missing, and what needs my attention."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Sticky top navigation with Revmatics branding matching CRO Reporting layout</li>
+                <li>Left sidebar with "Integrations" as active nav item</li>
+                <li>Page title "Integrations" with descriptive subtitle</li>
+                <li>Summary strip: Total Integrations, Connected, Not Connected, Needs Attention, Pages Tracked</li>
+                <li>Integration cards grouped by category (Analytics, Pixels, Email/CRM, Behavior)</li>
+                <li>Each card shows: icon, name, status badge (Connected/Not Connected/Needs Attention), description, connection metadata or action button</li>
+                <li>Connected cards link to Connection Detail screen</li>
+                <li>Not-connected cards show "Connect" button linking to Setup Wizard</li>
+                <li>Needs-attention cards show warning message and "Reconnect" button</li>
+                <li>Design matches existing Revmatics product aesthetic</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-3rd-party-setup-v1.0-screen1.html">cro-3rd-party-setup-v1.0-screen1.html</a>
+            </div>
+        </div>
+
+        <!-- US-02 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-02</div>
+            <h3 class="story-title">Guided Setup Wizard — Education Step</h3>
+            <div class="story-text-box">
+                "As a small business owner who isn't a technical marketer, I need the setup process to explain what each integration does and why I need it, before asking me to configure anything."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>4-step progress indicator: Learn → Connect → Configure → Verify</li>
+                <li>Step 1 shows plain-language explanation of the tool</li>
+                <li>"Why you need this" section with 3 benefit cards</li>
+                <li>Language is jargon-free and written for Shopify store owners</li>
+                <li>"Skip this step" option for experienced users</li>
+                <li>Progress bar is navigable (can click back to completed steps)</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-3rd-party-setup-v1.0-screen2.html">cro-3rd-party-setup-v1.0-screen2.html</a>
+            </div>
+        </div>
+
+        <!-- US-03 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-03</div>
+            <h3 class="story-title">Guided Setup Wizard — Connect & Configure Steps</h3>
+            <div class="story-text-box">
+                "As a store owner, I want clear instructions on where to find my tracking IDs and how to enter them, with helpful guidance if I get stuck."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Input fields with clear labels and placeholder examples</li>
+                <li>"Where do I find this?" expandable help section with step-by-step instructions</li>
+                <li>Page selection with toggle switches for each landing page</li>
+                <li>Smart defaults (paid pages ON by default for ad pixels, all pages ON for analytics)</li>
+                <li>Event mapping table showing auto-mapped events (page_view, cta_click, form_submit, purchase)</li>
+                <li>Back/Next navigation between steps</li>
+            </ul>
+        </div>
+
+        <!-- US-04 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-04</div>
+            <h3 class="story-title">Guided Setup Wizard — Verification Step</h3>
+            <div class="story-text-box">
+                "As a store owner, I want to know immediately whether my setup worked, with a clear pass/fail result and what to do if something went wrong."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Automated verification checklist with visual pass/fail indicators</li>
+                <li>Each check: ID format validation, tag installation, test event sent, event received</li>
+                <li>Success state: green banner with confirmation message and timeline expectation</li>
+                <li>Failure state: red indicators with plain-language troubleshooting guidance</li>
+                <li>"Finish Setup" returns to Hub; "View Connection Details" navigates to Detail screen</li>
+            </ul>
+        </div>
+
+        <!-- US-05 -->
+        <div class="user-story-card highlighted">
+            <div class="story-id">US-05</div>
+            <h3 class="story-title">Connection Detail — Monitoring & Management</h3>
+            <div class="story-text-box">
+                "As a marketer, I want to see that my integrations are working properly, monitor event activity, and troubleshoot issues without leaving the platform."
+            </div>
+            <div class="acceptance-criteria-label">Acceptance Criteria</div>
+            <ul class="acceptance-list">
+                <li>Page header with integration name, connected status, connection date</li>
+                <li>Action buttons: Reconnect, Disconnect</li>
+                <li>KPI cards: Pages Connected, Events Tracked (30d), Last Sync, Uptime</li>
+                <li>Event activity chart showing events over time (Chart.js line chart)</li>
+                <li>Connection details sidebar with technical metadata</li>
+                <li>Connected pages table with per-page event counts and status</li>
+                <li>Recent events log with timestamps</li>
+                <li>Collapsible troubleshooting FAQ section</li>
+            </ul>
+            <div class="mockup-link">
+                <strong>Mock-up:</strong> <a href="cro-3rd-party-setup-v1.0-screen3.html">cro-3rd-party-setup-v1.0-screen3.html</a>
+            </div>
+        </div>
+
+        <!-- Section 6: Non-Functional Requirements -->
+        <h2 id="nonfunctional" class="section-heading"><span class="section-number">6.</span> Non-Functional Requirements</h2>
+        <div class="section-content">
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li><strong>Design Consistency:</strong> Must match the existing Revmatics CRO product aesthetic (same typography, colors, spacing, card styling)</li>
+                <li><strong>Responsiveness:</strong> All screens must be desktop-first but responsive to tablet widths</li>
+                <li><strong>Language & Accessibility:</strong> Educational content must be written at a reading level accessible to non-technical small business owners</li>
+                <li><strong>Setup Speed:</strong> Wizard steps must be completable in under 3 minutes per integration</li>
+                <li><strong>Verification Feedback:</strong> Verification step must provide real-time feedback (no "check back later" dead ends)</li>
+                <li><strong>Error Handling:</strong> Error states must include plain-language guidance, not technical error codes</li>
+            </ul>
+        </div>
+
+        <!-- Section 7: Success Metrics -->
+        <h2 id="success-metrics" class="section-heading"><span class="section-number">7.</span> Success Metrics</h2>
+        <div class="metric-grid">
+            <div class="metric-card">
+                <div class="metric-card-label">Integration Completion Rate</div>
+                <div class="metric-card-value">85%+</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card-label">Time to First Connection</div>
+                <div class="metric-card-value">&lt;5 min</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card-label">Active Integrations per User</div>
+                <div class="metric-card-value">3+</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card-label">Integration Health Score</div>
+                <div class="metric-card-value">95%+</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-card-label">Support Ticket Reduction</div>
+                <div class="metric-card-value">40%</div>
+            </div>
+        </div>
+
+        <div class="section-content" style="margin-top: 2rem;">
+            <h3 class="subsection-heading">Metric Definitions</h3>
+            <ul style="margin-left: 1.5rem; color: #555; line-height: 1.8;">
+                <li><strong>Integration Completion Rate:</strong> Percentage of users who start the setup wizard and complete it successfully</li>
+                <li><strong>Time to First Connection:</strong> Elapsed time from user's first visit to Integrations Hub to first successfully verified connection</li>
+                <li><strong>Active Integrations per User:</strong> Average number of connected integrations per user account</li>
+                <li><strong>Integration Health Score:</strong> Percentage of connected integrations with no active errors or warnings over a 30-day period</li>
+                <li><strong>Support Ticket Reduction:</strong> Reduction in support tickets with "how do I connect" or "why isn't X working" subject lines</li>
+            </ul>
+        </div>
+
+        <!-- Section 8: Out of Scope -->
+        <h2 id="out-of-scope" class="section-heading"><span class="section-number">8.</span> Out of Scope</h2>
+        <div class="out-of-scope">
+            <h3>Version 1.0 Exclusions</h3>
+            <ul>
+                <li>Custom webhook integrations</li>
+                <li>Direct database connections</li>
+                <li>Server-side tracking implementation</li>
+                <li>Multi-account management (one account per integration)</li>
+                <li>Real-time bidding API access</li>
+                <li>Custom event definitions beyond the standard set</li>
+                <li>Integration marketplace or third-party plugin system</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Revmatics · CRO 3rd Party Setup PRD v1.0 · April 2026</p>
+    </div>
+
+</body>
+</html>
