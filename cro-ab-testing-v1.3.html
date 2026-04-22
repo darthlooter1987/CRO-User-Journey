@@ -575,6 +575,13 @@
         .live-row td:first-child {
             border-left: 3px solid var(--success);
         }
+        .completed-row {
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+        .completed-row:hover {
+            background-color: rgba(46, 80, 144, 0.04) !important;
+        }
 
         /* EXPERIMENT DETAIL MODAL */
         .detail-backdrop {
@@ -860,6 +867,7 @@
         }
 
         .overlay-panel {
+            display: none;
             position: fixed;
             top: 56px;
             left: 50%;
@@ -1493,7 +1501,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr class="completed-row" onclick="showExperimentDetail('completed-1')">
                             <td><strong>Conversion — CTA Placement</strong></td>
                             <td><span class="table-page-dot" style="background-color: var(--conversion);"></span>Conversion</td>
                             <td><span class="badge-type" style="padding: 3px 8px; font-size: 11px;">A/B</span></td>
@@ -1503,9 +1511,9 @@
                             <td>8,102</td>
                             <td>18 days</td>
                             <td>Apr 15, 2026</td>
-                            <td><a class="table-link" href="#">View Report</a></td>
+                            <td><a class="table-link" href="#" onclick="event.stopPropagation();">View Report</a></td>
                         </tr>
-                        <tr>
+                        <tr class="completed-row" onclick="showExperimentDetail('completed-2')">
                             <td><strong>Awareness — Hero Image</strong></td>
                             <td><span class="table-page-dot" style="background-color: var(--awareness);"></span>Awareness</td>
                             <td><span class="badge-type" style="padding: 3px 8px; font-size: 11px;">A/B</span></td>
@@ -1515,9 +1523,9 @@
                             <td>14,230</td>
                             <td>24 days</td>
                             <td>Apr 8, 2026</td>
-                            <td><a class="table-link" href="#">View Report</a></td>
+                            <td><a class="table-link" href="#" onclick="event.stopPropagation();">View Report</a></td>
                         </tr>
-                        <tr>
+                        <tr class="completed-row" onclick="showExperimentDetail('completed-3')">
                             <td><strong>Differentiation — Comparison Layout</strong></td>
                             <td><span class="table-page-dot" style="background-color: var(--differentiation);"></span>Differentiation</td>
                             <td><span class="badge-type mvt" style="padding: 3px 8px; font-size: 11px;">MVT</span></td>
@@ -1527,9 +1535,9 @@
                             <td>9,847</td>
                             <td>28 days</td>
                             <td>Mar 28, 2026</td>
-                            <td><a class="table-link" href="#">View Report</a></td>
+                            <td><a class="table-link" href="#" onclick="event.stopPropagation();">View Report</a></td>
                         </tr>
-                        <tr>
+                        <tr class="completed-row" onclick="showExperimentDetail('completed-4')">
                             <td><strong>Conversion — Offer Structure</strong></td>
                             <td><span class="table-page-dot" style="background-color: var(--conversion);"></span>Conversion</td>
                             <td><span class="badge-type" style="padding: 3px 8px; font-size: 11px;">A/B</span></td>
@@ -1539,9 +1547,9 @@
                             <td>11,340</td>
                             <td>21 days</td>
                             <td>Mar 19, 2026</td>
-                            <td><a class="table-link" href="#">View Report</a></td>
+                            <td><a class="table-link" href="#" onclick="event.stopPropagation();">View Report</a></td>
                         </tr>
-                        <tr>
+                        <tr class="completed-row" onclick="showExperimentDetail('completed-5')">
                             <td><strong>Awareness — Value Prop</strong></td>
                             <td><span class="table-page-dot" style="background-color: var(--awareness);"></span>Awareness</td>
                             <td><span class="badge-type" style="padding: 3px 8px; font-size: 11px;">A/B</span></td>
@@ -1551,7 +1559,7 @@
                             <td>4,313</td>
                             <td>14 days</td>
                             <td>Mar 10, 2026</td>
-                            <td><a class="table-link" href="#">View Report</a></td>
+                            <td><a class="table-link" href="#" onclick="event.stopPropagation();">View Report</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -1709,6 +1717,346 @@
                 <button class="btn-outline">Pause Test</button>
                 <button class="btn-outline">Force Declare Winner</button>
                 <button class="btn-outline" style="margin-left:auto;">Export Data</button>
+            </div>
+        </div>
+
+        <!-- ═══ COMPLETED #1: A/B — Clear Winner, High Confidence (Bandit auto-deployed) ═══ -->
+        <div id="detail-completed-1" style="display:none;">
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="badge-type" style="padding:3px 8px;font-size:11px;">A/B Test</span>
+                    <span class="badge-page" style="padding:3px 8px;font-size:11px;background:rgba(6,214,160,0.1);color:#059669;">Conversion</span>
+                    <span style="padding:3px 8px;font-size:11px;background:rgba(46,80,144,0.1);color:var(--primary);border-radius:4px;font-weight:600;">✓ Completed</span>
+                </div>
+                <h2>Conversion — CTA Placement</h2>
+                <div class="detail-status">Completed Apr 15, 2026 · Ran 18 days · Auto-deployed by engine</div>
+            </div>
+            <div style="padding:14px 16px;background:rgba(6,214,160,0.06);border:1px solid rgba(6,214,160,0.15);border-radius:10px;margin-bottom:20px;font-size:13px;">
+                <strong style="color:var(--success);">🏆 Winner: Version B — "Buy Now, Pay Later"</strong>
+                <span style="color:var(--text-light);margin-left:8px;">Auto-deployed when Expected Loss dropped below 0.01%</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Confidence</div>
+                    <div class="detail-card-value">98.7%</div>
+                    <div class="detail-confidence-bar"><div class="detail-confidence-fill" style="width:98.7%;background:var(--success);"></div></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Uplift</div>
+                    <div class="detail-card-value" style="color:var(--success);">+22.4%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">2.1% → 2.57% conv rate</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Sessions Tested</div>
+                    <div class="detail-card-value">8,102</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">3,041 (A) · 5,061 (B)</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Revenue Impact</div>
+                    <div class="detail-card-value" style="color:var(--success);">+$4,280</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Est. monthly incremental</div>
+                </div>
+            </div>
+            <div class="detail-section-title">Final Results</div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">Version A: "Add to Cart" (Control)</div>
+                <div class="detail-version-stats"><span class="conv">2.1%</span><span>3,041 sessions</span></div>
+            </div>
+            <div class="detail-version-row winning">
+                <div class="detail-version-name">Version B: "Buy Now, Pay Later" 🏆</div>
+                <div class="detail-version-stats"><span class="conv winning">2.57%</span><span>5,061 sessions</span></div>
+            </div>
+            <div class="detail-section-title">Bandit Allocation Over Time</div>
+            <div class="detail-traffic-bar">
+                <div class="detail-traffic-a" style="width:0%;">0%</div>
+                <div class="detail-traffic-b" style="width:100%;">100% B (auto-deployed)</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-light);">Started 50/50 → shifted to 70/30 by Day 5 → 100% B by Day 18 (auto-deploy triggered)</div>
+            <div class="detail-engine">
+                <span style="font-size:20px;">✅</span>
+                <div><strong>Decision Engine (Final):</strong> Version B declared winner with 98.7% confidence. Expected Loss reached 0.003% — well below the 0.01% auto-deploy threshold. The "Buy Now, Pay Later" framing reduced checkout friction significantly. Revenue protected during the test via Thompson Sampling.</div>
+            </div>
+            <div class="detail-actions">
+                <button class="btn-outline">Export Full Report</button>
+                <button class="btn-outline">Re-run This Test</button>
+                <button class="btn-outline" style="margin-left:auto;">Archive</button>
+            </div>
+        </div>
+
+        <!-- ═══ COMPLETED #2: A/B — Moderate Win, Slower Convergence ═══ -->
+        <div id="detail-completed-2" style="display:none;">
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="badge-type" style="padding:3px 8px;font-size:11px;">A/B Test</span>
+                    <span class="badge-page" style="padding:3px 8px;font-size:11px;">Awareness</span>
+                    <span style="padding:3px 8px;font-size:11px;background:rgba(46,80,144,0.1);color:var(--primary);border-radius:4px;font-weight:600;">✓ Completed</span>
+                </div>
+                <h2>Awareness — Hero Image</h2>
+                <div class="detail-status">Completed Apr 8, 2026 · Ran 24 days · Manually declared</div>
+            </div>
+            <div style="padding:14px 16px;background:rgba(6,214,160,0.06);border:1px solid rgba(6,214,160,0.15);border-radius:10px;margin-bottom:20px;font-size:13px;">
+                <strong style="color:var(--success);">🏆 Winner: Version B — "Lifestyle Shot"</strong>
+                <span style="color:var(--text-light);margin-left:8px;">Declared at 96.2% confidence (expected loss 0.04%)</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Confidence</div>
+                    <div class="detail-card-value">96.2%</div>
+                    <div class="detail-confidence-bar"><div class="detail-confidence-fill" style="width:96.2%;background:var(--primary);"></div></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Uplift</div>
+                    <div class="detail-card-value" style="color:var(--success);">+11.3%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">3.1% → 3.45% conv rate</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Sessions Tested</div>
+                    <div class="detail-card-value">14,230</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">6,892 (A) · 7,338 (B)</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Time to 90% Confidence</div>
+                    <div class="detail-card-value">18 days</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Slow convergence (cold traffic)</div>
+                </div>
+            </div>
+            <div class="detail-section-title">Final Results</div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">Version A: "Product Studio Shot" (Control)</div>
+                <div class="detail-version-stats"><span class="conv">3.1%</span><span>6,892 sessions</span></div>
+            </div>
+            <div class="detail-version-row winning">
+                <div class="detail-version-name">Version B: "Lifestyle Shot" 🏆</div>
+                <div class="detail-version-stats"><span class="conv winning">3.45%</span><span>7,338 sessions</span></div>
+            </div>
+            <div class="detail-section-title">Prior vs Posterior</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.7;padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div style="margin-bottom:6px;"><strong>Prior:</strong> Industry baseline of 2.8% (Strong Industry Prior — new brand)</div>
+                <div style="margin-bottom:6px;"><strong>Posterior A:</strong> 3.1% ± 0.15% (narrowed after 6,892 observations)</div>
+                <div><strong>Posterior B:</strong> 3.45% ± 0.14% (narrowed after 7,338 observations)</div>
+            </div>
+            <div class="detail-engine">
+                <span style="font-size:20px;">✅</span>
+                <div><strong>Decision Engine (Final):</strong> The Lifestyle Shot resonated better with cold audiences — an emotional connection outperformed the product-focus shot. Convergence was slower than typical (24 days vs ~18 day average) because awareness traffic has higher variance. Recommended: apply lifestyle imagery to Differentiation page too.</div>
+            </div>
+            <div class="detail-actions">
+                <button class="btn-outline">Export Full Report</button>
+                <button class="btn-outline">Re-run This Test</button>
+                <button class="btn-outline" style="margin-left:auto;">Archive</button>
+            </div>
+        </div>
+
+        <!-- ═══ COMPLETED #3: MVT — Recipe Winner + Sensitivity Breakdown ═══ -->
+        <div id="detail-completed-3" style="display:none;">
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="badge-type mvt" style="padding:3px 8px;font-size:11px;">MVT</span>
+                    <span class="badge-page differentiation" style="padding:3px 8px;font-size:11px;">Differentiation</span>
+                    <span style="padding:3px 8px;font-size:11px;background:rgba(46,80,144,0.1);color:var(--primary);border-radius:4px;font-weight:600;">✓ Completed</span>
+                </div>
+                <h2>Differentiation — Comparison Layout</h2>
+                <div class="detail-status">Completed Mar 28, 2026 · Ran 28 days · 12 recipes tested, 1 winner</div>
+            </div>
+            <div style="padding:14px 16px;background:rgba(6,214,160,0.06);border:1px solid rgba(6,214,160,0.15);border-radius:10px;margin-bottom:20px;font-size:13px;">
+                <strong style="color:var(--success);">🏆 Winner: Recipe #5 — Founder's Video + Comparison Table + Trust Seal</strong>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Confidence</div>
+                    <div class="detail-card-value">97.1%</div>
+                    <div class="detail-confidence-bar"><div class="detail-confidence-fill" style="width:97.1%;background:var(--differentiation);"></div></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Uplift (vs worst)</div>
+                    <div class="detail-card-value" style="color:var(--success);">+18.9%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Best recipe vs control</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Recipes Tested</div>
+                    <div class="detail-card-value">12</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">3 Proof × 2 Layout × 2 Trust</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Sessions Tested</div>
+                    <div class="detail-card-value">9,847</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Across all recipes</div>
+                </div>
+            </div>
+            <div class="detail-section-title">Top 3 Recipes</div>
+            <div class="detail-version-row winning">
+                <div class="detail-version-name">#5: Video + Table + Trust Seal 🏆</div>
+                <div class="detail-version-stats"><span class="conv winning">5.6%</span><span>1,423 sessions</span></div>
+            </div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">#8: Video + Bullet Points + Trust Seal</div>
+                <div class="detail-version-stats"><span class="conv">5.1%</span><span>1,102 sessions</span></div>
+            </div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">#2: Lab Results + Table + No Seal</div>
+                <div class="detail-version-stats"><span class="conv">4.7%</span><span>987 sessions</span></div>
+            </div>
+            <div class="detail-section-title">Sensitivity Breakdown (Variance Decomposition)</div>
+            <div style="margin-bottom:16px;">
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                    <span style="font-size:12px;font-weight:600;width:90px;">Proof Type</span>
+                    <div style="flex:1;height:22px;background:var(--border);border-radius:4px;overflow:hidden;">
+                        <div style="width:62%;height:100%;background:var(--differentiation);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:white;font-weight:600;">62%</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                    <span style="font-size:12px;font-weight:600;width:90px;">Layout</span>
+                    <div style="flex:1;height:22px;background:var(--border);border-radius:4px;overflow:hidden;">
+                        <div style="width:28%;height:100%;background:var(--primary-light);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:white;font-weight:600;">28%</div>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:12px;font-weight:600;width:90px;">Trust Signal</span>
+                    <div style="flex:1;height:22px;background:var(--border);border-radius:4px;overflow:hidden;">
+                        <div style="width:10%;height:100%;background:var(--text-light);border-radius:4px;display:flex;align-items:center;padding-left:8px;font-size:11px;color:white;font-weight:600;">10%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section-title">Interaction Heatmap</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.7;padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div style="margin-bottom:6px;"><span style="color:var(--success);font-weight:600;">+12% synergy</span> — Founder's Video + Comparison Table (trust + evidence combination)</div>
+                <div style="margin-bottom:6px;"><span style="color:var(--danger);font-weight:600;">-6% clash</span> — Lab Results + Bullet Points (too clinical, users bounced)</div>
+                <div><span style="color:var(--text-light);font-weight:600;">Neutral</span> — Trust Seal had minimal interaction with other elements</div>
+            </div>
+            <div class="detail-engine">
+                <span style="font-size:20px;">✅</span>
+                <div><strong>Decision Engine (Final):</strong> Proof Type was the "Big Lever" (62% of variance). Founder's Video built trust that cold comparisons couldn't. The Table layout organized information for comparison-minded visitors. Trust Seal added marginal value — skip testing it next time. <strong>Next test recommendation:</strong> Try different video styles on the Conversion page.</div>
+            </div>
+            <div class="detail-actions">
+                <button class="btn-outline">Export Full Report</button>
+                <button class="btn-outline">Re-run This Test</button>
+                <button class="btn-outline" style="margin-left:auto;">Archive</button>
+            </div>
+        </div>
+
+        <!-- ═══ COMPLETED #4: A/B — Narrow Win, Bandit Protected Revenue ═══ -->
+        <div id="detail-completed-4" style="display:none;">
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="badge-type" style="padding:3px 8px;font-size:11px;">A/B Test</span>
+                    <span class="badge-page" style="padding:3px 8px;font-size:11px;background:rgba(6,214,160,0.1);color:#059669;">Conversion</span>
+                    <span style="padding:3px 8px;font-size:11px;background:rgba(46,80,144,0.1);color:var(--primary);border-radius:4px;font-weight:600;">✓ Completed</span>
+                </div>
+                <h2>Conversion — Offer Structure</h2>
+                <div class="detail-status">Completed Mar 19, 2026 · Ran 21 days · Auto-deployed by engine</div>
+            </div>
+            <div style="padding:14px 16px;background:rgba(6,214,160,0.06);border:1px solid rgba(6,214,160,0.15);border-radius:10px;margin-bottom:20px;font-size:13px;">
+                <strong style="color:var(--success);">🏆 Winner: Version B — "Free Trial (14 days)"</strong>
+                <span style="color:var(--text-light);margin-left:8px;">Narrow win — bandit protected $2,100 in revenue during the test</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Confidence</div>
+                    <div class="detail-card-value">95.4%</div>
+                    <div class="detail-confidence-bar"><div class="detail-confidence-fill" style="width:95.4%;background:var(--conversion);"></div></div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Uplift</div>
+                    <div class="detail-card-value" style="color:var(--success);">+8.7%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">2.3% → 2.5% conv rate</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Revenue Protected</div>
+                    <div class="detail-card-value" style="color:var(--success);">$2,100</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">vs. a fixed 50/50 split</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Expected Loss</div>
+                    <div class="detail-card-value">0.008%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Below 0.01% threshold</div>
+                </div>
+            </div>
+            <div class="detail-section-title">Final Results</div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">Version A: "20% Off First Order" (Control)</div>
+                <div class="detail-version-stats"><span class="conv">2.3%</span><span>4,812 sessions</span></div>
+            </div>
+            <div class="detail-version-row winning">
+                <div class="detail-version-name">Version B: "Free Trial (14 days)" 🏆</div>
+                <div class="detail-version-stats"><span class="conv winning">2.5%</span><span>6,528 sessions</span></div>
+            </div>
+            <div class="detail-section-title">Bandit Impact</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.7;padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div style="margin-bottom:6px;"><strong>With Bandit:</strong> 57.6% of traffic went to the winner → $2,100 more revenue during test</div>
+                <div style="margin-bottom:6px;"><strong>Without Bandit:</strong> A fixed 50/50 split would have lost ~38 conversions to the inferior variant</div>
+                <div><strong>Convergence:</strong> This was a narrow margin test (0.2% absolute difference) — Bandit correctly shifted traffic despite the small gap</div>
+            </div>
+            <div class="detail-engine">
+                <span style="font-size:20px;">✅</span>
+                <div><strong>Decision Engine (Final):</strong> "Free Trial" reduced commitment anxiety better than a discount. Narrow win (8.7% relative) but the Bandit protected revenue throughout. Conversion page friction is now lower — next test should focus on form length or payment options.</div>
+            </div>
+            <div class="detail-actions">
+                <button class="btn-outline">Export Full Report</button>
+                <button class="btn-outline">Re-run This Test</button>
+                <button class="btn-outline" style="margin-left:auto;">Archive</button>
+            </div>
+        </div>
+
+        <!-- ═══ COMPLETED #5: A/B — Close Call, Low Traffic, Prior Mattered ═══ -->
+        <div id="detail-completed-5" style="display:none;">
+            <div class="detail-header">
+                <div class="detail-badges">
+                    <span class="badge-type" style="padding:3px 8px;font-size:11px;">A/B Test</span>
+                    <span class="badge-page" style="padding:3px 8px;font-size:11px;">Awareness</span>
+                    <span style="padding:3px 8px;font-size:11px;background:rgba(46,80,144,0.1);color:var(--primary);border-radius:4px;font-weight:600;">✓ Completed</span>
+                </div>
+                <h2>Awareness — Value Prop</h2>
+                <div class="detail-status">Completed Mar 10, 2026 · Ran 14 days · Manually declared (low traffic)</div>
+            </div>
+            <div style="padding:14px 16px;background:rgba(255,209,102,0.15);border:1px solid rgba(255,177,0,0.2);border-radius:10px;margin-bottom:20px;font-size:13px;">
+                <strong style="color:#B45309;">⚠️ Winner: Version B — "Results-focused" (declared at 94.8% — below 95% threshold)</strong>
+                <span style="color:var(--text-light);margin-left:8px;">Manually declared due to low traffic and business timeline</span>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-card">
+                    <div class="detail-card-label">Final Confidence</div>
+                    <div class="detail-card-value" style="color:#B45309;">94.8%</div>
+                    <div class="detail-confidence-bar"><div class="detail-confidence-fill" style="width:94.8%;background:var(--warning);"></div></div>
+                    <div style="font-size:11px;color:#B45309;margin-top:4px;">0.2% below 95% threshold</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Uplift</div>
+                    <div class="detail-card-value" style="color:var(--success);">+6.1%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">2.8% → 2.97% conv rate</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Sessions Tested</div>
+                    <div class="detail-card-value">4,313</div>
+                    <div style="font-size:11px;color:#B45309;margin-top:8px;">Below ideal sample size</div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-card-label">Expected Loss at End</div>
+                    <div class="detail-card-value">0.06%</div>
+                    <div style="font-size:11px;color:var(--text-light);margin-top:8px;">Acceptable but not minimal</div>
+                </div>
+            </div>
+            <div class="detail-section-title">Final Results</div>
+            <div class="detail-version-row">
+                <div class="detail-version-name">Version A: "We care about your skin" (Emotional)</div>
+                <div class="detail-version-stats"><span class="conv">2.8%</span><span>2,198 sessions</span></div>
+            </div>
+            <div class="detail-version-row winning">
+                <div class="detail-version-name">Version B: "94% saw results in 30 days" (Results) 🏆</div>
+                <div class="detail-version-stats"><span class="conv winning">2.97%</span><span>2,115 sessions</span></div>
+            </div>
+            <div class="detail-section-title">Why the Prior Mattered</div>
+            <div style="font-size:13px;color:var(--text);line-height:1.7;padding:12px 14px;background:var(--bg);border-radius:8px;border:1px solid var(--border);">
+                <div style="margin-bottom:6px;"><strong>Industry Prior used:</strong> 2.5% baseline (beauty/skincare sector average)</div>
+                <div style="margin-bottom:6px;"><strong>Without Prior:</strong> With only 4,313 sessions, a flat prior would have produced 87% confidence — insufficient to act on</div>
+                <div><strong>With Prior:</strong> The informative prior stabilized the estimate, reaching 94.8% — close enough for the team to make a confident business decision despite limited traffic</div>
+            </div>
+            <div class="detail-engine">
+                <span style="font-size:20px;">⚠️</span>
+                <div><strong>Decision Engine (Final):</strong> Results-focused messaging outperformed emotional messaging for cold awareness traffic. However, confidence only reached 94.8% due to low traffic (4,313 sessions vs. recommended 8,000+). The Strong Industry Prior prevented a false positive from the small sample. <strong>Recommendation:</strong> Consider re-running with more traffic budget, or validate with the Hero Image test winner for compounding gains.</div>
+            </div>
+            <div class="detail-actions">
+                <button class="btn-outline">Export Full Report</button>
+                <button class="btn-outline">Re-run With More Budget</button>
+                <button class="btn-outline" style="margin-left:auto;">Archive</button>
             </div>
         </div>
     </div>
@@ -2277,8 +2625,11 @@
         // EXPERIMENT DETAIL MODAL
         function showExperimentDetail(id) {
             // Hide all detail content
-            document.getElementById('detail-awareness-ab').style.display = 'none';
-            document.getElementById('detail-diff-mvt').style.display = 'none';
+            var allDetails = ['detail-awareness-ab', 'detail-diff-mvt', 'detail-completed-1', 'detail-completed-2', 'detail-completed-3', 'detail-completed-4', 'detail-completed-5'];
+            allDetails.forEach(function(detailId) {
+                var el = document.getElementById(detailId);
+                if (el) el.style.display = 'none';
+            });
             // Show the selected one
             document.getElementById('detail-' + id).style.display = 'block';
             document.getElementById('detailBackdrop').classList.add('active');
