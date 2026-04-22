@@ -432,7 +432,7 @@
         <div class="label">Products</div>
       </div>
       <div class="hero-stat">
-        <div class="num">9</div>
+        <div class="num">10</div>
         <div class="label">Total Versions</div>
       </div>
       <div class="hero-stat">
@@ -463,8 +463,8 @@
       <div class="pc-title">CRO A/B Testing</div>
       <div class="pc-desc">Test landing page variants against each other to find the highest-converting combination per funnel stage.</div>
       <div class="pc-meta">
-        <div class="pc-meta-item"><strong>0</strong> versions</div>
-        <span class="pc-status pc-status-coming">Coming Soon</span>
+        <div class="pc-meta-item"><strong>1</strong> versions</div>
+        <span class="pc-status pc-status-active">Active</span>
       </div>
     </div>
 
@@ -661,11 +661,50 @@
       </div>
     </div>
 
-    <div class="empty-state">
-      <div class="empty-icon">&#x2696;</div>
-      <h3>No versions yet</h3>
-      <p>The A/B Testing product is in the planning phase. Mock-ups and PRDs will appear here as versions are created.</p>
-      <span class="coming-badge">&#x1F6A7; Coming Soon</span>
+    <div class="version-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:120px;">Version</th>
+            <th style="width:180px;">Links</th>
+            <th>What Was Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- VERSION 1.0 -->
+          <tr>
+            <td>
+              <div class="v-badge">
+                <span class="v-dot"></span>
+                v1.0
+              </div>
+              <div class="v-date">April 2026</div>
+              <div><span class="v-status status-current">Current</span></div>
+            </td>
+            <td>
+              <div class="link-cell">
+                <a href="cro-ab-testing-v1.0.html" class="link-btn link-btn-mockup" target="_blank">
+                  &#x1F5A5; Mock-up
+                </a>
+              </div>
+            </td>
+            <td>
+              <ul class="changes-list">
+                <li class="first">Initial version — first complete mock-up of the CRO A/B Testing product.</li>
+                <li class="new">4-screen flow: Page Selector &#x2192; Experiment Type Picker &#x2192; A/B Wizard (5 steps) &#x2192; MVT Wizard (5 steps)</li>
+                <li class="new">Page selector with 4 funnel-stage landing pages (Awareness, Differentiation, Conversion, Loyalty) showing live session &amp; conversion metrics</li>
+                <li class="new">Experiment type picker: educational side-by-side cards explaining A/B Testing vs. Multivariate Testing with "Best for" badges and 3-step process summaries</li>
+                <li class="new">A/B Wizard: Bayesian 5-step flow — Set Prior (historical baseline toggle), Define Certainty (confidence threshold selector), Smart Split (Thompson Sampling visualization), Monitoring (real-time bell curves &amp; confidence gauge), Auto-Deploy (expected loss threshold &amp; timeline)</li>
+                <li class="new">MVT Wizard: 5-step flow — Ingredient Setup (element buckets with auto-calculated combinations), Smart Learning (hierarchical shrinkage), Synergy Map (interaction heatmap), Auto-Prune (weekly traffic pruning timeline), Winning Recipe (sensitivity breakdown chart)</li>
+                <li class="new">Interactive elements: toggle switches, threshold selectors, expandable sections, animated traffic split visualizations</li>
+                <li class="new">Matches CRO Reporting design language — same topnav, sidebar, cards, typography, and color system</li>
+              </ul>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
     </div>
   </div>
 
