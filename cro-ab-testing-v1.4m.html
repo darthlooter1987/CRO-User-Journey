@@ -1,0 +1,2256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO A/B Testing V1.4 M — Revmatics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --danger: #FF6B6B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --awareness: #4A7BC7;
+            --differentiation: #F77F00;
+            --conversion: #06D6A0;
+            --loyalty: #9B5DE5;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* TOPNAV */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .topnav-logo {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+        }
+
+        .topnav-spacer {
+            flex: 1;
+        }
+
+        .topnav-user {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 220px;
+            height: calc(100vh - 56px);
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px 16px;
+            overflow-y: auto;
+            z-index: 50;
+        }
+
+        .sidebar-item {
+            font-size: 13px;
+            padding: 10px 12px;
+            margin-bottom: 4px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            color: var(--text-light);
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-item:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* MAIN CONTAINER */
+        .main {
+            margin-left: 220px;
+            margin-top: 56px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        /* HEADER */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        /* KPI STRIP */
+        .kpi-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .kpi-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* SECTION HEADER */
+        .section-header {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 16px;
+            margin-top: 32px;
+        }
+
+        /* TABLE */
+        .table-container {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        tbody tr {
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: var(--bg);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* BADGES */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-awareness {
+            background: rgba(74, 123, 199, 0.15);
+            color: var(--awareness);
+        }
+
+        .badge-differentiation {
+            background: rgba(247, 127, 0, 0.15);
+            color: var(--differentiation);
+        }
+
+        .badge-conversion {
+            background: rgba(6, 214, 160, 0.15);
+            color: var(--conversion);
+        }
+
+        .badge-loyalty {
+            background: rgba(155, 93, 229, 0.15);
+            color: var(--loyalty);
+        }
+
+        .badge-ab {
+            background: rgba(46, 80, 144, 0.15);
+            color: var(--primary);
+        }
+
+        .badge-mvt {
+            background: rgba(247, 127, 0, 0.15);
+            color: var(--accent2);
+        }
+
+        /* METRIC */
+        .metric-positive {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* OVERLAY */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .overlay-panel {
+            position: fixed;
+            bottom: 0;
+            left: 220px;
+            right: 0;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 201;
+            animation: slideUp 0.3s ease;
+            display: none;
+        }
+
+        .overlay-panel.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .overlay-header {
+            position: sticky;
+            top: 0;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .overlay-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+            line-height: 1;
+        }
+
+        .overlay-content {
+            padding: 24px;
+        }
+
+        .detail-section {
+            margin-bottom: 32px;
+        }
+
+        .detail-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+        }
+
+        /* KPI Cards in Detail */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-detail-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+        }
+
+        .kpi-detail-label {
+            font-size: 11px;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-detail-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* Guidance Box */
+        .guidance-box {
+            background: rgba(74, 123, 199, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* Version Comparison */
+        .version-row {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            align-items: center;
+        }
+
+        .version-label {
+            font-size: 13px;
+            font-weight: 600;
+            width: 80px;
+        }
+
+        .version-cell {
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        /* Bar Charts */
+        .bar-chart {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .bar-label {
+            font-size: 12px;
+            font-weight: 500;
+            min-width: 120px;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 24px;
+            background: var(--bg);
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Matrix/Heatmap */
+        .matrix-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .matrix-table th,
+        .matrix-table td {
+            padding: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .matrix-table th {
+            background: var(--bg);
+            font-weight: 600;
+        }
+
+        .heat-positive {
+            background: rgba(6, 214, 160, 0.2);
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .heat-negative {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg);
+            margin-bottom: 8px;
+            border-radius: var(--radius);
+            font-size: 13px;
+        }
+
+        .leaderboard-rank {
+            font-weight: 700;
+            color: var(--primary);
+            margin-right: 12px;
+            width: 24px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .leaderboard-prob {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Segment Table */
+        .segment-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 20px;
+        }
+
+        .segment-table th,
+        .segment-table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .segment-table th {
+            background: var(--bg);
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .segment-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .segment-lift {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Status Indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .status-connected {
+            background: var(--success);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-danger:hover {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        /* WIZARD */
+        .wizard-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 300;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .wizard-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .wizard-panel {
+            background: var(--card);
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 301;
+            animation: popIn 0.3s ease;
+            margin: auto;
+        }
+
+        .wizard-panel.active {
+            display: block;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .wizard-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .wizard-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .wizard-content {
+            padding: 24px;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .step-guidance {
+            background: rgba(74, 123, 199, 0.08);
+            border-left: 4px solid var(--primary);
+            padding: 12px 14px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* Page Cards */
+        .page-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .page-card {
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .page-card:hover {
+            border-color: var(--primary);
+            background: rgba(46, 80, 144, 0.05);
+        }
+
+        .page-card.selected {
+            border-color: var(--primary);
+            background: rgba(46, 80, 144, 0.1);
+        }
+
+        .page-card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .page-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .page-card-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        /* Type Cards */
+        .type-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .type-card {
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .type-card:hover {
+            border-color: var(--primary);
+            background: rgba(46, 80, 144, 0.05);
+        }
+
+        .type-card.selected {
+            border-color: var(--primary);
+            background: rgba(46, 80, 144, 0.1);
+        }
+
+        .type-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .type-card-desc {
+            font-size: 12px;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        .type-card-rec {
+            margin-top: 8px;
+            font-size: 11px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 80, 144, 0.1);
+        }
+
+        .element-guidance {
+            background: rgba(74, 123, 199, 0.06);
+            border: 1px solid rgba(74, 123, 199, 0.15);
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        /* Wizard Footer */
+        .wizard-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .wizard-nav {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-secondary-small {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary-small:hover {
+            background: var(--border);
+        }
+
+        .btn-secondary-small:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-light);
+        }
+
+        /* Responsive */
+        @media (max-width: 1400px) {
+            .kpi-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOPNAV -->
+    <div class="topnav">
+        <div class="topnav-logo">Revmatics</div>
+        <div class="topnav-spacer"></div>
+        <div class="topnav-user">alex@revmatics.ai</div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-item active">Dashboard</div>
+        <div class="sidebar-item">Experiments</div>
+        <div class="sidebar-item">Reports</div>
+        <div class="sidebar-item">Segments</div>
+        <div class="sidebar-item">Settings</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+            <h1 class="page-title">A/B Testing Dashboard</h1>
+            <button class="btn-primary" onclick="showWizard()">+ New Experiment</button>
+        </div>
+
+        <!-- KPI STRIP -->
+        <div class="kpi-strip">
+            <div class="kpi-card">
+                <div class="kpi-label">Active Tests</div>
+                <div class="kpi-value">4</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Completed</div>
+                <div class="kpi-value">5</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Avg Uplift</div>
+                <div class="kpi-value metric-positive">+14.2%</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Total Sessions</div>
+                <div class="kpi-value">47,832</div>
+            </div>
+        </div>
+
+        <!-- LIVE EXPERIMENTS -->
+        <h2 class="section-header">Live Experiments</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Experiment</th>
+                        <th>Type</th>
+                        <th>Progress</th>
+                        <th>Confidence</th>
+                        <th>Lift</th>
+                        <th>Sessions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="showExperimentDetail('detail-awareness-ab')">
+                        <td>
+                            <span class="badge badge-awareness">Awareness</span>
+                            <strong>Headline Hook Test</strong>
+                        </td>
+                        <td><span class="badge badge-ab">A/B</span></td>
+                        <td>Day 12/21</td>
+                        <td>82%</td>
+                        <td><span class="metric-positive">+22.6%</span></td>
+                        <td>12,818</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-diff-mvt')">
+                        <td>
+                            <span class="badge badge-differentiation">Differentiation</span>
+                            <strong>Proof Mix MVT</strong>
+                        </td>
+                        <td><span class="badge badge-mvt">MVT</span></td>
+                        <td>Week 2/4</td>
+                        <td>71%</td>
+                        <td><span class="metric-positive">+8.3%</span></td>
+                        <td>9,234</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-conversion-mab')">
+                        <td>
+                            <span class="badge badge-conversion">Conversion</span>
+                            <strong>CTA Urgency Test</strong>
+                        </td>
+                        <td><span class="badge badge-ab">A/B+MAB</span></td>
+                        <td>Day 8/14</td>
+                        <td>88%</td>
+                        <td><span class="metric-positive">+15.2%</span></td>
+                        <td>6,420</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-loyalty-mvt')">
+                        <td>
+                            <span class="badge badge-loyalty">Loyalty</span>
+                            <strong>Re-engagement Recipe</strong>
+                        </td>
+                        <td><span class="badge badge-mvt">MVT</span></td>
+                        <td>Week 1/3</td>
+                        <td>62%</td>
+                        <td><span class="metric-positive">+5.8%</span></td>
+                        <td>3,112</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- COMPLETED EXPERIMENTS -->
+        <h2 class="section-header">Completed Experiments</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Experiment</th>
+                        <th>Type</th>
+                        <th>Duration</th>
+                        <th>Confidence</th>
+                        <th>Lift</th>
+                        <th>Winner</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="showExperimentDetail('detail-completed-1')">
+                        <td><strong>Homepage Hero Redesign</strong></td>
+                        <td><span class="badge badge-ab">A/B</span></td>
+                        <td>18 days</td>
+                        <td>95%</td>
+                        <td><span class="metric-positive">+18.3%</span></td>
+                        <td>Version B</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-completed-2')">
+                        <td><strong>Add-to-Cart Button Color</strong></td>
+                        <td><span class="badge badge-ab">A/B</span></td>
+                        <td>14 days</td>
+                        <td>92%</td>
+                        <td><span class="metric-positive">+11.5%</span></td>
+                        <td>Version A</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-completed-3')">
+                        <td><strong>Product Page Social Proof</strong></td>
+                        <td><span class="badge badge-mvt">MVT</span></td>
+                        <td>22 days</td>
+                        <td>88%</td>
+                        <td><span class="metric-positive">+7.2%</span></td>
+                        <td>Recipe 4</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-completed-4')">
+                        <td><strong>Checkout Form Length</strong></td>
+                        <td><span class="badge badge-ab">A/B</span></td>
+                        <td>21 days</td>
+                        <td>94%</td>
+                        <td><span class="metric-positive">+13.8%</span></td>
+                        <td>Version B</td>
+                    </tr>
+                    <tr onclick="showExperimentDetail('detail-completed-5')">
+                        <td><strong>Email Welcome Series</strong></td>
+                        <td><span class="badge badge-mvt">MVT</span></td>
+                        <td>28 days</td>
+                        <td>91%</td>
+                        <td><span class="metric-positive">+9.6%</span></td>
+                        <td>Recipe 2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- OVERLAY BACKDROP -->
+    <div class="overlay" id="overlay" onclick="hideDetailModal()"></div>
+
+    <!-- DETAIL MODALS -->
+
+    <!-- 1. AWARENESS A/B DETAIL -->
+    <div class="overlay-panel" id="detail-awareness-ab">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Headline Hook Test</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Awareness → A/B Test → Day 12/21</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Probability of Being Best</div>
+                    <div class="kpi-detail-value">82%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+22.6%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">12,818</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Time to Certainty</div>
+                    <div class="kpi-detail-value">~9 days</div>
+                </div>
+            </div>
+
+            <!-- Prior vs Posterior -->
+            <div class="detail-section">
+                <div class="detail-section-title">Prior vs Posterior Analysis</div>
+                <div class="guidance-box">
+                    The Prior is your starting belief based on industry data. As real visitors arrive, it updates into a Posterior — your refined, data-backed estimate.
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">Industry Prior: 2.8% baseline</div>
+                    <div class="bar-chart">
+                        <div class="bar-label">Prior</div>
+                        <div class="bar-container">
+                            <div class="bar-segment" style="width: 100%; background: var(--text-light);">2.8%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">Posterior A</div>
+                    <div class="bar-chart">
+                        <div class="bar-label">Version A</div>
+                        <div class="bar-container">
+                            <div class="bar-segment" style="width: 100%; background: var(--awareness);">3.1%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 16px;">
+                    <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px;">Posterior B</div>
+                    <div class="bar-chart">
+                        <div class="bar-label">Version B</div>
+                        <div class="bar-container">
+                            <div class="bar-segment" style="width: 100%; background: var(--success);">3.8%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Version Comparison -->
+            <div class="detail-section">
+                <div class="detail-section-title">Version Comparison</div>
+                <div class="version-row">
+                    <div class="version-label">Variant</div>
+                    <div class="version-cell"><strong>A</strong></div>
+                    <div class="version-cell"><strong>B (Leading)</strong></div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Conversion Rate</div>
+                    <div class="version-cell">3.1%</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">3.8% (+22.6%)</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Sessions</div>
+                    <div class="version-cell">6,412</div>
+                    <div class="version-cell">6,406</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Conversions</div>
+                    <div class="version-cell">199</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">243</div>
+                </div>
+            </div>
+
+            <!-- Traffic Split -->
+            <div class="detail-section">
+                <div class="detail-section-title">Smart Traffic Split (Thompson Sampling)</div>
+                <div class="bar-chart" style="margin-bottom: 16px;">
+                    <div class="bar-label">Traffic Allocation</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 38%; background: var(--awareness);">A: 38%</div>
+                        <div class="bar-segment" style="width: 62%; background: var(--success);">B: 62%</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light);">Thompson Sampling automatically allocates more traffic to the better-performing version while collecting data.</div>
+            </div>
+
+            <!-- Decision Engine -->
+            <div class="detail-section">
+                <div class="detail-section-title">Decision Engine Status</div>
+                <div class="version-row">
+                    <div class="version-label">Status</div>
+                    <div class="version-cell">Active — Collecting Data</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Statistical Method</div>
+                    <div class="version-cell">Bayesian Inference</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Next Review</div>
+                    <div class="version-cell">Day 16</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-secondary">⏸ Pause Experiment</button>
+                <button class="btn-secondary">📊 Force Declare Winner</button>
+                <button class="btn-secondary">⬇ Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. DIFFERENTIATION MVT DETAIL -->
+    <div class="overlay-panel" id="detail-diff-mvt">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Proof Mix MVT</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Differentiation → Multivariate Test → Week 2/4</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winning Probability</div>
+                    <div class="kpi-detail-value">71%</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">Recipe #3</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Element Contribution</div>
+                    <div class="kpi-detail-value">62%</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">Proof Type</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Recipes Remaining</div>
+                    <div class="kpi-detail-value">4 of 8</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Shrinkage Factor</div>
+                    <div class="kpi-detail-value">32%</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">Traffic Saved</div>
+                </div>
+            </div>
+
+            <!-- Guidance -->
+            <div class="guidance-box">
+                Shrinkage means the model borrows signal from similar combinations, so it needs less traffic to find winners. A 32% savings means you'd have needed 32% more visitors without it.
+            </div>
+
+            <!-- Matrix Leaderboard -->
+            <div class="detail-section">
+                <div class="detail-section-title">Top Recipes Leaderboard</div>
+                <ul class="leaderboard">
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">1.</span>
+                        <span class="leaderboard-name">Recipe #3 (Video + Table + Peer Review)</span>
+                        <span class="leaderboard-prob">71%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">2.</span>
+                        <span class="leaderboard-name">Recipe #1 (Video + List + Expert)</span>
+                        <span class="leaderboard-prob">48%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">3.</span>
+                        <span class="leaderboard-name">Recipe #4 (Image + Grid + Lab)</span>
+                        <span class="leaderboard-prob">35%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">4.</span>
+                        <span class="leaderboard-name">Recipe #5 (Video + Grid + Lab)</span>
+                        <span class="leaderboard-prob">22%</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Interaction Heatmap -->
+            <div class="detail-section">
+                <div class="detail-section-title">Interaction Heatmap (Synergies & Clashes)</div>
+                <div class="matrix-container">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Layout</th>
+                                <th>Proof Type</th>
+                                <th>Trust Signal</th>
+                                <th>Effect</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Table</td>
+                                <td>Video</td>
+                                <td>Peer Review</td>
+                                <td class="heat-positive">+12%</td>
+                            </tr>
+                            <tr>
+                                <td>List</td>
+                                <td>Video</td>
+                                <td>Expert Quote</td>
+                                <td class="heat-positive">+8%</td>
+                            </tr>
+                            <tr>
+                                <td>Grid</td>
+                                <td>Image</td>
+                                <td>Lab Results</td>
+                                <td class="heat-negative">-6%</td>
+                            </tr>
+                            <tr>
+                                <td>Bullets</td>
+                                <td>Image</td>
+                                <td>Lab Results</td>
+                                <td class="heat-negative">-9%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Element Contribution -->
+            <div class="detail-section">
+                <div class="detail-section-title">Element Contribution Breakdown</div>
+                <div class="bar-chart">
+                    <div class="bar-label">Proof Type</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 62%; background: var(--differentiation);">62%</div>
+                    </div>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-label">Layout</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 28%; background: var(--accent);">28%</div>
+                    </div>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-label">Trust Signal</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 10%; background: var(--primary-light);">10%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Decision Engine -->
+            <div class="detail-section">
+                <div class="detail-section-title">Decision Engine Status</div>
+                <div class="version-row">
+                    <div class="version-label">Status</div>
+                    <div class="version-cell">Active — Optimizing Recipes</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Statistical Method</div>
+                    <div class="version-cell">Bayesian MVT with Shrinkage</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Next Review</div>
+                    <div class="version-cell">Week 3</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-secondary">⏸ Pause Experiment</button>
+                <button class="btn-secondary">📊 Declare & Launch Recipe #3</button>
+                <button class="btn-secondary">⬇ Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. CONVERSION A/B+MAB DETAIL -->
+    <div class="overlay-panel" id="detail-conversion-mab">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">CTA Urgency Test</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Conversion → A/B+MAB Test → Day 8/14</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Bandit Confidence</div>
+                    <div class="kpi-detail-value">88%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Revenue Gained from Bandit</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+$1,840</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Expected Loss</div>
+                    <div class="kpi-detail-value">0.04%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Auto-Deploy Ready When</div>
+                    <div class="kpi-detail-value">< 0.01%</div>
+                </div>
+            </div>
+
+            <!-- Guidance -->
+            <div class="guidance-box">
+                The Multi-Armed Bandit (MAB) automatically sends more visitors to whichever version is performing better — in real time. This means you earn more revenue during the test instead of splitting evenly and losing money on the weaker version.
+            </div>
+
+            <!-- Traffic Allocation -->
+            <div class="detail-section">
+                <div class="detail-section-title">Real-Time Traffic Allocation</div>
+                <div class="bar-chart" style="margin-bottom: 12px;">
+                    <div class="bar-label">Current Split</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 28%; background: var(--primary-light);">A: 28%</div>
+                        <div class="bar-segment" style="width: 72%; background: var(--success);">B: 72%</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light);">Bandit shifted traffic on Day 3 when B showed early signal. This dynamic allocation protects your revenue.</div>
+            </div>
+
+            <!-- Conversions Gained -->
+            <div class="detail-section">
+                <div class="detail-section-title">Additional Conversions from Bandit Optimization</div>
+                <div class="version-row">
+                    <div class="version-label">Extra Conversions</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">+47</div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">If we'd used fixed 50/50 split, you would have lost 47 conversions worth ~$1,840 in revenue.</div>
+            </div>
+
+            <!-- Expected Loss Chart -->
+            <div class="detail-section">
+                <div class="detail-section-title">Expected Loss to Auto-Deploy Threshold</div>
+                <div class="bar-chart">
+                    <div class="bar-label">Current</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 80%; background: var(--warning);">0.04%</div>
+                    </div>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-label">Threshold</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 20%; background: var(--success);">0.01%</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">You're 75% of the way there. Expected Loss needs to drop below 0.01% before the system auto-deploys the winner.</div>
+            </div>
+
+            <!-- Version Comparison -->
+            <div class="detail-section">
+                <div class="detail-section-title">Version Performance</div>
+                <div class="version-row">
+                    <div class="version-label">Variant</div>
+                    <div class="version-cell"><strong>A (Standard)</strong></div>
+                    <div class="version-cell"><strong>B (Urgency) ✓</strong></div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Conversion Rate</div>
+                    <div class="version-cell">2.8%</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">3.2% (+15.2%)</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Sessions Received</div>
+                    <div class="version-cell">1,792</div>
+                    <div class="version-cell">4,628</div>
+                </div>
+            </div>
+
+            <!-- Decision Engine -->
+            <div class="detail-section">
+                <div class="detail-section-title">Decision Engine Status</div>
+                <div class="version-row">
+                    <div class="version-label">Status</div>
+                    <div class="version-cell">Active — MAB Optimizing</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Statistical Method</div>
+                    <div class="version-cell">Thompson Sampling + Bandit</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Auto-Deploy Likely</div>
+                    <div class="version-cell">Day 12-13</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-secondary">⏸ Pause Experiment</button>
+                <button class="btn-secondary">🚀 Deploy Version B Now</button>
+                <button class="btn-secondary">⬇ Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. LOYALTY MVT DETAIL -->
+    <div class="overlay-panel" id="detail-loyalty-mvt">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Re-engagement Recipe</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Loyalty → Multivariate Test → Week 1/3</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winning Probability</div>
+                    <div class="kpi-detail-value">62%</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">Recipe #2</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">LTV Lift Estimate</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+$8.40</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">per customer</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Personalization Strength</div>
+                    <div class="kpi-detail-value">3.2x</div>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">vs control</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">CRM Sync Status</div>
+                    <div style="margin-top: 6px;">
+                        <span class="status-indicator status-connected"></span>
+                        <span style="font-size: 12px;">Connected</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guidance -->
+            <div class="guidance-box">
+                This test shows how different customer segments respond to different loyalty strategies. The winning recipe may differ by tier — VIPs want recognition, while newer customers respond to discounts.
+            </div>
+
+            <!-- Segment Performance -->
+            <div class="detail-section">
+                <div class="detail-section-title">Segment Performance Breakdown</div>
+                <table class="segment-table">
+                    <thead>
+                        <tr>
+                            <th>Customer Segment</th>
+                            <th>Preferred Strategy</th>
+                            <th>Re-engagement Lift</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>VIP Tier</strong></td>
+                            <td>Status Recognition</td>
+                            <td class="segment-lift">+8.1%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regular</strong></td>
+                            <td>Points Gamification</td>
+                            <td class="segment-lift">+4.2%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>New Customers</strong></td>
+                            <td>Welcome Discount</td>
+                            <td class="segment-lift">+6.7%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Top Recipes -->
+            <div class="detail-section">
+                <div class="detail-section-title">Top 3 Recipes by Winning Probability</div>
+                <ul class="leaderboard">
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">1.</span>
+                        <span class="leaderboard-name">Recipe #2 (Status + Points + Replenishment)</span>
+                        <span class="leaderboard-prob">62%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">2.</span>
+                        <span class="leaderboard-name">Recipe #5 (Formal + Points + Upsell)</span>
+                        <span class="leaderboard-prob">48%</span>
+                    </li>
+                    <li class="leaderboard-item">
+                        <span class="leaderboard-rank">3.</span>
+                        <span class="leaderboard-name">Recipe #1 (Casual + Discount + Community)</span>
+                        <span class="leaderboard-prob">35%</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Personalization Strength -->
+            <div class="detail-section">
+                <div class="detail-section-title">Personalization Strength Breakdown</div>
+                <div class="bar-chart">
+                    <div class="bar-label">First Name Usage</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 56%; background: var(--loyalty);">+1.8x</div>
+                    </div>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-label">Past Purchase Reference</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 75%; background: var(--loyalty);">+2.4x</div>
+                    </div>
+                </div>
+                <div class="bar-chart">
+                    <div class="bar-label">Tier Mention</div>
+                    <div class="bar-container">
+                        <div class="bar-segment" style="width: 34%; background: var(--loyalty);">+1.1x</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRM Sync -->
+            <div class="detail-section">
+                <div class="detail-section-title">CRM Data Sync Status</div>
+                <div class="version-row">
+                    <div class="version-label">Status</div>
+                    <div class="version-cell">
+                        <span class="status-indicator status-connected"></span>
+                        <span>Connected & Syncing</span>
+                    </div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Data Sources</div>
+                    <div class="version-cell">Shopify + Klaviyo</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Segments Updated</div>
+                    <div class="version-cell">Real-time</div>
+                </div>
+            </div>
+
+            <!-- Decision Engine -->
+            <div class="detail-section">
+                <div class="detail-section-title">Decision Engine Status</div>
+                <div class="version-row">
+                    <div class="version-label">Status</div>
+                    <div class="version-cell">Active — Segment Learning</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Statistical Method</div>
+                    <div class="version-cell">Bayesian MVT with Segment Priors</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Next Review</div>
+                    <div class="version-cell">Week 2</div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-buttons">
+                <button class="btn-secondary">⏸ Pause Experiment</button>
+                <button class="btn-secondary">📊 Declare & Launch Recipe #2</button>
+                <button class="btn-secondary">⬇ Export Results</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETED DETAIL MODALS (5) -->
+
+    <!-- detail-completed-1 -->
+    <div class="overlay-panel" id="detail-completed-1">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Homepage Hero Redesign</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Completed → A/B Test → 18 days</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winner</div>
+                    <div class="kpi-detail-value">Version B</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Confidence Level</div>
+                    <div class="kpi-detail-value">95%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+18.3%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">24,512</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Version Comparison</div>
+                <div class="version-row">
+                    <div class="version-label">Conversion Rate</div>
+                    <div class="version-cell">Version A: 2.1%</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">Version B: 2.49% ✓</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Key Changes in Winner</div>
+                <div style="font-size: 13px; line-height: 1.6; color: var(--text);">
+                    <ul style="margin-left: 20px; padding: 0;">
+                        <li>Larger, more compelling hero image</li>
+                        <li>Simplified headline (removed jargon)</li>
+                        <li>Improved CTA contrast and placement</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="action-buttons">
+                    <button class="btn-secondary">📊 View Full Report</button>
+                    <button class="btn-secondary">⬇ Export Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- detail-completed-2 -->
+    <div class="overlay-panel" id="detail-completed-2">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Add-to-Cart Button Color</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Completed → A/B Test → 14 days</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winner</div>
+                    <div class="kpi-detail-value">Version A</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Confidence Level</div>
+                    <div class="kpi-detail-value">92%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+11.5%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">18,934</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Version Details</div>
+                <div class="version-row">
+                    <div class="version-label">Version A</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">Teal (#00B4D8) ✓</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Version B</div>
+                    <div class="version-cell">Orange (#F77F00)</div>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 24px;">
+                <button class="btn-secondary">📊 View Full Report</button>
+                <button class="btn-secondary">⬇ Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- detail-completed-3 -->
+    <div class="overlay-panel" id="detail-completed-3">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Product Page Social Proof</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Completed → MVT → 22 days</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winner</div>
+                    <div class="kpi-detail-value">Recipe 4</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Confidence Level</div>
+                    <div class="kpi-detail-value">88%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+7.2%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">31,248</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Winning Recipe</div>
+                <div style="font-size: 13px; line-height: 1.6; color: var(--text);">
+                    <strong>Recipe 4:</strong> Star Ratings + Review Count + Trust Badges
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 24px;">
+                <button class="btn-secondary">📊 View Full Report</button>
+                <button class="btn-secondary">⬇ Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- detail-completed-4 -->
+    <div class="overlay-panel" id="detail-completed-4">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Checkout Form Length</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Completed → A/B Test → 21 days</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winner</div>
+                    <div class="kpi-detail-value">Version B</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Confidence Level</div>
+                    <div class="kpi-detail-value">94%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+13.8%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">28,456</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Version Comparison</div>
+                <div class="version-row">
+                    <div class="version-label">Version A</div>
+                    <div class="version-cell">8-field form</div>
+                </div>
+                <div class="version-row">
+                    <div class="version-label">Version B</div>
+                    <div class="version-cell" style="color: var(--success); font-weight: 600;">4-field form (Multi-step) ✓</div>
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 24px;">
+                <button class="btn-secondary">📊 View Full Report</button>
+                <button class="btn-secondary">⬇ Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- detail-completed-5 -->
+    <div class="overlay-panel" id="detail-completed-5">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Email Welcome Series</div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Completed → MVT → 28 days</div>
+            </div>
+            <button class="btn-close" onclick="hideDetailModal()">×</button>
+        </div>
+        <div class="overlay-content">
+            <div class="kpi-grid">
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Winner</div>
+                    <div class="kpi-detail-value">Recipe 2</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Confidence Level</div>
+                    <div class="kpi-detail-value">91%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Conversion Lift</div>
+                    <div class="kpi-detail-value" style="color: var(--success);">+9.6%</div>
+                </div>
+                <div class="kpi-detail-card">
+                    <div class="kpi-detail-label">Total Sessions</div>
+                    <div class="kpi-detail-value">35,892</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Winning Recipe</div>
+                <div style="font-size: 13px; line-height: 1.6; color: var(--text);">
+                    <strong>Recipe 2:</strong> Welcome Discount (20%) + Product Recommendation + Social Proof
+                </div>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 24px;">
+                <button class="btn-secondary">📊 View Full Report</button>
+                <button class="btn-secondary">⬇ Export Data</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WIZARD OVERLAY -->
+    <div class="wizard-overlay" id="wizard-overlay" onclick="hideWizard(event)"></div>
+
+    <!-- WIZARD PANEL -->
+    <div class="wizard-panel" id="wizard-panel" onclick="event.stopPropagation()">
+        <div class="wizard-header">
+            <div class="wizard-title">Create New Experiment</div>
+            <button class="btn-close" onclick="hideWizard()">×</button>
+        </div>
+
+        <div class="wizard-content">
+            <!-- STEP 0: Page Selector -->
+            <div class="wizard-step active" id="wizard-step-0">
+                <div class="step-guidance">
+                    Which page should I test? Each page has specific elements that drive conversions. Choose the page where you want to run your experiment.
+                </div>
+
+                <div class="page-cards">
+                    <div class="page-card" onclick="selectPage('awareness'); nextStep()">
+                        <div class="page-card-icon">🎯</div>
+                        <div class="page-card-title">Awareness</div>
+                        <div class="page-card-desc">Landing page, headline, hero image — first impression.</div>
+                    </div>
+                    <div class="page-card" onclick="selectPage('differentiation'); nextStep()">
+                        <div class="page-card-icon">✨</div>
+                        <div class="page-card-title">Differentiation</div>
+                        <div class="page-card-desc">Product page, proof, competitive advantage.</div>
+                    </div>
+                    <div class="page-card" onclick="selectPage('conversion'); nextStep()">
+                        <div class="page-card-icon">💳</div>
+                        <div class="page-card-title">Conversion</div>
+                        <div class="page-card-desc">Checkout page, offer, form, urgency.</div>
+                    </div>
+                    <div class="page-card" onclick="selectPage('loyalty'); nextStep()">
+                        <div class="page-card-icon">❤️</div>
+                        <div class="page-card-title">Loyalty</div>
+                        <div class="page-card-desc">Post-purchase, re-engagement, rewards.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 1: Type Picker -->
+            <div class="wizard-step" id="wizard-step-1">
+                <div class="step-guidance">
+                    What type of test do you want to run? A/B tests one change at a time (faster results). MVT tests multiple elements together (better insights). Choose based on what you want to learn.
+                </div>
+
+                <div class="type-cards">
+                    <div class="type-card" onclick="selectType('ab'); nextStep()">
+                        <div class="type-card-title">A/B Test</div>
+                        <div class="type-card-desc">Test one element with two versions. Fastest way to get clear winners.</div>
+                        <div class="type-card-rec">✓ Recommended for first-time testers</div>
+                    </div>
+                    <div class="type-card" onclick="selectType('mvt'); nextStep()">
+                        <div class="type-card-title">Multivariate (MVT)</div>
+                        <div class="type-card-desc">Test multiple elements + combinations. Find the perfect recipe.</div>
+                        <div class="type-card-rec">✓ For experienced teams</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 2A: A/B Element Selection -->
+            <div class="wizard-step" id="wizard-step-2a">
+                <div class="step-guidance">
+                    What element would you like to test? Choose from pre-defined categories or create a custom test. Each category explains why testing it matters.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Element Category</label>
+                    <select class="form-select" id="ab-category" onchange="updateABElements()">
+                        <option value="">Select a category...</option>
+                        <option value="message" data-page="awareness">Core Message & Hook (Emotional Drivers)</option>
+                        <option value="visual" data-page="awareness">Visual Identity (First Impression)</option>
+                        <option value="proof" data-page="awareness">Social Proof & Trust (Credibility)</option>
+                        <option value="action" data-page="awareness">Action & Conversion Path (The Soft Close)</option>
+                        <option value="offer" data-page="conversion">Offer & Pricing (The "Deal")</option>
+                        <option value="urgency" data-page="conversion">Urgency & Scarcity (The "Push")</option>
+                        <option value="friction" data-page="conversion">Form & Friction (The "Ease")</option>
+                        <option value="cta" data-page="conversion">Call to Action (The "Final Step")</option>
+                        <option value="custom">+ Custom Element</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Specific Element</label>
+                    <select class="form-select" id="ab-element">
+                        <option value="">Select element...</option>
+                        <option value="headline">Headline</option>
+                        <option value="subheading">Subheading</option>
+                        <option value="button">Button</option>
+                    </select>
+                </div>
+
+                <div class="element-guidance" id="ab-guidance">
+                    Select a category and element to see guidance on why testing it matters and what results you can expect.
+                </div>
+
+                <button class="btn-primary" style="margin-top: 16px; width: 100%;" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- STEP 2B: MVT Element + Variation Selection -->
+            <div class="wizard-step" id="wizard-step-2b">
+                <div class="step-guidance">
+                    For MVT, we test combinations of elements. The system will automatically suggest strategic variation pairs based on your selection. Choose the element to test.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Element to Test</label>
+                    <select class="form-select" id="mvt-element">
+                        <option value="">Select element...</option>
+                        <option value="greeting" data-page="loyalty">Greeting Style</option>
+                        <option value="history" data-page="loyalty">Purchase History Reference</option>
+                        <option value="reward" data-page="loyalty">Loyalty Reward Type</option>
+                        <option value="format" data-page="differentiation">Comparison Format</option>
+                        <option value="evidence" data-page="differentiation">Customer Evidence Type</option>
+                        <option value="demo" data-page="differentiation">Product Demo Style</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Variations (Suggested)</label>
+                    <select class="form-select" id="mvt-variations" multiple size="4">
+                        <option value="var1" selected>Variation 1</option>
+                        <option value="var2" selected>Variation 2</option>
+                        <option value="var3">Variation 3</option>
+                        <option value="var4">Variation 4</option>
+                    </select>
+                    <div style="font-size: 12px; color: var(--text-light); margin-top: 6px;">Hold Ctrl/Cmd to select multiple variations</div>
+                </div>
+
+                <div class="element-guidance">
+                    The system suggests variation pairs based on industry best practices. You can select 2-4 variations. More variations = more data needed, but better insights.
+                </div>
+
+                <button class="btn-primary" style="margin-top: 16px; width: 100%;" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- STEP 3: Traffic Allocation -->
+            <div class="wizard-step" id="wizard-step-3">
+                <div class="step-guidance">
+                    How should traffic be split between versions? 50/50 gives you the fastest answer. Bandit is smarter — it sends more traffic to whoever's winning, protecting your revenue during the test.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Traffic Allocation</label>
+                    <select class="form-select">
+                        <option value="50-50">50/50 Split (Fixed, Fastest)</option>
+                        <option value="bandit">Bandit (Dynamic, Revenue-Optimized)</option>
+                        <option value="custom">Custom Split...</option>
+                    </select>
+                </div>
+
+                <div class="element-guidance">
+                    50/50 split means each version gets exactly half the visitors. Bandit learns in real-time and shifts traffic to the winner, so you lose less revenue while testing.
+                </div>
+
+                <button class="btn-primary" style="margin-top: 16px; width: 100%;" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- STEP 4: Metrics -->
+            <div class="wizard-step" id="wizard-step-4">
+                <div class="step-guidance">
+                    Which metric should we measure? Pick the one that best reflects your goal. Each metric has different sample size requirements.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Primary Metric</label>
+                    <select class="form-select">
+                        <option value="conversion">Conversion Rate (Fastest to decide)</option>
+                        <option value="revenue">Revenue per Visitor (Most valuable)</option>
+                        <option value="ctr">Click-Through Rate</option>
+                        <option value="ltv">Lifetime Value (Longest to measure)</option>
+                    </select>
+                </div>
+
+                <div class="element-guidance">
+                    Conversion Rate is easiest to detect changes in (faster results). Revenue and LTV capture more business impact but need more data. Choose based on your business goal.
+                </div>
+
+                <button class="btn-primary" style="margin-top: 16px; width: 100%;" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- STEP 5: Statistical Rigor -->
+            <div class="wizard-step" id="wizard-step-5">
+                <div class="step-guidance">
+                    How certain do you want to be before we declare a winner? 95% confidence means there's only a 5% chance the result is a fluke. Higher confidence = more certain, but takes longer.
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Confidence Level</label>
+                    <select class="form-select">
+                        <option value="90">90% (Faster, slightly riskier)</option>
+                        <option value="95" selected>95% (Standard, balanced)</option>
+                        <option value="99">99% (Rigorous, slower)</option>
+                    </select>
+                </div>
+
+                <div class="element-guidance">
+                    At 95% confidence, you're 95% sure the winner is truly better. Most teams use 95% as the standard. Only go to 99% if you're testing something with big business impact.
+                </div>
+
+                <button class="btn-primary" style="margin-top: 16px; width: 100%;" onclick="nextStep()">Next</button>
+            </div>
+
+            <!-- STEP 6: Launch Confirmation -->
+            <div class="wizard-step" id="wizard-step-6">
+                <div class="step-guidance">
+                    You're ready to launch! Review your settings and confirm to start the experiment.
+                </div>
+
+                <div style="background: var(--bg); padding: 16px; border-radius: var(--radius); margin-bottom: 16px;">
+                    <div style="font-size: 13px; line-height: 1.8;">
+                        <div><strong>Page:</strong> <span id="review-page">-</span></div>
+                        <div><strong>Test Type:</strong> <span id="review-type">-</span></div>
+                        <div><strong>Element:</strong> <span id="review-element">-</span></div>
+                        <div><strong>Metric:</strong> Conversion Rate</div>
+                        <div><strong>Confidence:</strong> 95%</div>
+                    </div>
+                </div>
+
+                <div class="element-guidance">
+                    Estimated time to results: 5-14 days depending on traffic. You can pause or adjust the experiment anytime.
+                </div>
+            </div>
+        </div>
+
+        <div class="wizard-footer">
+            <div class="wizard-nav">
+                <button class="btn-secondary-small" id="btn-prev" onclick="prevStep()" disabled>← Back</button>
+                <button class="btn-secondary-small" id="btn-next" onclick="nextStep()">Next →</button>
+            </div>
+            <button class="btn-primary" id="btn-launch" style="display: none;" onclick="launchExperiment()">🚀 Launch Experiment</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = '';
+        let currentType = '';
+        let currentStep = 0;
+        const totalSteps = 7;
+
+        function selectPage(page) {
+            currentPage = page;
+            document.querySelectorAll('.page-card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.page-card').classList.add('selected');
+        }
+
+        function selectType(type) {
+            currentType = type;
+            document.querySelectorAll('.type-card').forEach(card => card.classList.remove('selected'));
+            event.target.closest('.type-card').classList.add('selected');
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                updateWizardUI();
+            } else {
+                launchExperiment();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateWizardUI();
+            }
+        }
+
+        function updateWizardUI() {
+            document.querySelectorAll('.wizard-step').forEach(step => step.classList.remove('active'));
+
+            if (currentType === 'ab' && currentStep === 2) {
+                document.getElementById('wizard-step-2a').classList.add('active');
+            } else if (currentType === 'mvt' && currentStep === 2) {
+                document.getElementById('wizard-step-2b').classList.add('active');
+            } else {
+                document.getElementById(`wizard-step-${currentStep}`).classList.add('active');
+            }
+
+            document.getElementById('btn-prev').disabled = currentStep === 0;
+
+            if (currentStep === totalSteps - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-launch').style.display = 'block';
+                updateReview();
+            } else {
+                document.getElementById('btn-next').style.display = 'block';
+                document.getElementById('btn-launch').style.display = 'none';
+            }
+        }
+
+        function updateReview() {
+            document.getElementById('review-page').textContent = currentPage.charAt(0).toUpperCase() + currentPage.slice(1);
+            document.getElementById('review-type').textContent = currentType === 'ab' ? 'A/B Test' : 'Multivariate';
+            document.getElementById('review-element').textContent = document.getElementById('ab-element')?.value || document.getElementById('mvt-element')?.value || 'Custom';
+        }
+
+        function updateABElements() {
+            const category = document.getElementById('ab-category').value;
+            const elementSelect = document.getElementById('ab-element');
+            const guidance = document.getElementById('ab-guidance');
+
+            const elements = {
+                message: ['Primary Value Proposition', 'Narrative Angle', 'Headline Urgency', 'Tone of Voice'],
+                visual: ['Hero Image Style', 'Video vs Static', 'Color Palette', 'Illustration vs Photo'],
+                proof: ['Social Proof Type', 'Authority Signal', 'Case Study vs Quote'],
+                action: ['Primary Offer', 'CTA Language', 'Lead Magnet Format'],
+                offer: ['Discount Strategy', 'Pricing Display', 'Free Trial vs Freemium', 'Payment Incentives'],
+                urgency: ['Time-Limited Offer', 'Stock Availability', 'Bonus Offer'],
+                friction: ['Form Length', 'Single vs Multi-step', 'Guest vs Account', 'Field Requirements'],
+                cta: ['CTA Copy', 'CTA Visual Weight', 'Sticky vs Inline']
+            };
+
+            elementSelect.innerHTML = '<option value="">Select element...</option>';
+            if (elements[category]) {
+                elements[category].forEach(el => {
+                    const opt = document.createElement('option');
+                    opt.value = el.toLowerCase();
+                    opt.textContent = el;
+                    elementSelect.appendChild(opt);
+                });
+                guidance.textContent = `Testing ${category} is important because it directly affects how prospects perceive your value. Results typically show 3-15% uplift.`;
+            }
+        }
+
+        function launchExperiment() {
+            hideWizard();
+            alert('Experiment launched! Check the Live Experiments table to monitor progress.');
+        }
+
+        function showWizard() {
+            currentStep = 0;
+            currentPage = '';
+            currentType = '';
+            document.getElementById('wizard-overlay').classList.add('active');
+            document.getElementById('wizard-panel').classList.add('active');
+            updateWizardUI();
+        }
+
+        function hideWizard(e) {
+            if (e && e.target.id !== 'wizard-overlay') return;
+            document.getElementById('wizard-overlay').classList.remove('active');
+            document.getElementById('wizard-panel').classList.remove('active');
+        }
+
+        function showExperimentDetail(detailId) {
+            // Hide all detail panels
+            document.querySelectorAll('.overlay-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+
+            // Show selected panel
+            document.getElementById(detailId).classList.add('active');
+            document.getElementById('overlay').classList.add('active');
+        }
+
+        function hideDetailModal() {
+            document.querySelectorAll('.overlay-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.getElementById('overlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
