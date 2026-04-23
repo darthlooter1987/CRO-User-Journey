@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO A/B Testing V1.1 A — Revmatics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E5090; --primary-light: #4A7BC7; --primary-dark: #1E3A6E;
+            --accent: #00B4D8; --accent2: #F77F00; --success: #06D6A0;
+            --warning: #FFD166; --danger: #FF6B6B;
+            --bg: #F8FAFC; --card: #FFFFFF; --text: #1E293B; --text-light: #64748B;
+            --border: #E2E8F0; --radius: 12px; --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --awareness: #4A7BC7; --differentiation: #F77F00; --conversion: #06D6A0; --loyalty: #9B5DE5;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+
+        /* ── TOPNAV ── */
+        .topnav {
+            position:fixed; top:0; left:0; right:0; height:56px; z-index:100;
+            background:linear-gradient(135deg,var(--primary-dark),var(--primary));
+            display:flex; align-items:center; padding:0 24px; gap:16px;
+        }
+        .topnav .logo { color:#fff; font-weight:800; font-size:18px; letter-spacing:-0.5px; }
+        .topnav .logo span { color:var(--accent); }
+        .topnav .sep { color:rgba(255,255,255,0.3); }
+        .topnav .section-label { color:rgba(255,255,255,0.7); font-size:13px; font-weight:500; }
+        .topnav .right { margin-left:auto; display:flex; align-items:center; gap:12px; }
+        .topnav .avatar { width:32px; height:32px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            position:fixed; top:56px; left:0; bottom:0; width:220px; z-index:90;
+            background:var(--card); border-right:1px solid var(--border); padding:20px 0;
+            display:flex; flex-direction:column;
+        }
+        .sidebar .nav-group { padding:0 16px; margin-bottom:20px; }
+        .sidebar .nav-group-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); padding:0 8px; margin-bottom:8px; }
+        .sidebar .nav-item {
+            display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px;
+            font-size:13px; font-weight:500; color:var(--text-light); cursor:pointer; transition:all .15s;
+        }
+        .sidebar .nav-item:hover { background:#F1F5F9; color:var(--text); }
+        .sidebar .nav-item.active { background:#EEF2FF; color:var(--primary); font-weight:600; }
+        .sidebar .nav-item .icon { font-size:16px; width:20px; text-align:center; }
+
+        /* ── MAIN AREA ── */
+        .main { margin-left:220px; margin-top:56px; padding:28px 32px 60px; min-height:calc(100vh - 56px); }
+
+        /* ── SCREEN CONTAINERS ── */
+        .screen { display:none; animation:fadeIn .3s ease; }
+        .screen.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+
+        /* ── COMMON ELEMENTS ── */
+        .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+        .page-header h1 { font-size:22px; font-weight:800; color:var(--primary-dark); }
+        .btn {
+            display:inline-flex; align-items:center; gap:6px; padding:10px 20px; border-radius:8px;
+            font-size:13px; font-weight:600; border:none; cursor:pointer; transition:all .15s;
+        }
+        .btn-primary { background:var(--primary); color:#fff; }
+        .btn-primary:hover { background:var(--primary-dark); }
+        .btn-secondary { background:#EEF2FF; color:var(--primary); border:1px solid #C7D7F8; }
+        .btn-secondary:hover { background:#DBEAFE; }
+        .btn-success { background:var(--success); color:#fff; }
+        .btn-success:hover { background:#05C090; }
+        .btn-disabled { background:#F1F5F9; color:#94A3B8; cursor:not-allowed; pointer-events:none; }
+        .btn-danger { background:#FEF2F2; color:var(--danger); border:1px solid #FECACA; }
+        .btn-sm { padding:6px 14px; font-size:12px; }
+
+        .card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+        .badge {
+            display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:12px;
+            font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;
+        }
+        .badge-running { background:#DCFCE7; color:#166534; }
+        .badge-paused { background:#FEF3C7; color:#92400E; }
+        .badge-completed { background:#DBEAFE; color:#1E40AF; }
+        .badge-draft { background:#F3F4F6; color:#6B7280; }
+        .badge-winner { background:#FDF2F8; color:#BE185D; }
+        .funnel-badge { padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+        .funnel-awareness { background:#EEF2FF; color:var(--awareness); }
+        .funnel-differentiation { background:#FFF7ED; color:var(--differentiation); }
+        .funnel-conversion { background:#ECFDF5; color:var(--conversion); }
+        .funnel-loyalty { background:#F5F3FF; color:var(--loyalty); }
+
+        .warning-banner {
+            background:#FFFBEB; border:1px solid #FDE68A; border-radius:8px; padding:12px 16px;
+            font-size:13px; color:#92400E; display:flex; align-items:flex-start; gap:8px; margin-bottom:16px;
+        }
+
+        /* ── SCREEN 1: EXPERIMENT LIST ── */
+        .kpi-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+        .kpi-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 20px; }
+        .kpi-card .kpi-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-light); margin-bottom:4px; }
+        .kpi-card .kpi-value { font-size:24px; font-weight:800; color:var(--primary-dark); }
+        .kpi-card .kpi-sub { font-size:12px; color:var(--text-light); margin-top:2px; }
+
+        .list-toolbar { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+        .search-input {
+            flex:1; min-width:200px; padding:9px 14px 9px 36px; border:1px solid var(--border);
+            border-radius:8px; font-size:13px; background:var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85zm-5.44.156a5 5 0 1 1 0-10 5 5 0 0 1 0 10z'/%3E%3C/svg%3E") no-repeat 12px center;
+            outline:none; transition:border-color .15s;
+        }
+        .search-input:focus { border-color:var(--primary-light); }
+        .filter-select {
+            padding:9px 14px; border:1px solid var(--border); border-radius:8px;
+            font-size:13px; background:var(--card); color:var(--text); outline:none; cursor:pointer;
+        }
+
+        .exp-table { width:100%; border-collapse:collapse; }
+        .exp-table thead { background:#F8FAFC; }
+        .exp-table th {
+            padding:12px 16px; text-align:left; font-size:11px; font-weight:700;
+            text-transform:uppercase; letter-spacing:0.5px; color:var(--text-light);
+            border-bottom:2px solid var(--border); cursor:pointer; white-space:nowrap;
+            user-select:none;
+        }
+        .exp-table th:hover { color:var(--text); }
+        .exp-table td { padding:14px 16px; border-bottom:1px solid var(--border); font-size:13px; vertical-align:middle; }
+        .exp-table tbody tr { cursor:pointer; transition:background .1s; }
+        .exp-table tbody tr:hover { background:#F8FAFC; }
+        .exp-name { font-weight:600; color:var(--text); }
+        .exp-type { font-size:12px; color:var(--text-light); }
+        .pulse-dot { width:8px; height:8px; border-radius:50%; background:#22C55E; display:inline-block; margin-right:6px; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        .lift-positive { color:#16A34A; font-weight:600; }
+        .lift-negative { color:var(--danger); font-weight:600; }
+        .lift-neutral { color:var(--text-light); }
+
+        /* ── SCREEN 2: PAGE SELECTION ── */
+        .wizard-progress {
+            display:flex; align-items:center; gap:0; margin-bottom:32px; padding:0 20px;
+        }
+        .wiz-step {
+            display:flex; align-items:center; gap:8px; font-size:12px; font-weight:600;
+            color:var(--text-light); white-space:nowrap;
+        }
+        .wiz-step.active { color:var(--primary); }
+        .wiz-step.done { color:var(--success); }
+        .wiz-step .step-num {
+            width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+            font-size:12px; font-weight:700; border:2px solid var(--border); background:var(--card); color:var(--text-light);
+        }
+        .wiz-step.active .step-num { border-color:var(--primary); background:var(--primary); color:#fff; }
+        .wiz-step.done .step-num { border-color:var(--success); background:var(--success); color:#fff; }
+        .wiz-connector { flex:1; height:2px; background:var(--border); margin:0 8px; min-width:20px; }
+        .wiz-connector.done { background:var(--success); }
+
+        .page-cards { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-bottom:24px; }
+        .page-card {
+            background:var(--card); border:2px solid var(--border); border-radius:var(--radius);
+            padding:24px; cursor:pointer; transition:all .2s; position:relative;
+        }
+        .page-card:hover { border-color:var(--primary-light); box-shadow:0 8px 32px rgba(0,0,0,0.1); transform:translateY(-2px); }
+        .page-card.selected { border-color:var(--primary); box-shadow:0 0 0 3px rgba(46,80,144,0.15); }
+        .page-card .check-mark {
+            position:absolute; top:12px; right:12px; width:24px; height:24px; border-radius:50%;
+            background:var(--primary); color:#fff; display:none; align-items:center; justify-content:center; font-size:14px;
+        }
+        .page-card.selected .check-mark { display:flex; }
+        .page-card .funnel-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:12px; }
+        .page-card .pc-title { font-size:16px; font-weight:700; margin-bottom:4px; }
+        .page-card .pc-stats { display:flex; gap:16px; margin:12px 0; }
+        .page-card .pc-stat { font-size:12px; color:var(--text-light); }
+        .page-card .pc-stat strong { color:var(--text); font-weight:700; }
+        .page-card .rec-badge { display:inline-flex; align-items:center; gap:4px; padding:4px 10px; border-radius:6px; font-size:11px; font-weight:600; margin-top:8px; }
+        .page-card .low-traffic-warn { background:#FFFBEB; border:1px solid #FDE68A; border-radius:6px; padding:8px 10px; font-size:11px; color:#92400E; margin-top:10px; }
+        .page-card .pre-selected-label { position:absolute; top:12px; left:12px; background:var(--primary); color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; }
+
+        /* ── SCREEN 3: VARIANT SETUP ── */
+        .setup-section { margin-bottom:28px; }
+        .setup-section-title { font-size:15px; font-weight:700; color:var(--primary-dark); margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+        .setup-section-title .step-badge { background:var(--primary); color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+
+        .hypothesis-input {
+            width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:10px;
+            font-size:14px; font-family:inherit; resize:vertical; min-height:60px; outline:none; transition:border-color .15s;
+        }
+        .hypothesis-input:focus { border-color:var(--primary-light); }
+        .hypothesis-hint { font-size:12px; color:var(--text-light); margin-top:6px; }
+
+        .element-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+        .element-card {
+            background:var(--card); border:2px solid var(--border); border-radius:10px; padding:16px;
+            cursor:pointer; transition:all .15s; position:relative;
+        }
+        .element-card:hover { border-color:var(--primary-light); }
+        .element-card.selected { border-color:var(--primary); background:#FAFBFF; }
+        .element-card .el-name { font-size:13px; font-weight:600; margin-bottom:4px; }
+        .element-card .el-desc { font-size:11px; color:var(--text-light); line-height:1.4; }
+        .impact-badge { position:absolute; top:8px; right:8px; font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; text-transform:uppercase; }
+        .impact-high { background:#FEE2E2; color:#DC2626; }
+        .impact-medium { background:#FEF3C7; color:#D97706; }
+        .impact-low { background:#F3F4F6; color:#6B7280; }
+
+        .ai-suggestions { background:#F0F7FF; border:1px solid #BFDBFE; border-radius:8px; padding:12px 16px; margin-top:12px; }
+        .ai-suggestions .ai-label { font-size:11px; font-weight:700; color:var(--primary); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+        .suggestion-item {
+            display:flex; align-items:center; gap:10px; padding:8px 12px; background:var(--card);
+            border:1px solid var(--border); border-radius:6px; margin-bottom:6px; font-size:13px; cursor:pointer; transition:all .1s;
+        }
+        .suggestion-item:hover { border-color:var(--primary-light); }
+        .suggestion-item.picked { border-color:var(--primary); background:#EEF2FF; }
+        .suggestion-item .pick-btn { margin-left:auto; font-size:11px; font-weight:600; color:var(--primary); }
+
+        .model-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .model-card {
+            background:var(--card); border:2px solid var(--border); border-radius:10px; padding:20px;
+            cursor:pointer; transition:all .2s; position:relative;
+        }
+        .model-card:hover { border-color:var(--primary-light); }
+        .model-card.selected { border-color:var(--primary); box-shadow:0 0 0 3px rgba(46,80,144,0.12); }
+        .model-card .mc-title { font-size:15px; font-weight:700; margin-bottom:6px; }
+        .model-card .mc-desc { font-size:13px; color:var(--text-light); line-height:1.5; }
+        .model-card .mc-default { position:absolute; top:10px; right:10px; font-size:10px; font-weight:700; background:#F3F4F6; color:#6B7280; padding:2px 8px; border-radius:4px; }
+        .model-card .mc-rec { position:absolute; top:10px; right:10px; font-size:10px; font-weight:700; background:#DCFCE7; color:#166534; padding:2px 8px; border-radius:4px; }
+
+        .split-display { display:flex; align-items:center; gap:20px; margin:12px 0; }
+        .split-bar { flex:1; height:32px; border-radius:8px; overflow:hidden; display:flex; }
+        .split-control { background:var(--primary); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; }
+        .split-variant { background:var(--accent); display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; }
+        .split-slider-wrap { margin-top:8px; }
+        .split-slider-wrap input[type=range] { width:100%; accent-color:var(--primary); }
+        .duration-estimate { background:#F0FDF4; border:1px solid #BBF7D0; border-radius:8px; padding:12px 16px; font-size:13px; color:#166534; margin-top:12px; }
+
+        /* ── LAUNCH SUMMARY ── */
+        .summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .summary-item { padding:14px 16px; background:#F8FAFC; border-radius:8px; border:1px solid var(--border); }
+        .summary-item .si-label { font-size:11px; font-weight:600; text-transform:uppercase; color:var(--text-light); margin-bottom:4px; }
+        .summary-item .si-value { font-size:14px; font-weight:600; color:var(--text); }
+
+        /* ── SCREEN 4: RESULTS ── */
+        .result-header { display:flex; align-items:center; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
+        .result-header .exp-title { font-size:20px; font-weight:800; color:var(--primary-dark); }
+        .result-meta { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .result-meta .meta-item { font-size:12px; color:var(--text-light); }
+
+        .variant-comparison { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+        .variant-card {
+            background:var(--card); border:2px solid var(--border); border-radius:var(--radius); padding:24px; position:relative;
+        }
+        .variant-card.winner-card { border-color:var(--success); }
+        .variant-card .vc-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-light); margin-bottom:12px; }
+        .variant-card .vc-metric { margin-bottom:14px; }
+        .variant-card .vc-metric .metric-label { font-size:12px; color:var(--text-light); margin-bottom:2px; }
+        .variant-card .vc-metric .metric-value { font-size:22px; font-weight:800; color:var(--text); }
+        .variant-card .vc-metric .metric-sub { font-size:12px; color:var(--text-light); }
+        .winner-badge-lg { position:absolute; top:12px; right:12px; background:#DCFCE7; color:#166534; padding:4px 12px; border-radius:6px; font-size:11px; font-weight:700; }
+
+        .stat-result-card {
+            background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px;
+        }
+        .confidence-bar-wrap { margin:16px 0; }
+        .confidence-bar { height:12px; background:#E2E8F0; border-radius:6px; position:relative; overflow:visible; }
+        .confidence-fill { height:100%; border-radius:6px; transition:width .5s; }
+        .confidence-threshold { position:absolute; top:-6px; bottom:-6px; width:2px; background:var(--text); }
+        .confidence-threshold::after { content:'95%'; position:absolute; top:-18px; left:-10px; font-size:10px; font-weight:600; color:var(--text); }
+
+        .chart-placeholder {
+            background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:24px;
+        }
+        .chart-area { height:200px; background:linear-gradient(180deg,#F8FAFC 0%,#EEF2FF 100%); border-radius:8px; position:relative; overflow:hidden; }
+        .chart-line { position:absolute; bottom:0; left:0; right:0; }
+        .chart-line svg { width:100%; height:200px; }
+
+        .breakdown-table { width:100%; border-collapse:collapse; font-size:13px; }
+        .breakdown-table th { padding:10px 14px; text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; color:var(--text-light); border-bottom:2px solid var(--border); background:#F8FAFC; }
+        .breakdown-table td { padding:10px 14px; border-bottom:1px solid var(--border); }
+
+        .next-test-card {
+            background:linear-gradient(135deg,#EEF2FF,#F0F7FF); border:1px solid #C7D7F8;
+            border-radius:var(--radius); padding:20px 24px; display:flex; align-items:center; gap:16px; margin-top:24px;
+        }
+        .next-test-card .ntc-text { flex:1; }
+        .next-test-card .ntc-text h4 { font-size:14px; font-weight:700; color:var(--primary-dark); margin-bottom:4px; }
+        .next-test-card .ntc-text p { font-size:13px; color:var(--text-light); }
+
+        /* ── CONFIRM MODAL ── */
+        .modal-backdrop {
+            display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:200;
+            align-items:center; justify-content:center;
+        }
+        .modal-backdrop.active { display:flex; }
+        .modal-box {
+            background:var(--card); border-radius:16px; padding:32px; max-width:480px; width:90%;
+            box-shadow:0 20px 60px rgba(0,0,0,0.2); animation:modalIn .25s ease;
+        }
+        @keyframes modalIn { from{opacity:0;transform:scale(0.95)} to{opacity:1;transform:scale(1)} }
+        .modal-box h3 { font-size:18px; font-weight:700; margin-bottom:8px; }
+        .modal-box p { font-size:14px; color:var(--text-light); line-height:1.6; margin-bottom:20px; }
+        .modal-actions { display:flex; gap:12px; justify-content:flex-end; }
+
+        /* ── PAID MEDIA NOTICE ── */
+        .media-notice {
+            background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:12px 16px;
+            font-size:13px; color:#1E40AF; margin-bottom:16px; display:flex; align-items:flex-start; gap:8px;
+        }
+
+        /* ── WIZARD NAV ── */
+        .wizard-nav { display:flex; justify-content:space-between; margin-top:24px; padding-top:20px; border-top:1px solid var(--border); }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px) {
+            .sidebar { display:none; }
+            .main { margin-left:0; }
+            .page-cards, .variant-comparison, .model-cards, .summary-grid, .element-grid { grid-template-columns:1fr; }
+            .kpi-strip { grid-template-columns:repeat(2,1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══ TOP NAV ═══ -->
+<nav class="topnav">
+    <div class="logo">Rev<span>matics</span></div>
+    <span class="sep">|</span>
+    <span class="section-label">A/B Testing Suite</span>
+    <div class="right">
+        <div class="avatar">A</div>
+    </div>
+</nav>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+    <div class="nav-group">
+        <div class="nav-group-label">Testing</div>
+        <div class="nav-item active" onclick="showScreen('list')">
+            <span class="icon">&#x1F9EA;</span> Experiments
+        </div>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-label">Pages</div>
+        <div class="nav-item"><span class="icon">&#x1F4E2;</span> Awareness</div>
+        <div class="nav-item"><span class="icon">&#x2696;</span> Differentiation</div>
+        <div class="nav-item"><span class="icon">&#x1F3AF;</span> Conversion</div>
+        <div class="nav-item"><span class="icon">&#x1F49C;</span> Loyalty</div>
+    </div>
+    <div class="nav-group">
+        <div class="nav-group-label">Integrations</div>
+        <div class="nav-item"><span class="icon">&#x1F4CA;</span> Google Ads</div>
+        <div class="nav-item"><span class="icon">&#x1F4F1;</span> Meta Ads</div>
+        <div class="nav-item"><span class="icon">&#x1F6D2;</span> Shopify</div>
+    </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 1: EXPERIMENT LIST (US-13)          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="main">
+<div class="screen active" id="screen-list">
+
+    <div class="page-header">
+        <h1>Experiments</h1>
+        <button class="btn btn-primary" onclick="showScreen('page-select')">+ Create New Experiment</button>
+    </div>
+
+    <!-- KPI Strip -->
+    <div class="kpi-strip">
+        <div class="kpi-card">
+            <div class="kpi-label">Running</div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-sub">active experiments</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Completed</div>
+            <div class="kpi-value">5</div>
+            <div class="kpi-sub">all time</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Avg. Lift</div>
+            <div class="kpi-value">+12.4%</div>
+            <div class="kpi-sub">across winners</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Total Sessions</div>
+            <div class="kpi-value">38,420</div>
+            <div class="kpi-sub">tested visitors</div>
+        </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="list-toolbar">
+        <input class="search-input" type="text" placeholder="Search experiments..." id="expSearch" oninput="filterExperiments()">
+        <select class="filter-select" id="filterStatus" onchange="filterExperiments()">
+            <option value="all">All Statuses</option>
+            <option value="running">Running</option>
+            <option value="paused">Paused</option>
+            <option value="completed">Completed</option>
+            <option value="draft">Draft</option>
+        </select>
+        <select class="filter-select" id="filterStage" onchange="filterExperiments()">
+            <option value="all">All Stages</option>
+            <option value="awareness">Awareness</option>
+            <option value="differentiation">Differentiation</option>
+            <option value="conversion">Conversion</option>
+            <option value="loyalty">Loyalty</option>
+        </select>
+    </div>
+
+    <!-- Experiment Table -->
+    <div class="card" style="overflow-x:auto;">
+        <table class="exp-table" id="expTable">
+            <thead>
+                <tr>
+                    <th>Experiment</th>
+                    <th>Page</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Control CVR</th>
+                    <th>Variant CVR</th>
+                    <th>Lift</th>
+                    <th>Last Modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Running -->
+                <tr data-status="running" data-stage="conversion" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Conversion — CTA Copy Test</div>
+                        <div class="exp-type">Hypothesis: If we change CTA copy, then CVR will improve</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-conversion">Conversion</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-running"><span class="pulse-dot"></span> Running</span></td>
+                    <td>3.2%</td>
+                    <td>4.1%</td>
+                    <td><span class="lift-positive">+28.1% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">2 hours ago</td>
+                </tr>
+                <tr data-status="running" data-stage="awareness" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Awareness — Hero Image Test</div>
+                        <div class="exp-type">Hypothesis: If we change hero image, then lead capture will improve</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-awareness">Awareness</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-running"><span class="pulse-dot"></span> Running</span></td>
+                    <td>1.8%</td>
+                    <td>2.0%</td>
+                    <td><span class="lift-positive">+11.1% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">5 hours ago</td>
+                </tr>
+                <!-- Completed - Winner Ready -->
+                <tr data-status="completed" data-stage="conversion" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Conversion — Price Display Format</div>
+                        <div class="exp-type">Hypothesis: If we change price display, then CVR will improve because of clarity</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-conversion">Conversion</span></td>
+                    <td>A/B</td>
+                    <td>
+                        <span class="badge badge-completed">Completed</span>
+                        <span class="badge badge-winner" style="margin-left:4px;">&#x1F3C6; Winner</span>
+                    </td>
+                    <td>2.9%</td>
+                    <td>3.8%</td>
+                    <td><span class="lift-positive">+31.0% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 18, 2026</td>
+                </tr>
+                <tr data-status="completed" data-stage="differentiation" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Differentiation — Comparison Table Layout</div>
+                        <div class="exp-type">Hypothesis: If we restructure comparison table, then CTR to cart will improve</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-differentiation">Differentiation</span></td>
+                    <td>A/B/n</td>
+                    <td><span class="badge badge-completed">Completed</span></td>
+                    <td>4.1%</td>
+                    <td>4.5%</td>
+                    <td><span class="lift-positive">+9.8% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 14, 2026</td>
+                </tr>
+                <tr data-status="completed" data-stage="loyalty" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Loyalty — Re-engagement CTA</div>
+                        <div class="exp-type">Hypothesis: If we personalize CTA, then repeat purchases will increase</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-loyalty">Loyalty</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-completed">Completed</span></td>
+                    <td>5.2%</td>
+                    <td>5.0%</td>
+                    <td><span class="lift-negative">-3.8% &#x2193;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 10, 2026</td>
+                </tr>
+                <!-- Paused -->
+                <tr data-status="paused" data-stage="awareness" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Awareness — Social Proof Block</div>
+                        <div class="exp-type">Hypothesis: If we add review quotes, then lead capture rate will improve</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-awareness">Awareness</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-paused">Paused</span></td>
+                    <td>1.8%</td>
+                    <td>1.9%</td>
+                    <td><span class="lift-neutral">+5.6%</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 8, 2026</td>
+                </tr>
+                <!-- Draft -->
+                <tr data-status="draft" data-stage="differentiation" onclick="showScreen('page-select')">
+                    <td>
+                        <div class="exp-name">Differentiation — Trust Badges</div>
+                        <div class="exp-type">Draft — not yet configured</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-differentiation">Differentiation</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-draft">Draft</span></td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="lift-neutral">—</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 6, 2026</td>
+                </tr>
+                <!-- Completed -->
+                <tr data-status="completed" data-stage="conversion" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Conversion — Urgency Elements</div>
+                        <div class="exp-type">Hypothesis: If we add countdown timer, then CVR will improve due to urgency</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-conversion">Conversion</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-completed">Completed</span></td>
+                    <td>3.1%</td>
+                    <td>3.6%</td>
+                    <td><span class="lift-positive">+16.1% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Apr 2, 2026</td>
+                </tr>
+                <tr data-status="completed" data-stage="awareness" onclick="showScreen('results')">
+                    <td>
+                        <div class="exp-name">Awareness — Headline Test</div>
+                        <div class="exp-type">Hypothesis: If we test benefit-first headline, then leads will increase</div>
+                    </td>
+                    <td><span class="funnel-badge funnel-awareness">Awareness</span></td>
+                    <td>A/B</td>
+                    <td><span class="badge badge-completed">Completed</span></td>
+                    <td>1.6%</td>
+                    <td>2.1%</td>
+                    <td><span class="lift-positive">+31.3% &#x2191;</span></td>
+                    <td style="font-size:12px;color:var(--text-light);">Mar 28, 2026</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 2: PAGE SELECTION (US-14)           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-page-select">
+
+    <div class="page-header">
+        <h1>Create New Experiment</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <!-- Wizard Progress -->
+    <div class="wizard-progress">
+        <div class="wiz-step active"><div class="step-num">1</div> Select Page</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">2</div> Hypothesis</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">3</div> Elements</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">4</div> Model</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">5</div> Traffic</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:8px;">Select the landing page you want to run an experiment on. Traffic estimates and recommended test types are shown for each page.</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">The system pre-selects the page with the highest traffic. You can override this — pick whichever page you want to improve.</p>
+
+    <div class="page-cards">
+        <!-- Awareness -->
+        <div class="page-card" onclick="selectPage(this, 'awareness')">
+            <div class="check-mark">&#x2713;</div>
+            <div class="funnel-icon" style="background:#EEF2FF;">&#x1F4E2;</div>
+            <div class="pc-title" style="color:var(--awareness);">Awareness Landing Page</div>
+            <div class="pc-stats">
+                <div class="pc-stat">Readiness: <strong>8/10</strong></div>
+                <div class="pc-stat">Traffic: <strong>~820 sessions/week</strong></div>
+            </div>
+            <div class="rec-badge" style="background:#EEF2FF;color:var(--awareness);">&#x2696; Recommended: A/B Test</div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Cold traffic from ads — test one element at a time (headline or hero image)</div>
+        </div>
+
+        <!-- Differentiation -->
+        <div class="page-card" onclick="selectPage(this, 'differentiation')">
+            <div class="check-mark">&#x2713;</div>
+            <div class="funnel-icon" style="background:#FFF7ED;">&#x2696;</div>
+            <div class="pc-title" style="color:var(--differentiation);">Differentiation Landing Page</div>
+            <div class="pc-stats">
+                <div class="pc-stat">Readiness: <strong>7/10</strong></div>
+                <div class="pc-stat">Traffic: <strong>~1,450 sessions/week</strong></div>
+            </div>
+            <div class="rec-badge" style="background:#FFF7ED;color:var(--differentiation);">&#x2696; Recommended: A/B or A/B/n</div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Comparison-focused visitors from branded search — test offer framing and comparison structure</div>
+        </div>
+
+        <!-- Conversion (pre-selected = highest traffic) -->
+        <div class="page-card selected" onclick="selectPage(this, 'conversion')">
+            <div class="check-mark">&#x2713;</div>
+            <span class="pre-selected-label">Highest Traffic</span>
+            <div class="funnel-icon" style="background:#ECFDF5;">&#x1F3AF;</div>
+            <div class="pc-title" style="color:var(--conversion);">Conversion Landing Page</div>
+            <div class="pc-stats">
+                <div class="pc-stat">Readiness: <strong>9/10</strong></div>
+                <div class="pc-stat">Traffic: <strong>~3,200 sessions/week</strong></div>
+            </div>
+            <div class="rec-badge" style="background:#ECFDF5;color:#059669;">&#x2696; Recommended: A/B, A/B/n, or MVT*</div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Highest-intent retargeting traffic — most optimizable page. *MVT requires &gt;10k sessions/week.</div>
+        </div>
+
+        <!-- Loyalty -->
+        <div class="page-card" onclick="selectPage(this, 'loyalty')">
+            <div class="check-mark">&#x2713;</div>
+            <div class="funnel-icon" style="background:#F5F3FF;">&#x1F49C;</div>
+            <div class="pc-title" style="color:var(--loyalty);">Loyalty Landing Page</div>
+            <div class="pc-stats">
+                <div class="pc-stat">Readiness: <strong>6/10</strong></div>
+                <div class="pc-stat">Traffic: <strong>~340 sessions/week</strong></div>
+            </div>
+            <div class="rec-badge" style="background:#F5F3FF;color:var(--loyalty);">&#x2696; Recommended: A/B Test</div>
+            <div class="low-traffic-warn">&#x26A0; Low traffic — results may take 10+ weeks. Consider increasing ad spend before testing.</div>
+            <div style="font-size:11px;color:var(--text-light);margin-top:6px;">Repeat buyers — small but high-value segment. Keep tests simple.</div>
+        </div>
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('list')">&#x2190; Back to List</button>
+        <button class="btn btn-primary" id="btnContinueToSetup" onclick="showScreen('hypothesis')">Continue &#x2192;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 3: VARIANT SETUP (US-15)            -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════ -->
+<!-- STEP 2: HYPOTHESIS                         -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-hypothesis">
+
+    <div class="page-header">
+        <h1>Write Your Hypothesis</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">2</div> Hypothesis</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">3</div> Elements</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">4</div> Model</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">5</div> Traffic</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <div class="card" style="padding:32px;max-width:720px;">
+        <p style="font-size:14px;color:var(--text-light);margin-bottom:16px;line-height:1.6;">A hypothesis is your prediction about what will happen. It keeps your experiment focused and helps you learn something useful — even if the variant doesn't win.</p>
+
+        <div style="background:#F0F7FF;border:1px solid #BFDBFE;border-radius:8px;padding:14px 16px;margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">Template</div>
+            <div style="font-size:14px;color:var(--text);">If we change <strong>[element]</strong>, then <strong>[metric]</strong> will improve because <strong>[reason]</strong>.</div>
+        </div>
+
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Your Hypothesis</div>
+        <textarea class="hypothesis-input" placeholder="If we change [element], then [metric] will improve because [reason].">If we change the CTA button copy, then purchase conversion rate will improve because clearer action language reduces hesitation at checkout.</textarea>
+        <div class="hypothesis-hint">This field is required — you won't be able to proceed without it.</div>
+
+        <div style="margin-top:20px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400E;">
+            &#x1F4A1; <strong>Tip:</strong> Be specific. "If we change the headline" is too vague. "If we change the headline from feature-focused to benefit-focused" tells you exactly what to test and why.
+        </div>
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('page-select')">&#x2190; Back to Page Selection</button>
+        <button class="btn btn-primary" onclick="showScreen('elements')">Continue to Elements &#x2192;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- STEP 3: ELEMENTS                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-elements">
+
+    <div class="page-header">
+        <h1>Select Elements to Test</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Hypothesis</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">3</div> Elements</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">4</div> Model</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">5</div> Traffic</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:8px;">Elements available for your <strong>Conversion</strong> page. Impact badges show the estimated effect on your conversion rate based on industry benchmarks.</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">Click to select the element you want to test. We recommend starting with <strong>one High-impact element</strong> for the clearest results.</p>
+
+    <div class="element-grid">
+        <div class="element-card selected" onclick="toggleElement(this)">
+            <span class="impact-badge impact-high">High</span>
+            <div class="el-name">&#x1F3AF; CTA Copy</div>
+            <div class="el-desc">Button text, color, and placement. Directly affects click-through to purchase.</div>
+        </div>
+        <div class="element-card" onclick="toggleElement(this)">
+            <span class="impact-badge impact-high">High</span>
+            <div class="el-name">&#x1F4B0; Price Display</div>
+            <div class="el-desc">Format, positioning, and anchoring of price. Affects perceived value.</div>
+        </div>
+        <div class="element-card" onclick="toggleElement(this)">
+            <span class="impact-badge impact-medium">Medium</span>
+            <div class="el-name">&#x23F1; Urgency Elements</div>
+            <div class="el-desc">Countdown timers, stock indicators, limited-time offers.</div>
+        </div>
+        <div class="element-card" onclick="toggleElement(this)">
+            <span class="impact-badge impact-medium">Medium</span>
+            <div class="el-name">&#x1F4DD; Form Fields</div>
+            <div class="el-desc">Number of fields, layout, and validation messaging on checkout forms.</div>
+        </div>
+        <div class="element-card" onclick="toggleElement(this)">
+            <span class="impact-badge impact-low">Low</span>
+            <div class="el-name">&#x2B50; Trust Badges</div>
+            <div class="el-desc">Security seals, money-back guarantees, payment method icons.</div>
+        </div>
+        <div class="element-card" onclick="toggleElement(this)">
+            <span class="impact-badge impact-low">Low</span>
+            <div class="el-name">&#x1F5BC; Hero Image</div>
+            <div class="el-desc">Product imagery, lifestyle photos, video thumbnails.</div>
+        </div>
+    </div>
+
+    <!-- AI Suggestions -->
+    <div class="ai-suggestions" style="margin-top:20px;">
+        <div class="ai-label">&#x2728; AI-Generated Variant Suggestions for CTA Copy</div>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Based on your brand copy and funnel stage, here are variant options. Select one, or write your own.</p>
+        <div class="suggestion-item picked">
+            <div>
+                <div style="font-weight:600;">Variant B: "Get Yours Now — Free Shipping"</div>
+                <div style="font-size:11px;color:var(--text-light);">Adds urgency + removes friction (shipping concern)</div>
+            </div>
+            <span class="pick-btn">&#x2713; Selected</span>
+        </div>
+        <div class="suggestion-item">
+            <div>
+                <div style="font-weight:600;">Variant C: "Start Your Order"</div>
+                <div style="font-size:11px;color:var(--text-light);">Lower commitment language — reduces purchase anxiety</div>
+            </div>
+            <span class="pick-btn">Select</span>
+        </div>
+        <div class="suggestion-item">
+            <div>
+                <div style="font-weight:600;">Custom: Write your own variant</div>
+                <div style="font-size:11px;color:var(--text-light);">Enter your own CTA text</div>
+            </div>
+            <span class="pick-btn">Edit</span>
+        </div>
+    </div>
+
+    <div style="margin-top:16px;background:#FFFBEB;border:1px solid #FDE68A;border-radius:8px;padding:12px 16px;font-size:13px;color:#92400E;">
+        &#x26A0; <strong>A/B Testing tip:</strong> Testing multiple elements at once makes it harder to know what caused the result. If you want to test more than one element simultaneously, consider a Multivariate Test (MVT) instead.
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('hypothesis')">&#x2190; Back to Hypothesis</button>
+        <button class="btn btn-primary" onclick="showScreen('model')">Continue to Model &#x2192;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- STEP 4: STATISTICAL MODEL                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-model">
+
+    <div class="page-header">
+        <h1>Choose Statistical Model</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Hypothesis</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Elements</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">4</div> Model</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">5</div> Traffic</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:8px;">This determines how we calculate whether your variant is actually better than the control.</p>
+    <p style="font-size:13px;color:var(--text-light);margin-bottom:24px;">Don't overthink it — both methods are valid. The main question is: <strong>will you check results before the test ends?</strong></p>
+
+    <div class="model-cards">
+        <div class="model-card selected" onclick="selectModel(this,'freq')">
+            <span class="mc-default">Default</span>
+            <div class="mc-title">&#x1F4CA; Frequentist</div>
+            <div class="mc-desc">Classic approach — we'll tell you when we're <strong>95% confident</strong> one variant is better. Best if you plan to wait for the full result without checking early.</div>
+            <div style="margin-top:16px;padding:12px;background:#F8FAFC;border-radius:8px;">
+                <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">What you'll see:</div>
+                <div style="font-size:13px;color:var(--text-light);">"We're 95% sure Variant B is better."</div>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-light);line-height:1.5;">
+                &#x2705; Simple to understand<br>
+                &#x2705; Industry standard<br>
+                &#x26A0; Risk: peeking at results early can lead to wrong decisions
+            </div>
+        </div>
+        <div class="model-card" onclick="selectModel(this,'bayes')">
+            <span class="mc-rec">Recommended</span>
+            <div class="mc-title">&#x1F9E0; Bayesian</div>
+            <div class="mc-desc">Probability-based — shows the <strong>chance Variant B is winning</strong> at any point. Safer if you plan to check results before the test ends.</div>
+            <div style="margin-top:16px;padding:12px;background:#F8FAFC;border-radius:8px;">
+                <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:4px;">What you'll see:</div>
+                <div style="font-size:13px;color:var(--text-light);">"Variant B has a 91% probability of being better."</div>
+            </div>
+            <div style="margin-top:12px;font-size:12px;color:var(--text-light);line-height:1.5;">
+                &#x2705; Safe to check anytime<br>
+                &#x2705; Shows probability, not just pass/fail<br>
+                &#x2705; Better for merchants who check daily
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:20px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:14px 16px;font-size:13px;color:#1E40AF;">
+        &#x1F4A1; <strong>Not sure?</strong> If you'll be checking your experiment dashboard more than once a week, go with Bayesian. It's designed for exactly that behavior and won't penalize you for looking.
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('elements')">&#x2190; Back to Elements</button>
+        <button class="btn btn-primary" onclick="showScreen('traffic')">Continue to Traffic Split &#x2192;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- STEP 5: TRAFFIC SPLIT                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-traffic">
+
+    <div class="page-header">
+        <h1>Traffic Split &amp; Duration</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Hypothesis</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Elements</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Model</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">5</div> Traffic</div>
+        <div class="wiz-connector"></div>
+        <div class="wiz-step"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <div class="media-notice">
+        &#x26A0; <strong>Paid Media Warning:</strong> Changing your ad campaign budget, targeting, or creatives during this experiment will affect your results. We recommend keeping campaign settings stable for the duration of the test.
+    </div>
+
+    <div class="card" style="padding:28px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:4px;">Traffic Allocation</div>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">This controls what percentage of your visitors see the Control vs. the Variant. Based on your traffic (~3,200 sessions/week), we recommend 50/50 for the fastest result.</p>
+
+        <div class="split-display">
+            <div style="text-align:center;font-size:12px;font-weight:600;color:var(--text);">
+                <div>Control (A)</div>
+                <div style="font-size:20px;color:var(--primary);">50%</div>
+            </div>
+            <div class="split-bar">
+                <div class="split-control" style="width:50%;">50%</div>
+                <div class="split-variant" style="width:50%;">50%</div>
+            </div>
+            <div style="text-align:center;font-size:12px;font-weight:600;color:var(--text);">
+                <div>Variant (B)</div>
+                <div style="font-size:20px;color:var(--accent);">50%</div>
+            </div>
+        </div>
+
+        <div class="split-slider-wrap">
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-light);">
+                <span>80/20 (lower risk)</span>
+                <span>50/50 (fastest result)</span>
+            </div>
+            <input type="range" min="20" max="50" value="50" style="width:100%;">
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:var(--text-light);line-height:1.6;">
+            &#x1F4A1; <strong>80/20</strong> means 80% of visitors still see your current page — lower risk, but takes longer to reach significance. <strong>50/50</strong> gets you an answer fastest, but half your visitors see an unproven variant.
+        </div>
+    </div>
+
+    <div class="duration-estimate" style="margin-top:20px;">
+        &#x1F4C5; <strong>Estimated duration: 2–4 weeks</strong> — Based on ~3,200 sessions/week, baseline CVR of 3.2%, and minimum detectable effect of 10%. You need ~4,200 visitors to detect a 10% improvement with 95% confidence.
+    </div>
+
+    <div class="card" style="padding:28px;margin-top:20px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:12px;">Metrics</div>
+
+        <div style="margin-bottom:14px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:6px;">Primary Metric</div>
+            <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:#F8FAFC;border:1px solid var(--border);border-radius:8px;">
+                <span style="font-size:14px;">&#x1F3AF;</span>
+                <div>
+                    <div style="font-size:13px;font-weight:600;">Purchase Conversion Rate (CVR)</div>
+                    <div style="font-size:11px;color:var(--text-light);">Completed purchases / unique visitors — 7-day attribution window</div>
+                </div>
+                <span class="badge badge-completed" style="margin-left:auto;">Auto-selected</span>
+            </div>
+            <div style="font-size:12px;color:var(--text-light);margin-top:6px;">This is automatically chosen based on your Conversion page. It's the metric that matters most for this funnel stage.</div>
+        </div>
+
+        <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:6px;">Guardrail Metrics</div>
+            <p style="font-size:12px;color:var(--text-light);margin-bottom:8px;">These are safety checks. If any guardrail is breached, the system alerts you — the variant might be winning on conversions but hurting something else.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <span style="padding:6px 12px;background:#F8FAFC;border:1px solid var(--border);border-radius:6px;font-size:12px;">&#x26A1; Page Load &lt; +200ms</span>
+                <span style="padding:6px 12px;background:#F8FAFC;border:1px solid var(--border);border-radius:6px;font-size:12px;">&#x1F6A8; JS Errors &lt; 1%</span>
+                <span style="padding:6px 12px;background:#F8FAFC;border:1px solid var(--border);border-radius:6px;font-size:12px;">&#x1F4C9; Ad CTR drop &lt; 15%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('model')">&#x2190; Back to Model</button>
+        <button class="btn btn-primary" onclick="showScreen('test-name')">Continue to Name &amp; Launch &#x2192;</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- STEP 6: TEST NAME & LAUNCH                 -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-test-name">
+
+    <div class="page-header">
+        <h1>Name Your Experiment</h1>
+        <button class="btn btn-secondary" onclick="showScreen('list')">Cancel</button>
+    </div>
+
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Hypothesis</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Elements</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Model</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Traffic</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">6</div> Name &amp; Launch</div>
+    </div>
+
+    <div class="card" style="padding:32px;max-width:720px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Experiment Name</div>
+        <input type="text" value="Conversion Page — CTA Copy Test — April 2026" style="width:100%;padding:12px 14px;border:2px solid var(--border);border-radius:8px;font-size:15px;font-family:inherit;outline:none;font-weight:600;">
+        <div style="font-size:12px;color:var(--text-light);margin-top:6px;">Auto-generated from your page + element + date. Rename it to something your team will recognize.</div>
+    </div>
+
+    <div style="margin-top:24px;font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">Review Your Setup</div>
+
+    <div class="card" style="padding:28px;">
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="si-label">Page</div>
+                <div class="si-value"><span class="funnel-badge funnel-conversion" style="margin-right:6px;">Conversion</span> Conversion Landing Page</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Test Type</div>
+                <div class="si-value">A/B Test (2 variants)</div>
+            </div>
+            <div class="summary-item" style="grid-column:1/-1;">
+                <div class="si-label">Hypothesis</div>
+                <div class="si-value" style="font-weight:400;">If we change the CTA button copy, then purchase conversion rate will improve because clearer action language reduces hesitation at checkout.</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Control (A)</div>
+                <div class="si-value">"Buy Now"</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Variant (B)</div>
+                <div class="si-value">"Get Yours Now — Free Shipping"</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Statistical Model</div>
+                <div class="si-value">Frequentist (95% confidence)</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Traffic Split</div>
+                <div class="si-value">50% Control / 50% Variant</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Primary Metric</div>
+                <div class="si-value">Purchase Conversion Rate (CVR)</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Estimated Duration</div>
+                <div class="si-value">2–4 weeks (~4,200 visitors needed)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="media-notice" style="margin-top:20px;">
+        &#x26A0; <strong>Reminder:</strong> Keep your ad campaign settings stable during this experiment. Changes to budget, targeting, or creatives will affect results.
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('traffic')">&#x2190; Back to Traffic</button>
+        <button class="btn btn-success" style="font-size:15px;padding:12px 32px;" onclick="showLaunchModal()">&#x1F680; Launch Experiment</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 3b: LAUNCH SUMMARY                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-launch-summary">
+
+    <div class="page-header">
+        <h1>Launch Summary</h1>
+    </div>
+
+    <!-- Wizard Progress -->
+    <div class="wizard-progress">
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Select Page</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Hypothesis</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Variants</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step done"><div class="step-num">&#x2713;</div> Configure</div>
+        <div class="wiz-connector done"></div>
+        <div class="wiz-step active"><div class="step-num">5</div> Launch</div>
+    </div>
+
+    <p style="font-size:14px;color:var(--text-light);margin-bottom:20px;">Review your experiment settings before going live. Once launched, the experiment will begin splitting traffic immediately.</p>
+
+    <div class="card" style="padding:28px;">
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="si-label">Page</div>
+                <div class="si-value"><span class="funnel-badge funnel-conversion" style="margin-right:6px;">Conversion</span> Conversion Landing Page</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Test Type</div>
+                <div class="si-value">A/B Test (2 variants)</div>
+            </div>
+            <div class="summary-item" style="grid-column:1/-1;">
+                <div class="si-label">Hypothesis</div>
+                <div class="si-value" style="font-weight:400;">If we change the CTA button copy, then purchase conversion rate will improve because clearer action language reduces hesitation at checkout.</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Control (A)</div>
+                <div class="si-value">"Buy Now"</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Variant (B)</div>
+                <div class="si-value">"Get Yours Now — Free Shipping"</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Statistical Model</div>
+                <div class="si-value">Frequentist (95% confidence)</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Traffic Split</div>
+                <div class="si-value">50% Control / 50% Variant</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Primary Metric</div>
+                <div class="si-value">Purchase Conversion Rate (CVR)</div>
+            </div>
+            <div class="summary-item">
+                <div class="si-label">Estimated Duration</div>
+                <div class="si-value">2–4 weeks (~4,200 visitors needed)</div>
+            </div>
+        </div>
+
+        <div class="media-notice" style="margin-top:20px;">
+            &#x26A0; <strong>Reminder:</strong> Keep your ad campaign settings stable during this experiment. Changes to budget, targeting, or creatives will affect results.
+        </div>
+    </div>
+
+    <div class="wizard-nav">
+        <button class="btn btn-secondary" onclick="showScreen('variant-setup')">&#x2190; Back to Edit</button>
+        <button class="btn btn-success" style="font-size:15px;padding:12px 32px;" onclick="showLaunchModal()">&#x1F680; Launch Experiment</button>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SCREEN 4: RESULTS & PROMOTION (US-16)      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-results">
+
+    <div style="margin-bottom:8px;">
+        <button class="btn btn-sm btn-secondary" onclick="showScreen('list')">&#x2190; Back to Experiments</button>
+    </div>
+
+    <div class="result-header">
+        <div>
+            <div class="exp-title">Conversion — CTA Copy Test</div>
+            <div class="result-meta">
+                <span class="meta-item"><span class="funnel-badge funnel-conversion">Conversion</span></span>
+                <span class="meta-item">A/B Test</span>
+                <span class="meta-item">Frequentist</span>
+                <span class="meta-item">&#x1F4C5; Running 18 days</span>
+                <span class="meta-item">&#x1F465; 5,840 visitors</span>
+            </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+            <button class="btn btn-sm btn-secondary">&#x23F8; Pause Test</button>
+            <button class="btn btn-sm btn-secondary">&#x1F4E5; Export</button>
+            <button class="btn btn-sm btn-success" onclick="showPromoteModal()">&#x1F3C6; Make Variant B the new control</button>
+        </div>
+    </div>
+
+    <!-- Anti-peeking Warning (shown when below sample) -->
+    <!--
+    <div class="warning-banner">
+        &#x26A0; <div><strong>Your experiment needs more data.</strong> Results may change significantly. Minimum visitors needed: 4,200. Current: 1,890. <em>Preliminary — do not act yet.</em></div>
+    </div>
+    -->
+
+    <!-- Variant Comparison Cards -->
+    <div class="variant-comparison">
+        <div class="variant-card">
+            <div class="vc-label">Control (A) — "Buy Now"</div>
+            <div class="vc-metric">
+                <div class="metric-label">Visitors</div>
+                <div class="metric-value">2,920</div>
+            </div>
+            <div class="vc-metric">
+                <div class="metric-label">Conversions</div>
+                <div class="metric-value">94</div>
+            </div>
+            <div class="vc-metric">
+                <div class="metric-label">Conversion Rate</div>
+                <div class="metric-value">3.22%</div>
+            </div>
+        </div>
+        <div class="variant-card winner-card">
+            <span class="winner-badge-lg">&#x1F3C6; Leading</span>
+            <div class="vc-label">Variant B — "Get Yours Now — Free Shipping"</div>
+            <div class="vc-metric">
+                <div class="metric-label">Visitors</div>
+                <div class="metric-value">2,920</div>
+            </div>
+            <div class="vc-metric">
+                <div class="metric-label">Conversions</div>
+                <div class="metric-value">120</div>
+            </div>
+            <div class="vc-metric">
+                <div class="metric-label">Conversion Rate</div>
+                <div class="metric-value">4.11%</div>
+                <div class="metric-sub"><span class="lift-positive">+27.6% vs Control &#x2191;</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistical Result -->
+    <div class="stat-result-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+                <div style="font-size:15px;font-weight:700;color:var(--primary-dark);">Statistical Result — Frequentist</div>
+                <div style="font-size:13px;color:var(--text-light);margin-top:4px;">Significance threshold: p &lt; 0.05 (95% confidence)</div>
+            </div>
+            <div style="text-align:right;">
+                <div style="font-size:28px;font-weight:800;color:var(--success);">97.2%</div>
+                <div style="font-size:12px;color:var(--success);font-weight:600;">&#x2705; Statistically significant result</div>
+            </div>
+        </div>
+        <div class="confidence-bar-wrap">
+            <div class="confidence-bar">
+                <div class="confidence-fill" style="width:97.2%;background:linear-gradient(90deg,var(--primary),var(--success));border-radius:6px;"></div>
+                <div class="confidence-threshold" style="left:95%;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-light);">
+                <span>0% confidence</span>
+                <span>p = 0.028 — Variant B is significantly better than Control</span>
+                <span>100%</span>
+            </div>
+        </div>
+        <div style="margin-top:16px;padding:14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;font-size:14px;color:#166534;">
+            <strong>&#x1F4A1; Recommendation:</strong> Variant B appears to be the winner. We recommend promoting it to become the new control on your Conversion page.
+        </div>
+    </div>
+
+    <!-- Conversion Rate Over Time Chart -->
+    <div class="chart-placeholder">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">Conversion Rate Over Time</div>
+        <div class="chart-area">
+            <svg viewBox="0 0 700 200" preserveAspectRatio="none" style="width:100%;height:100%;">
+                <!-- Grid lines -->
+                <line x1="0" y1="50" x2="700" y2="50" stroke="#E2E8F0" stroke-width="0.5"/>
+                <line x1="0" y1="100" x2="700" y2="100" stroke="#E2E8F0" stroke-width="0.5"/>
+                <line x1="0" y1="150" x2="700" y2="150" stroke="#E2E8F0" stroke-width="0.5"/>
+                <!-- Control line (A) -->
+                <polyline points="0,140 39,135 78,142 117,130 156,138 195,128 234,135 273,132 312,128 351,130 390,125 429,132 468,128 507,130 546,126 585,132 624,128 663,130 700,128" fill="none" stroke="var(--primary)" stroke-width="2.5" opacity="0.6"/>
+                <!-- Variant line (B) -->
+                <polyline points="0,142 39,130 78,125 117,118 156,122 195,110 234,105 273,112 312,100 351,98 390,95 429,102 468,92 507,88 546,85 585,90 624,82 663,80 700,78" fill="none" stroke="var(--success)" stroke-width="2.5"/>
+                <!-- Area under variant -->
+                <polygon points="0,142 39,130 78,125 117,118 156,122 195,110 234,105 273,112 312,100 351,98 390,95 429,102 468,92 507,88 546,85 585,90 624,82 663,80 700,78 700,200 0,200" fill="var(--success)" opacity="0.08"/>
+            </svg>
+            <div style="position:absolute;bottom:8px;right:12px;display:flex;gap:16px;font-size:11px;">
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:var(--primary);opacity:0.6;display:inline-block;border-radius:2px;"></span> Control (A)</span>
+                <span style="display:flex;align-items:center;gap:4px;"><span style="width:12px;height:3px;background:var(--success);display:inline-block;border-radius:2px;"></span> Variant B</span>
+            </div>
+            <div style="position:absolute;top:8px;left:12px;font-size:11px;color:var(--text-light);">Daily granularity — 18 days</div>
+        </div>
+    </div>
+
+    <!-- Paid Media Breakdown -->
+    <div class="card" style="padding:24px;margin-bottom:24px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">Paid Media Breakdown</div>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Cost and revenue metrics per variant, broken down by traffic source. Last-click attribution.</p>
+        <table class="breakdown-table">
+            <thead>
+                <tr>
+                    <th>Channel</th>
+                    <th>Variant</th>
+                    <th>Spend</th>
+                    <th>Conversions</th>
+                    <th>CPA</th>
+                    <th>Revenue</th>
+                    <th>RPV</th>
+                    <th>ROAS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="2"><strong>Google Ads</strong></td>
+                    <td>Control (A)</td>
+                    <td>$2,450</td>
+                    <td>52</td>
+                    <td>$47.12</td>
+                    <td>$4,160</td>
+                    <td>$2.45</td>
+                    <td style="font-weight:600;">1.70x</td>
+                </tr>
+                <tr>
+                    <td style="color:var(--success);font-weight:600;">Variant B</td>
+                    <td>$2,510</td>
+                    <td>71</td>
+                    <td style="color:var(--success);font-weight:600;">$35.35</td>
+                    <td>$5,680</td>
+                    <td>$3.26</td>
+                    <td style="color:var(--success);font-weight:600;">2.26x</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>Meta Ads</strong></td>
+                    <td>Control (A)</td>
+                    <td>$1,800</td>
+                    <td>34</td>
+                    <td>$52.94</td>
+                    <td>$2,720</td>
+                    <td>$2.18</td>
+                    <td style="font-weight:600;">1.51x</td>
+                </tr>
+                <tr>
+                    <td style="color:var(--success);font-weight:600;">Variant B</td>
+                    <td>$1,850</td>
+                    <td>42</td>
+                    <td style="color:var(--success);font-weight:600;">$44.05</td>
+                    <td>$3,360</td>
+                    <td>$2.67</td>
+                    <td style="color:var(--success);font-weight:600;">1.82x</td>
+                </tr>
+                <tr>
+                    <td rowspan="2"><strong>Email</strong></td>
+                    <td>Control (A)</td>
+                    <td>—</td>
+                    <td>8</td>
+                    <td>—</td>
+                    <td>$640</td>
+                    <td>$3.05</td>
+                    <td>—</td>
+                </tr>
+                <tr>
+                    <td style="color:var(--success);font-weight:600;">Variant B</td>
+                    <td>—</td>
+                    <td>7</td>
+                    <td>—</td>
+                    <td>$560</td>
+                    <td>$2.80</td>
+                    <td>—</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- UTM Breakdown -->
+    <div class="card" style="padding:24px;margin-bottom:24px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">UTM Source Breakdown</div>
+        <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Results segmented by utm_source to show variant performance across traffic sources.</p>
+        <table class="breakdown-table">
+            <thead>
+                <tr>
+                    <th>Source</th>
+                    <th>Campaign</th>
+                    <th>Visitors</th>
+                    <th>Control CVR</th>
+                    <th>Variant B CVR</th>
+                    <th>Lift</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>google</strong></td>
+                    <td>spring_sale_2026</td>
+                    <td>2,840</td>
+                    <td>3.06%</td>
+                    <td>4.18%</td>
+                    <td><span class="lift-positive">+36.6% &#x2191;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>facebook</strong></td>
+                    <td>retarget_apr</td>
+                    <td>1,960</td>
+                    <td>3.47%</td>
+                    <td>4.08%</td>
+                    <td><span class="lift-positive">+17.6% &#x2191;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>email</strong></td>
+                    <td>newsletter_weekly</td>
+                    <td>620</td>
+                    <td>3.81%</td>
+                    <td>3.54%</td>
+                    <td><span class="lift-negative">-7.1% &#x2193;</span></td>
+                </tr>
+                <tr>
+                    <td><strong>instagram</strong></td>
+                    <td>stories_promo</td>
+                    <td>420</td>
+                    <td>2.86%</td>
+                    <td>4.29%</td>
+                    <td><span class="lift-positive">+50.0% &#x2191;</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Secondary Metrics -->
+    <div class="card" style="padding:24px;margin-bottom:24px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">Secondary Metrics</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+            <div style="padding:14px;background:#F8FAFC;border-radius:8px;text-align:center;">
+                <div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;">Bounce Rate</div>
+                <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;">
+                    <div><div style="font-size:11px;color:var(--text-light);">Control</div><div style="font-size:18px;font-weight:700;">42.1%</div></div>
+                    <div><div style="font-size:11px;color:var(--success);">Variant B</div><div style="font-size:18px;font-weight:700;color:var(--success);">36.8%</div></div>
+                </div>
+            </div>
+            <div style="padding:14px;background:#F8FAFC;border-radius:8px;text-align:center;">
+                <div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;">Time on Page</div>
+                <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;">
+                    <div><div style="font-size:11px;color:var(--text-light);">Control</div><div style="font-size:18px;font-weight:700;">48s</div></div>
+                    <div><div style="font-size:11px;color:var(--success);">Variant B</div><div style="font-size:18px;font-weight:700;color:var(--success);">62s</div></div>
+                </div>
+            </div>
+            <div style="padding:14px;background:#F8FAFC;border-radius:8px;text-align:center;">
+                <div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;">Scroll Depth</div>
+                <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;">
+                    <div><div style="font-size:11px;color:var(--text-light);">Control</div><div style="font-size:18px;font-weight:700;">61%</div></div>
+                    <div><div style="font-size:11px;color:var(--success);">Variant B</div><div style="font-size:18px;font-weight:700;color:var(--success);">74%</div></div>
+                </div>
+            </div>
+            <div style="padding:14px;background:#F8FAFC;border-radius:8px;text-align:center;">
+                <div style="font-size:11px;color:var(--text-light);font-weight:600;text-transform:uppercase;">CTA Clicks</div>
+                <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;">
+                    <div><div style="font-size:11px;color:var(--text-light);">Control</div><div style="font-size:18px;font-weight:700;">312</div></div>
+                    <div><div style="font-size:11px;color:var(--success);">Variant B</div><div style="font-size:18px;font-weight:700;color:var(--success);">418</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guardrail Metrics -->
+    <div class="card" style="padding:24px;margin-bottom:24px;">
+        <div style="font-size:15px;font-weight:700;color:var(--primary-dark);margin-bottom:16px;">Guardrail Metrics</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+            <div style="padding:14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;">
+                <div style="font-size:11px;color:#166534;font-weight:600;text-transform:uppercase;">Page Load (P75)</div>
+                <div style="font-size:18px;font-weight:700;color:#166534;margin-top:4px;">+42ms</div>
+                <div style="font-size:11px;color:#166534;">&#x2705; Within threshold (&lt; +200ms)</div>
+            </div>
+            <div style="padding:14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;">
+                <div style="font-size:11px;color:#166534;font-weight:600;text-transform:uppercase;">JS Error Rate</div>
+                <div style="font-size:18px;font-weight:700;color:#166534;margin-top:4px;">0.12%</div>
+                <div style="font-size:11px;color:#166534;">&#x2705; Within threshold (&lt; 1%)</div>
+            </div>
+            <div style="padding:14px;background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;">
+                <div style="font-size:11px;color:#166534;font-weight:600;text-transform:uppercase;">Ad CTR Change</div>
+                <div style="font-size:18px;font-weight:700;color:#166534;margin-top:4px;">-2.1%</div>
+                <div style="font-size:11px;color:#166534;">&#x2705; Within threshold (&lt; -15%)</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Next Test Suggestion -->
+    <div class="next-test-card">
+        <div style="font-size:28px;">&#x1F4A1;</div>
+        <div class="ntc-text">
+            <h4>What's next for your Conversion page?</h4>
+            <p>Your Conversion page has <strong>4 other high-impact elements</strong> to test: Price Display, Urgency Elements, Form Fields, and Trust Badges. Want to run another experiment?</p>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="showScreen('page-select')">Start Next Test</button>
+    </div>
+</div>
+
+</div><!-- /.main -->
+
+<!-- ═══ PROMOTE WINNER MODAL ═══ -->
+<div class="modal-backdrop" id="promoteModal">
+    <div class="modal-box">
+        <h3>&#x1F3C6; Promote Variant B</h3>
+        <p>This will replace the current Control with <strong>"Get Yours Now — Free Shipping"</strong> on your live Conversion landing page and stop the experiment.</p>
+        <p style="color:var(--danger);font-weight:600;font-size:13px;">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="hideModal('promoteModal')">Cancel</button>
+            <button class="btn btn-success" onclick="hideModal('promoteModal');showScreen('list');">Confirm — Make it Live</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══ LAUNCH MODAL ═══ -->
+<div class="modal-backdrop" id="launchModal">
+    <div class="modal-box">
+        <h3>&#x1F680; Launch Experiment</h3>
+        <p>Your experiment <strong>"Conversion Page — CTA Copy Test — April 2026"</strong> will go live immediately. Traffic will be split 50/50 between Control and Variant B.</p>
+        <p style="font-size:13px;color:var(--text-light);">You can pause or stop the experiment at any time from the Experiments list.</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="hideModal('launchModal')">Cancel</button>
+            <button class="btn btn-success" onclick="hideModal('launchModal');showScreen('list');">Launch Now</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ── Screen Navigation ──
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    // ── Page Selection ──
+    function selectPage(el, stage) {
+        document.querySelectorAll('.page-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    // ── Element Selection ──
+    function toggleElement(el) {
+        el.classList.toggle('selected');
+    }
+
+    // ── Model Selection ──
+    function selectModel(el, type) {
+        document.querySelectorAll('.model-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    // ── Modals ──
+    function showPromoteModal() { document.getElementById('promoteModal').classList.add('active'); }
+    function showLaunchModal() { document.getElementById('launchModal').classList.add('active'); }
+    function hideModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // Close modals on backdrop click
+    document.querySelectorAll('.modal-backdrop').forEach(m => {
+        m.addEventListener('click', function(e) { if(e.target === this) this.classList.remove('active'); });
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', function(e) {
+        if(e.key === 'Escape') document.querySelectorAll('.modal-backdrop.active').forEach(m => m.classList.remove('active'));
+    });
+
+    // ── Experiment List Filtering ──
+    function filterExperiments() {
+        var search = document.getElementById('expSearch').value.toLowerCase();
+        var status = document.getElementById('filterStatus').value;
+        var stage = document.getElementById('filterStage').value;
+        var rows = document.querySelectorAll('#expTable tbody tr');
+        rows.forEach(function(row) {
+            var name = row.querySelector('.exp-name').textContent.toLowerCase();
+            var rowStatus = row.getAttribute('data-status');
+            var rowStage = row.getAttribute('data-stage');
+            var matchSearch = !search || name.indexOf(search) !== -1;
+            var matchStatus = status === 'all' || rowStatus === status;
+            var matchStage = stage === 'all' || rowStage === stage;
+            row.style.display = (matchSearch && matchStatus && matchStage) ? '' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>
