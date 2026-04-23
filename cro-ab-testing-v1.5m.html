@@ -1,0 +1,2504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRO A/B Testing V1.5 M — Revmatics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2E5090;
+            --primary-light: #4A7BC7;
+            --primary-dark: #1E3A6E;
+            --accent: #00B4D8;
+            --accent2: #F77F00;
+            --success: #06D6A0;
+            --warning: #FFD166;
+            --danger: #FF6B6B;
+            --bg: #F8FAFC;
+            --card: #FFFFFF;
+            --text: #1E293B;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --radius: 12px;
+            --awareness: #4A7BC7;
+            --differentiation: #F77F00;
+            --conversion: #06D6A0;
+            --loyalty: #9B5DE5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* TOPNAV */
+        .topnav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background-color: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .topnav-logo {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .topnav-search {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin: 0 40px;
+        }
+
+        .topnav-search input {
+            width: 300px;
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 13px;
+            background-color: var(--bg);
+        }
+
+        .topnav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .topnav-bell, .topnav-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 56px;
+            width: 220px;
+            height: calc(100vh - 56px);
+            background-color: var(--card);
+            border-right: 1px solid var(--border);
+            padding: 20px 0;
+            z-index: 50;
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-light);
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--bg);
+            color: var(--text);
+        }
+
+        .sidebar-item.active {
+            background-color: var(--bg);
+            border-left-color: var(--primary);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* MAIN LAYOUT */
+        .container {
+            margin-left: 220px;
+            margin-top: 56px;
+            padding: 40px;
+        }
+
+        /* SCREENS */
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .page-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f0f4f8;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        /* KPI STRIP */
+        .kpi-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .kpi-change {
+            font-size: 12px;
+            color: var(--success);
+            margin-top: 8px;
+        }
+
+        /* SCOREBOARD CARDS */
+        .scoreboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .scoreboard-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .scoreboard-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: var(--primary-light);
+        }
+
+        .scoreboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .scoreboard-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .scoreboard-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .badge-awareness {
+            background-color: rgba(74, 123, 199, 0.1);
+            color: var(--awareness);
+        }
+
+        .badge-differentiation {
+            background-color: rgba(247, 127, 0, 0.1);
+            color: var(--differentiation);
+        }
+
+        .badge-conversion {
+            background-color: rgba(6, 214, 160, 0.1);
+            color: var(--conversion);
+        }
+
+        .badge-loyalty {
+            background-color: rgba(155, 93, 229, 0.1);
+            color: var(--loyalty);
+        }
+
+        .scoreboard-body {
+            margin-bottom: 20px;
+        }
+
+        .scoreboard-matchup {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .scoreboard-side {
+            flex: 1;
+            text-align: center;
+        }
+
+        .scoreboard-side-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .scoreboard-side-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .scoreboard-side.winning .scoreboard-side-value {
+            color: var(--success);
+        }
+
+        .scoreboard-vs {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .scoreboard-result {
+            text-align: center;
+            padding: 12px;
+            background-color: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .scoreboard-result-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .scoreboard-result-emoji {
+            margin-left: 6px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .scoreboard-footer {
+            font-size: 12px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .engine-status {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* COMPLETED TABLE */
+        .completed-section {
+            margin-top: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr {
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--bg);
+        }
+
+        .table td {
+            padding: 12px 16px;
+            font-size: 13px;
+        }
+
+        .winner-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: rgba(6, 214, 160, 0.1);
+            color: var(--success);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* MODALS */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            z-index: 150;
+        }
+
+        .modal-backdrop.active {
+            display: block;
+        }
+
+        .overlay-panel {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card);
+            border-radius: var(--radius) var(--radius) 0 0;
+            max-height: 85vh;
+            overflow-y: auto;
+            z-index: 160;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
+        }
+
+        .overlay-panel.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .overlay-header {
+            display: flex;
+            align-items: center;
+            padding: 20px 28px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .overlay-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .overlay-subtitle {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .overlay-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: auto;
+        }
+
+        .overlay-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .overlay-close:hover {
+            background-color: var(--bg);
+        }
+
+        .overlay-content {
+            padding: 28px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .scoreboard-detail {
+            background-color: var(--bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .scoreboard-detail-matchup {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .scoreboard-detail-side {
+            flex: 1;
+            text-align: center;
+        }
+
+        .scoreboard-detail-side-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .scoreboard-detail-side-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .scoreboard-detail-side.winning .scoreboard-detail-side-value {
+            color: var(--success);
+        }
+
+        .scoreboard-detail-vs {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .detail-result {
+            text-align: center;
+            padding: 16px;
+            background-color: var(--card);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .detail-result-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .detail-section {
+            margin-bottom: 28px;
+        }
+
+        .detail-section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .confidence-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .confidence-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            min-width: 80px;
+        }
+
+        .confidence-progress {
+            flex: 1;
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+        }
+
+        .plain-english {
+            background-color: var(--card);
+            border-left: 3px solid var(--primary);
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .traffic-split {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .traffic-bar {
+            flex: 1;
+            height: 32px;
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .traffic-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .traffic-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .recipe-card {
+            background-color: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .recipe-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .recipe-name {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .recipe-value {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .recipe-description {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .ingredient-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .ingredient-label {
+            min-width: 100px;
+            color: var(--text-light);
+        }
+
+        .ingredient-graph {
+            flex: 1;
+            height: 20px;
+            background-color: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .ingredient-fill {
+            height: 100%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .synergy-card {
+            background-color: rgba(74, 123, 199, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .segment-breakdown {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .segment-card {
+            background-color: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .segment-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .segment-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .segment-choice {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        .crm-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .crm-check {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        /* WIZARD */
+        .wizard-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            z-index: 200;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wizard-overlay.active {
+            display: flex;
+        }
+
+        .wizard-panel {
+            background-color: var(--card);
+            border-radius: var(--radius);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .wizard-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+            z-index: 10;
+        }
+
+        .wizard-close:hover {
+            background-color: var(--bg);
+        }
+
+        .wizard-content {
+            padding: 40px;
+        }
+
+        .wizard-header {
+            margin-bottom: 28px;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .wizard-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .wizard-subtitle {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .wizard-step-indicator {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .page-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .page-card {
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .page-card:hover {
+            border-color: var(--primary);
+            background-color: var(--bg);
+        }
+
+        .page-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(46, 80, 144, 0.05);
+        }
+
+        .page-card-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .page-card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .page-card-traffic {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .path-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .path-card {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .path-card:hover {
+            border-color: var(--primary);
+            background-color: var(--bg);
+        }
+
+        .path-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(46, 80, 144, 0.05);
+        }
+
+        .path-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .path-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .path-description {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+
+        .path-best-for {
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            padding: 6px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .path-time {
+            font-size: 11px;
+            color: var(--text-light);
+        }
+
+        .goal-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .goal-card {
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .goal-card:hover {
+            border-color: var(--primary);
+            background-color: var(--bg);
+        }
+
+        .goal-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(46, 80, 144, 0.05);
+        }
+
+        .goal-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .goal-card.selected .goal-radio {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+
+        .goal-content {
+            flex: 1;
+        }
+
+        .goal-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
+
+        .goal-description {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .wizard-footer {
+            display: flex;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .wizard-nav {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+        }
+
+        .autopilot-summary {
+            background-color: var(--bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            min-width: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            flex: 1;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .summary-value-bold {
+            font-weight: 600;
+        }
+
+        .summary-note {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-top: 8px;
+        }
+
+        .aggression-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .aggression-card {
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .aggression-card:hover {
+            border-color: var(--primary);
+            background-color: var(--bg);
+        }
+
+        .aggression-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(46, 80, 144, 0.05);
+        }
+
+        .aggression-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .aggression-description {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 16px 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 250;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- TOPNAV -->
+    <div class="topnav">
+        <div class="topnav-logo">Revmatics | CRO</div>
+        <div class="topnav-search">
+            <input type="text" placeholder="Search experiments...">
+        </div>
+        <div class="topnav-right">
+            <div class="topnav-bell">🔔</div>
+            <div class="topnav-avatar">👤</div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-item active" onclick="showScreen('screen-list')">Experiments</div>
+        <div class="sidebar-item" onclick="showScreen('screen-pages')">Landing Pages</div>
+        <div class="sidebar-item" onclick="showScreen('screen-reports')">Reports</div>
+        <div class="sidebar-item" onclick="showScreen('screen-settings')">Settings</div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- EXPERIMENTS LIST SCREEN -->
+        <div id="screen-list" class="screen active">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Experiments</div>
+                    <div class="page-subtitle">Manage your live A/B tests and multivariate experiments</div>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-primary" onclick="showWizard()">+ New Experiment</button>
+                </div>
+            </div>
+
+            <!-- KPI STRIP -->
+            <div class="kpi-strip">
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Tests</div>
+                    <div class="kpi-value">4</div>
+                    <div class="kpi-change">All running normally</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Completed</div>
+                    <div class="kpi-value">5</div>
+                    <div class="kpi-change">This month</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg. Uplift</div>
+                    <div class="kpi-value">+14.2%</div>
+                    <div class="kpi-change">vs baseline</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Sessions</div>
+                    <div class="kpi-value">47,832</div>
+                    <div class="kpi-change">Across all tests</div>
+                </div>
+            </div>
+
+            <!-- LIVE EXPERIMENTS SCOREBOARD -->
+            <div>
+                <div class="section-title">Live Experiments</div>
+                <div class="scoreboard-grid">
+                    <!-- Awareness A/B -->
+                    <div class="scoreboard-card" onclick="showExperimentDetail('exp-1')">
+                        <div class="scoreboard-header">
+                            <div class="scoreboard-title">Headline Hook Test</div>
+                            <div class="scoreboard-badge badge-awareness">Awareness · A/B</div>
+                        </div>
+                        <div class="scoreboard-body">
+                            <div class="scoreboard-matchup">
+                                <div class="scoreboard-side">
+                                    <div class="scoreboard-side-label">Version A</div>
+                                    <div class="scoreboard-side-value">3.1%</div>
+                                </div>
+                                <div class="scoreboard-vs">vs</div>
+                                <div class="scoreboard-side winning">
+                                    <div class="scoreboard-side-label">Version B</div>
+                                    <div class="scoreboard-side-value">3.8%</div>
+                                </div>
+                            </div>
+                            <div class="scoreboard-result">
+                                <div class="scoreboard-result-text">B is winning by +22.6% <span class="scoreboard-result-emoji">🟢</span></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%;"></div>
+                            </div>
+                            <div class="scoreboard-footer">Day 12/21 · ~9 days left</div>
+                            <div class="engine-status">🧠 Engine auto-optimizing</div>
+                        </div>
+                    </div>
+
+                    <!-- Differentiation MVT -->
+                    <div class="scoreboard-card" onclick="showExperimentDetail('exp-2')">
+                        <div class="scoreboard-header">
+                            <div class="scoreboard-title">Proof Mix MVT</div>
+                            <div class="scoreboard-badge badge-differentiation">Differentiation · MVT</div>
+                        </div>
+                        <div class="scoreboard-body">
+                            <div class="scoreboard-matchup">
+                                <div class="scoreboard-side winning">
+                                    <div class="scoreboard-side-label">Best Recipe</div>
+                                    <div class="scoreboard-side-value">5.2%</div>
+                                </div>
+                                <div class="scoreboard-vs">vs</div>
+                                <div class="scoreboard-side">
+                                    <div class="scoreboard-side-label">Control</div>
+                                    <div class="scoreboard-side-value">4.8%</div>
+                                </div>
+                            </div>
+                            <div class="scoreboard-result">
+                                <div class="scoreboard-result-text">Leading by +8.3% <span class="scoreboard-result-emoji">🟢</span></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%;"></div>
+                            </div>
+                            <div class="scoreboard-footer">Week 2/4 · ~2 weeks left</div>
+                            <div class="engine-status">🧠 Testing 4 of 8 recipes</div>
+                        </div>
+                    </div>
+
+                    <!-- Conversion A/B+MAB -->
+                    <div class="scoreboard-card" onclick="showExperimentDetail('exp-3')">
+                        <div class="scoreboard-header">
+                            <div class="scoreboard-title">CTA Urgency Test</div>
+                            <div class="scoreboard-badge badge-conversion">Conversion · A/B+MAB</div>
+                        </div>
+                        <div class="scoreboard-body">
+                            <div class="scoreboard-matchup">
+                                <div class="scoreboard-side">
+                                    <div class="scoreboard-side-label">Version A</div>
+                                    <div class="scoreboard-side-value">2.8%</div>
+                                </div>
+                                <div class="scoreboard-vs">vs</div>
+                                <div class="scoreboard-side winning">
+                                    <div class="scoreboard-side-label">Version B</div>
+                                    <div class="scoreboard-side-value">3.2%</div>
+                                </div>
+                            </div>
+                            <div class="scoreboard-result">
+                                <div class="scoreboard-result-text">B is winning by +15.2% <span class="scoreboard-result-emoji">🟢</span></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 58%;"></div>
+                            </div>
+                            <div class="scoreboard-footer">Day 8/14 · ~6 days left</div>
+                            <div class="engine-status">🧠 Traffic optimizing to winner</div>
+                        </div>
+                    </div>
+
+                    <!-- Loyalty MVT -->
+                    <div class="scoreboard-card" onclick="showExperimentDetail('exp-4')">
+                        <div class="scoreboard-header">
+                            <div class="scoreboard-title">Re-engagement Recipe</div>
+                            <div class="scoreboard-badge badge-loyalty">Loyalty · MVT</div>
+                        </div>
+                        <div class="scoreboard-body">
+                            <div class="scoreboard-matchup">
+                                <div class="scoreboard-side winning">
+                                    <div class="scoreboard-side-label">Best Recipe</div>
+                                    <div class="scoreboard-side-value">4.1%</div>
+                                </div>
+                                <div class="scoreboard-vs">vs</div>
+                                <div class="scoreboard-side">
+                                    <div class="scoreboard-side-label">Control</div>
+                                    <div class="scoreboard-side-value">3.9%</div>
+                                </div>
+                            </div>
+                            <div class="scoreboard-result">
+                                <div class="scoreboard-result-text">Leading by +5.8% <span class="scoreboard-result-emoji">🟢</span></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 42%;"></div>
+                            </div>
+                            <div class="scoreboard-footer">Week 1/3 · ~2 weeks left</div>
+                            <div class="engine-status">🧠 Segmenting by customer type</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPLETED EXPERIMENTS -->
+            <div class="completed-section">
+                <div class="section-title">Completed Experiments</div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Experiment</th>
+                            <th>Page</th>
+                            <th>Type</th>
+                            <th>Winner</th>
+                            <th>Uplift</th>
+                            <th>Sessions</th>
+                            <th>Completed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr onclick="showExperimentDetail('completed-1')">
+                            <td>Button Color Split</td>
+                            <td>Product</td>
+                            <td>A/B</td>
+                            <td><div class="winner-badge">Green Button</div></td>
+                            <td>+8.2%</td>
+                            <td>12,450</td>
+                            <td>Apr 15</td>
+                        </tr>
+                        <tr onclick="showExperimentDetail('completed-2')">
+                            <td>Hero Copy Variants</td>
+                            <td>Home</td>
+                            <td>A/B</td>
+                            <td><div class="winner-badge">Variant B</div></td>
+                            <td>+18.5%</td>
+                            <td>18,920</td>
+                            <td>Apr 10</td>
+                        </tr>
+                        <tr onclick="showExperimentDetail('completed-3')">
+                            <td>Form Field Layout</td>
+                            <td>Signup</td>
+                            <td>A/B</td>
+                            <td><div class="winner-badge">Single Column</div></td>
+                            <td>+11.3%</td>
+                            <td>8,760</td>
+                            <td>Apr 8</td>
+                        </tr>
+                        <tr onclick="showExperimentDetail('completed-4')">
+                            <td>Social Proof Placement</td>
+                            <td>Pricing</td>
+                            <td>A/B</td>
+                            <td><div class="winner-badge">Above Fold</div></td>
+                            <td>+6.7%</td>
+                            <td>14,200</td>
+                            <td>Apr 5</td>
+                        </tr>
+                        <tr onclick="showExperimentDetail('completed-5')">
+                            <td>Price Anchoring</td>
+                            <td>Pricing</td>
+                            <td>A/B</td>
+                            <td><div class="winner-badge">High Anchor</div></td>
+                            <td>+5.4%</td>
+                            <td>9,100</td>
+                            <td>Mar 28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LANDING PAGES SCREEN (placeholder) -->
+        <div id="screen-pages" class="screen">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Landing Pages</div>
+                    <div class="page-subtitle">Manage your pages and experiment setup</div>
+                </div>
+            </div>
+            <div class="kpi-card" style="padding: 40px; text-align: center;">
+                <p style="color: var(--text-light);">Landing Pages section coming soon</p>
+            </div>
+        </div>
+
+        <!-- REPORTS SCREEN (placeholder) -->
+        <div id="screen-reports" class="screen">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Reports</div>
+                    <div class="page-subtitle">View detailed experiment analytics</div>
+                </div>
+            </div>
+            <div class="kpi-card" style="padding: 40px; text-align: center;">
+                <p style="color: var(--text-light);">Reports section coming soon</p>
+            </div>
+        </div>
+
+        <!-- SETTINGS SCREEN (placeholder) -->
+        <div id="screen-settings" class="screen">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">Settings</div>
+                    <div class="page-subtitle">Configure your CRO account</div>
+                </div>
+            </div>
+            <div class="kpi-card" style="padding: 40px; text-align: center;">
+                <p style="color: var(--text-light);">Settings section coming soon</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL BACKDROP -->
+    <div class="modal-backdrop" id="modal-backdrop" onclick="hideDetailModal()"></div>
+
+    <!-- EXPERIMENT DETAIL PANELS -->
+
+    <!-- EXP 1: HEADLINE HOOK TEST (Awareness A/B) -->
+    <div class="overlay-panel" id="detail-exp-1">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Headline Hook Test</div>
+                <div class="overlay-subtitle">Awareness · A/B · Day 12/21</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Pause</button>
+                <button class="btn btn-secondary btn-small">Force Declare</button>
+                <button class="btn btn-secondary btn-small">Export</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Version A</div>
+                        <div class="scoreboard-detail-side-value">3.1%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Version B</div>
+                        <div class="scoreboard-detail-side-value">3.8%</div>
+                    </div>
+                </div>
+                <div class="detail-result">
+                    <div class="detail-result-text">B is winning by +22.6% 🟢</div>
+                </div>
+            </div>
+
+            <div class="plain-english">
+                Version B's headline is converting 22.6% more visitors. We need about 9 more days of data before we can confidently call it a winner.
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Statistical Confidence</div>
+                <div class="confidence-bar">
+                    <div class="confidence-value">82%</div>
+                    <div class="confidence-progress">
+                        <div class="confidence-fill" style="width: 82%;"></div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); text-align: right;">Need 95% to call winner</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Bayesian Analysis</div>
+                <div class="stat-row">
+                    <span class="stat-label">Industry Prior</span>
+                    <span class="stat-value">2.8%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Version A Posterior</span>
+                    <span class="stat-value">3.1%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Version B Posterior</span>
+                    <span class="stat-value">3.8%</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Traffic Split</div>
+                <div class="traffic-split">
+                    <div class="traffic-bar">
+                        <div class="traffic-segment" style="flex: 0.38; background-color: var(--primary);">38%</div>
+                        <div class="traffic-segment" style="flex: 0.62; background-color: var(--success);">62%</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">Engine is sending more traffic to the leader</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Timeline</div>
+                <div class="stat-row">
+                    <span class="stat-label">Days Elapsed</span>
+                    <span class="stat-value">12/21</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Time Remaining</span>
+                    <span class="stat-value">~9 days</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Collected</span>
+                    <span class="stat-value">8,240</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXP 2: PROOF MIX MVT (Differentiation) -->
+    <div class="overlay-panel" id="detail-exp-2">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Proof Mix MVT</div>
+                <div class="overlay-subtitle">Differentiation · MVT · Week 2/4</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Pause</button>
+                <button class="btn btn-secondary btn-small">Force Declare</button>
+                <button class="btn btn-secondary btn-small">Export</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Best Recipe</div>
+                        <div class="scoreboard-detail-side-value">5.2%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Control</div>
+                        <div class="scoreboard-detail-side-value">4.8%</div>
+                    </div>
+                </div>
+                <div class="detail-result">
+                    <div class="detail-result-text">Recipe #3 is leading by +8.3% 🟢</div>
+                </div>
+            </div>
+
+            <div class="plain-english">
+                The combination of founder's video with a comparison table is working best. The video is the biggest factor — it drives 62% of the result.
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Top 3 Recipes</div>
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <span class="recipe-name">Recipe #3 (Best)</span>
+                        <span class="recipe-value">5.2%</span>
+                    </div>
+                    <div class="recipe-description">Video + Comparison Table + Trust Badges</div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <span class="recipe-name">Recipe #5</span>
+                        <span class="recipe-value">5.0%</span>
+                    </div>
+                    <div class="recipe-description">Video + Comparison Table + No Badges</div>
+                </div>
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <span class="recipe-name">Recipe #1</span>
+                        <span class="recipe-value">4.9%</span>
+                    </div>
+                    <div class="recipe-description">Testimonials + Comparison Table + Trust Badges</div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Which Ingredient Matters Most?</div>
+                <div class="ingredient-bar">
+                    <div class="ingredient-label">Proof Type</div>
+                    <div class="ingredient-graph">
+                        <div class="ingredient-fill" style="width: 62%;">62%</div>
+                    </div>
+                </div>
+                <div class="ingredient-bar">
+                    <div class="ingredient-label">Layout</div>
+                    <div class="ingredient-graph">
+                        <div class="ingredient-fill" style="width: 28%;">28%</div>
+                    </div>
+                </div>
+                <div class="ingredient-bar">
+                    <div class="ingredient-label">Trust</div>
+                    <div class="ingredient-graph">
+                        <div class="ingredient-fill" style="width: 10%;">10%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Synergy Insight</div>
+                <div class="synergy-card">
+                    Video + Comparison Table combine for +12% boost together — their synergy is stronger than the sum of their parts.
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Status</div>
+                <div class="stat-row">
+                    <span class="stat-label">Recipes Active</span>
+                    <span class="stat-value">4 of 8</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Eliminated</span>
+                    <span class="stat-value">4 (Week 1)</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions</span>
+                    <span class="stat-value">12,560</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXP 3: CTA URGENCY TEST (Conversion A/B+MAB) -->
+    <div class="overlay-panel" id="detail-exp-3">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">CTA Urgency Test</div>
+                <div class="overlay-subtitle">Conversion · A/B+MAB · Day 8/14</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Pause</button>
+                <button class="btn btn-secondary btn-small">Force Declare</button>
+                <button class="btn btn-secondary btn-small">Export</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Version A</div>
+                        <div class="scoreboard-detail-side-value">2.8%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Version B</div>
+                        <div class="scoreboard-detail-side-value">3.2%</div>
+                    </div>
+                </div>
+                <div class="detail-result">
+                    <div class="detail-result-text">B is winning by +15.2% 🟢</div>
+                </div>
+            </div>
+
+            <div class="plain-english">
+                Version B's urgency CTA is outperforming. The engine has already shifted 72% of traffic to B to protect your revenue while we gather more data.
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Revenue Protection</div>
+                <div class="stat-row">
+                    <span class="stat-label">Revenue Saved</span>
+                    <span class="stat-value">+$1,840</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">By smart traffic shifting</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Traffic Split</div>
+                <div class="traffic-split">
+                    <div class="traffic-bar">
+                        <div class="traffic-segment" style="flex: 0.28; background-color: var(--primary);">28%</div>
+                        <div class="traffic-segment" style="flex: 0.72; background-color: var(--success);">72%</div>
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">Engine shifted traffic to B on Day 3</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Risk Assessment</div>
+                <div class="stat-row">
+                    <span class="stat-label">Switch to B now</span>
+                    <span class="stat-value">0.04% risk</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Almost zero chance it's wrong</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Test Details</div>
+                <div class="stat-row">
+                    <span class="stat-label">Statistical Model</span>
+                    <span class="stat-value">Thompson Sampling</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Days Elapsed</span>
+                    <span class="stat-value">8/14</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions</span>
+                    <span class="stat-value">6,840</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- EXP 4: RE-ENGAGEMENT RECIPE (Loyalty MVT) -->
+    <div class="overlay-panel" id="detail-exp-4">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Re-engagement Recipe</div>
+                <div class="overlay-subtitle">Loyalty · MVT · Week 1/3</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Pause</button>
+                <button class="btn btn-secondary btn-small">Force Declare</button>
+                <button class="btn btn-secondary btn-small">Export</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Best Recipe</div>
+                        <div class="scoreboard-detail-side-value">4.1%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Control</div>
+                        <div class="scoreboard-detail-side-value">3.9%</div>
+                    </div>
+                </div>
+                <div class="detail-result">
+                    <div class="detail-result-text">Recipe #2 is leading by +5.8% 🟢</div>
+                </div>
+            </div>
+
+            <div class="plain-english">
+                Different customer types respond to different approaches. VIPs want to feel recognized, while regular customers respond better to points rewards.
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Segment Breakdown</div>
+                <div class="segment-breakdown">
+                    <div class="segment-card">
+                        <div class="segment-name">VIPs</div>
+                        <div class="segment-value">+8.1%</div>
+                        <div class="segment-choice">Prefer Status Recognition</div>
+                    </div>
+                    <div class="segment-card">
+                        <div class="segment-name">Regular Customers</div>
+                        <div class="segment-value">+4.2%</div>
+                        <div class="segment-choice">Prefer Points Rewards</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Estimated LTV Impact</div>
+                <div class="stat-row">
+                    <span class="stat-label">Per Customer</span>
+                    <span class="stat-value">+$8.40</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 4px;">Annual projection</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">CRM Sync</div>
+                <div class="crm-status">
+                    <span class="crm-check">✓</span>
+                    <span>Connected to Shopify + Klaviyo</span>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); margin-top: 8px;">Segments automatically sync</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-section-title">Progress</div>
+                <div class="stat-row">
+                    <span class="stat-label">Week</span>
+                    <span class="stat-value">1/3</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions</span>
+                    <span class="stat-value">5,120</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- COMPLETED EXPERIMENTS (generic detail panels) -->
+    <div class="overlay-panel" id="detail-completed-1">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Button Color Split</div>
+                <div class="overlay-subtitle">Product · A/B · Completed Apr 15</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Export</button>
+                <button class="btn btn-secondary btn-small">Re-run</button>
+                <button class="btn btn-secondary btn-small">Archive</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-result">
+                <div class="detail-result-text">✓ Winner: Green Button</div>
+            </div>
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Green Button</div>
+                        <div class="scoreboard-detail-side-value">4.2%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Blue Button</div>
+                        <div class="scoreboard-detail-side-value">3.9%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: 24px;">
+                <div class="detail-section-title">What We Learned</div>
+                <div class="plain-english">
+                    Green buttons significantly outperformed blue. The 8.2% uplift is statistically significant at 99% confidence. We recommend rolling out the green button across all product pages.
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="stat-row">
+                    <span class="stat-label">Final Uplift</span>
+                    <span class="stat-value">+8.2%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Tested</span>
+                    <span class="stat-value">12,450</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Duration</span>
+                    <span class="stat-value">3 weeks</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Confidence</span>
+                    <span class="stat-value">99.8%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-panel" id="detail-completed-2">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Hero Copy Variants</div>
+                <div class="overlay-subtitle">Home · A/B · Completed Apr 10</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Export</button>
+                <button class="btn btn-secondary btn-small">Re-run</button>
+                <button class="btn btn-secondary btn-small">Archive</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-result">
+                <div class="detail-result-text">✓ Winner: Variant B</div>
+            </div>
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Variant B</div>
+                        <div class="scoreboard-detail-side-value">5.3%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Variant A</div>
+                        <div class="scoreboard-detail-side-value">4.5%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: 24px;">
+                <div class="detail-section-title">What We Learned</div>
+                <div class="plain-english">
+                    Variant B's focus on ROI resonated much better than Variant A's feature focus. The 18.5% uplift indicates messaging about value and results drives significantly more engagement.
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="stat-row">
+                    <span class="stat-label">Final Uplift</span>
+                    <span class="stat-value">+18.5%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Tested</span>
+                    <span class="stat-value">18,920</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Duration</span>
+                    <span class="stat-value">3 weeks</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Confidence</span>
+                    <span class="stat-value">99.5%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-panel" id="detail-completed-3">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Form Field Layout</div>
+                <div class="overlay-subtitle">Signup · A/B · Completed Apr 8</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Export</button>
+                <button class="btn btn-secondary btn-small">Re-run</button>
+                <button class="btn btn-secondary btn-small">Archive</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-result">
+                <div class="detail-result-text">✓ Winner: Single Column</div>
+            </div>
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Single Column</div>
+                        <div class="scoreboard-detail-side-value">6.1%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Two Column</div>
+                        <div class="scoreboard-detail-side-value">5.5%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: 24px;">
+                <div class="detail-section-title">What We Learned</div>
+                <div class="plain-english">
+                    Single column forms reduce cognitive load and feel more mobile-friendly. The 11.3% uplift confirms users prefer a linear, step-by-step approach.
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="stat-row">
+                    <span class="stat-label">Final Uplift</span>
+                    <span class="stat-value">+11.3%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Tested</span>
+                    <span class="stat-value">8,760</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Duration</span>
+                    <span class="stat-value">2 weeks</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Confidence</span>
+                    <span class="stat-value">98.9%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-panel" id="detail-completed-4">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Social Proof Placement</div>
+                <div class="overlay-subtitle">Pricing · A/B · Completed Apr 5</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Export</button>
+                <button class="btn btn-secondary btn-small">Re-run</button>
+                <button class="btn btn-secondary btn-small">Archive</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-result">
+                <div class="detail-result-text">✓ Winner: Above Fold</div>
+            </div>
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">Above Fold</div>
+                        <div class="scoreboard-detail-side-value">3.8%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Below Fold</div>
+                        <div class="scoreboard-detail-side-value">3.6%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: 24px;">
+                <div class="detail-section-title">What We Learned</div>
+                <div class="plain-english">
+                    Showing social proof before the pricing decision increases conversions. The 6.7% uplift shows testimonials visible on first load build more trust.
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="stat-row">
+                    <span class="stat-label">Final Uplift</span>
+                    <span class="stat-value">+6.7%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Tested</span>
+                    <span class="stat-value">14,200</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Duration</span>
+                    <span class="stat-value">2 weeks</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Confidence</span>
+                    <span class="stat-value">97.8%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-panel" id="detail-completed-5">
+        <div class="overlay-header">
+            <div>
+                <div class="overlay-title">Price Anchoring</div>
+                <div class="overlay-subtitle">Pricing · A/B · Completed Mar 28</div>
+            </div>
+            <div class="overlay-actions">
+                <button class="btn btn-secondary btn-small">Export</button>
+                <button class="btn btn-secondary btn-small">Re-run</button>
+                <button class="btn btn-secondary btn-small">Archive</button>
+            </div>
+            <button class="overlay-close" onclick="hideDetailModal()">✕</button>
+        </div>
+        <div class="overlay-content">
+            <div class="detail-result">
+                <div class="detail-result-text">✓ Winner: High Anchor</div>
+            </div>
+            <div class="scoreboard-detail">
+                <div class="scoreboard-detail-matchup">
+                    <div class="scoreboard-detail-side winning">
+                        <div class="scoreboard-detail-side-label">High Anchor</div>
+                        <div class="scoreboard-detail-side-value">3.2%</div>
+                    </div>
+                    <div class="scoreboard-detail-vs">vs</div>
+                    <div class="scoreboard-detail-side">
+                        <div class="scoreboard-detail-side-label">Low Anchor</div>
+                        <div class="scoreboard-detail-side-value">3.0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-section" style="margin-top: 24px;">
+                <div class="detail-section-title">What We Learned</div>
+                <div class="plain-english">
+                    Showing a higher price first as reference makes the final price feel like a better deal. The 5.4% uplift validates the anchoring effect.
+                </div>
+            </div>
+            <div class="detail-section">
+                <div class="stat-row">
+                    <span class="stat-label">Final Uplift</span>
+                    <span class="stat-value">+5.4%</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Sessions Tested</span>
+                    <span class="stat-value">9,100</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Duration</span>
+                    <span class="stat-value">2 weeks</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Confidence</span>
+                    <span class="stat-value">95.2%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW EXPERIMENT WIZARD -->
+    <div class="wizard-overlay" id="wizard-overlay">
+        <div class="wizard-panel">
+            <button class="wizard-close" onclick="hideWizard()">✕</button>
+            <div class="wizard-content">
+                <div class="wizard-header">
+                    <div class="wizard-title">Create New Experiment</div>
+                    <div class="wizard-subtitle">Optimize your funnel with guided testing</div>
+                </div>
+
+                <!-- STEP 0: PICK A PAGE -->
+                <div class="wizard-step active" id="wizard-step-0">
+                    <div class="wizard-step-indicator">Step 1 of 2</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">Which page are you testing?</h3>
+                    <div class="page-cards" style="margin-top: 20px;">
+                        <div class="page-card" onclick="selectPage('awareness')">
+                            <div class="page-card-icon">🎯</div>
+                            <div class="page-card-title">Awareness</div>
+                            <div class="page-card-traffic">~12k daily</div>
+                        </div>
+                        <div class="page-card" onclick="selectPage('differentiation')">
+                            <div class="page-card-icon">🔍</div>
+                            <div class="page-card-title">Differentiation</div>
+                            <div class="page-card-traffic">~8k daily</div>
+                        </div>
+                        <div class="page-card" onclick="selectPage('conversion')">
+                            <div class="page-card-icon">💰</div>
+                            <div class="page-card-title">Conversion</div>
+                            <div class="page-card-traffic">~5k daily</div>
+                        </div>
+                        <div class="page-card" onclick="selectPage('loyalty')">
+                            <div class="page-card-icon">❤️</div>
+                            <div class="page-card-title">Loyalty</div>
+                            <div class="page-card-traffic">~3k daily</div>
+                        </div>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="hideWizard()">Cancel</button>
+                        <button class="btn btn-primary" onclick="wizardStep(1)" disabled id="btn-page-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- STEP 1: CHOOSE PATH -->
+                <div class="wizard-step" id="wizard-step-1">
+                    <div class="wizard-step-indicator">Step 2 of 2</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">How do you want to set up your test?</h3>
+                    <div class="path-cards" style="margin-top: 20px;">
+                        <div class="path-card" onclick="selectPath('autopilot')">
+                            <div class="path-icon">🚀</div>
+                            <div class="path-title">Autopilot</div>
+                            <div class="path-description">Answer 3 quick questions. We'll set up the best test for your page automatically.</div>
+                            <div class="path-best-for">Best for: Most merchants</div>
+                            <div class="path-time">⏱ Takes ~1 minute</div>
+                        </div>
+                        <div class="path-card" onclick="selectPath('custom')">
+                            <div class="path-icon">🔧</div>
+                            <div class="path-title">Custom Setup</div>
+                            <div class="path-description">Full control over every setting. Choose your test type, elements, model, traffic split.</div>
+                            <div class="path-best-for">Best for: Marketing teams</div>
+                            <div class="path-time">⏱ Takes ~5 minutes</div>
+                        </div>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(0)">Back</button>
+                        <button class="btn btn-primary" onclick="wizardStep(2)" disabled id="btn-path-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- AUTOPILOT Q1: GOAL -->
+                <div class="wizard-step" id="wizard-step-autopilot-1">
+                    <div class="wizard-step-indicator">Autopilot Setup</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">What's your main goal for this page?</h3>
+                    <div class="goal-cards" style="margin-top: 20px;">
+                        <div class="goal-card" onclick="selectGoal('signups')">
+                            <div class="goal-radio"></div>
+                            <div class="goal-content">
+                                <div class="goal-title">Get more signups / leads</div>
+                                <div class="goal-description">Increase form submissions and lead generation</div>
+                            </div>
+                        </div>
+                        <div class="goal-card" onclick="selectGoal('cta')">
+                            <div class="goal-radio"></div>
+                            <div class="goal-content">
+                                <div class="goal-title">Get more people to click through to product</div>
+                                <div class="goal-description">Increase CTR and product page visits</div>
+                            </div>
+                        </div>
+                        <div class="goal-card" onclick="selectGoal('purchases')">
+                            <div class="goal-radio"></div>
+                            <div class="goal-content">
+                                <div class="goal-title">Get more purchases</div>
+                                <div class="goal-description">Increase revenue and order conversions</div>
+                            </div>
+                        </div>
+                        <div class="goal-card" onclick="selectGoal('retention')">
+                            <div class="goal-radio"></div>
+                            <div class="goal-content">
+                                <div class="goal-title">Bring back returning customers</div>
+                                <div class="goal-description">Increase repeat purchases and loyalty</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(1)">Back</button>
+                        <button class="btn btn-primary" onclick="wizardStep(3)" disabled id="btn-goal-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- AUTOPILOT Q2: PROBLEM -->
+                <div class="wizard-step" id="wizard-step-autopilot-2">
+                    <div class="wizard-step-indicator">Autopilot Setup</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">What do you think is holding visitors back?</h3>
+                    <div class="goal-cards" id="problem-cards" style="margin-top: 20px;"></div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(2)">Back</button>
+                        <button class="btn btn-primary" onclick="wizardStep(4)" disabled id="btn-problem-next">Next</button>
+                    </div>
+                </div>
+
+                <!-- AUTOPILOT Q3: AGGRESSION -->
+                <div class="wizard-step" id="wizard-step-autopilot-3">
+                    <div class="wizard-step-indicator">Autopilot Setup</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">How aggressive do you want to be?</h3>
+                    <div class="aggression-cards" style="margin-top: 20px;">
+                        <div class="aggression-card" onclick="selectAggression('safe')">
+                            <div class="aggression-title">Play it safe — minimize risk</div>
+                            <div class="aggression-description">80/20 split, conservative approach, maximum certainty</div>
+                        </div>
+                        <div class="aggression-card selected" onclick="selectAggression('balanced')">
+                            <div class="aggression-title">Balanced — good speed, moderate risk</div>
+                            <div class="aggression-description">50/50 split, Bayesian approach (recommended)</div>
+                        </div>
+                        <div class="aggression-card" onclick="selectAggression('aggressive')">
+                            <div class="aggression-title">Move fast — I want answers quickly</div>
+                            <div class="aggression-description">50/50 split, aggressive approach, fastest results</div>
+                        </div>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(3)">Back</button>
+                        <button class="btn btn-primary" onclick="wizardStep(5)">Next</button>
+                    </div>
+                </div>
+
+                <!-- AUTOPILOT SUMMARY -->
+                <div class="wizard-step" id="wizard-step-autopilot-summary">
+                    <h3 class="wizard-title" style="font-size: 18px;">Your Experiment Setup</h3>
+                    <div class="autopilot-summary" style="margin-top: 20px;">
+                        <div class="summary-row">
+                            <span class="summary-label">Page</span>
+                            <span class="summary-value"><span class="summary-value-bold" id="summary-page">Awareness</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Testing</span>
+                            <span class="summary-value"><span class="summary-value-bold" id="summary-testing">Headline Copy</span> — We'll test different headline variations to increase engagement</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">AI Suggestion</span>
+                            <span class="summary-value"><span class="summary-value-bold">Version B:</span> "Increase Your Revenue 3x Faster with Revmatics"</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">How it Works</span>
+                            <span class="summary-value">We'll split your traffic <span class="summary-value-bold">50/50</span> and run for <span class="summary-value-bold">~2 weeks</span></span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Under the Hood</span>
+                            <span class="summary-value"><span class="summary-note">Bayesian approach, A/B test, 95% confidence target</span></span>
+                        </div>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(4)">Back</button>
+                        <button class="btn btn-success" onclick="launchExperiment('autopilot')">Launch Experiment</button>
+                    </div>
+                </div>
+
+                <!-- CUSTOM PATH - coming soon indicator -->
+                <div class="wizard-step" id="wizard-step-custom">
+                    <div class="wizard-step-indicator">Custom Setup</div>
+                    <h3 class="wizard-title" style="font-size: 18px;">Custom Test Configuration</h3>
+                    <div class="kpi-card" style="margin-top: 20px; padding: 40px; text-align: center;">
+                        <p style="color: var(--text-light);">Custom setup is available for advanced users. This interface guides you through selecting test type, elements, statistical model, traffic split, and metrics.</p>
+                        <p style="color: var(--text-light); margin-top: 16px; font-size: 12px;">For this V1.5 M mockup, please use Autopilot path.</p>
+                    </div>
+                    <div class="wizard-footer" style="margin-top: 28px;">
+                        <button class="btn btn-secondary" onclick="wizardStep(1)">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast" style="display: none;"></div>
+
+    <script>
+        // SCREEN NAVIGATION
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // DETAIL MODAL FUNCTIONS
+        function showExperimentDetail(id) {
+            document.getElementById('modal-backdrop').classList.add('active');
+            document.getElementById('detail-' + id).classList.add('active');
+        }
+
+        function hideDetailModal() {
+            document.getElementById('modal-backdrop').classList.remove('active');
+            document.querySelectorAll('.overlay-panel').forEach(p => p.classList.remove('active'));
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideDetailModal();
+                hideWizard();
+            }
+        });
+
+        // WIZARD FUNCTIONS
+        let wizardState = {
+            page: null,
+            path: null,
+            goal: null,
+            problem: null,
+            aggression: 'balanced'
+        };
+
+        function showWizard() {
+            document.getElementById('wizard-overlay').classList.add('active');
+            wizardState = { page: null, path: null, goal: null, problem: null, aggression: 'balanced' };
+            wizardStep(0);
+        }
+
+        function hideWizard() {
+            document.getElementById('wizard-overlay').classList.remove('active');
+        }
+
+        function wizardStep(step) {
+            document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+
+            if (step === 0) {
+                document.getElementById('wizard-step-0').classList.add('active');
+            } else if (step === 1) {
+                document.getElementById('wizard-step-1').classList.add('active');
+            } else if (step === 2) {
+                if (wizardState.path === 'autopilot') {
+                    renderProblemOptions();
+                    document.getElementById('wizard-step-autopilot-1').classList.add('active');
+                } else {
+                    document.getElementById('wizard-step-custom').classList.add('active');
+                }
+            } else if (step === 3) {
+                renderProblemOptions();
+                document.getElementById('wizard-step-autopilot-2').classList.add('active');
+            } else if (step === 4) {
+                document.getElementById('wizard-step-autopilot-3').classList.add('active');
+            } else if (step === 5) {
+                updateAutopilotSummary();
+                document.getElementById('wizard-step-autopilot-summary').classList.add('active');
+            }
+        }
+
+        function selectPage(page) {
+            wizardState.page = page;
+            document.querySelectorAll('.page-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.page-card').classList.add('selected');
+            document.getElementById('btn-page-next').disabled = false;
+        }
+
+        function selectPath(path) {
+            wizardState.path = path;
+            document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.path-card').classList.add('selected');
+            document.getElementById('btn-path-next').disabled = false;
+        }
+
+        function selectGoal(goal) {
+            wizardState.goal = goal;
+            document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.goal-card').classList.add('selected');
+            document.getElementById('btn-goal-next').disabled = false;
+        }
+
+        function selectProblem(problem) {
+            wizardState.problem = problem;
+            document.querySelectorAll('#problem-cards .goal-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.goal-card').classList.add('selected');
+            document.getElementById('btn-problem-next').disabled = false;
+        }
+
+        function selectAggression(agg) {
+            wizardState.aggression = agg;
+            document.querySelectorAll('.aggression-card').forEach(c => c.classList.remove('selected'));
+            event.target.closest('.aggression-card').classList.add('selected');
+        }
+
+        function renderProblemOptions() {
+            const problemMap = {
+                awareness: [
+                    { id: 'headline', title: "The headline doesn't grab attention", description: "Improve headline impact and clarity" },
+                    { id: 'visual', title: "The page doesn't look professional enough", description: "Enhance visual design and layout" },
+                    { id: 'proof', title: "People don't believe our claims", description: "Add social proof and testimonials" },
+                    { id: 'offer', title: "The offer isn't interesting enough", description: "Test lead magnet or CTA variations" },
+                    { id: 'auto', title: "I'm not sure — you decide", description: "System picks highest-impact element" }
+                ],
+                differentiation: [
+                    { id: 'comparison', title: "We don't stand out from competitors", description: "Test comparison format variations" },
+                    { id: 'trust', title: "People don't trust us enough", description: "Add trust and authority signals" },
+                    { id: 'demo', title: "The proof isn't convincing", description: "Test demo/evidence variations" },
+                    { id: 'guarantee', title: "The guarantee doesn't feel strong enough", description: "Test risk reversal approaches" },
+                    { id: 'auto', title: "I'm not sure — you decide", description: "System picks highest-impact element" }
+                ],
+                conversion: [
+                    { id: 'cta', title: "The call-to-action isn't compelling enough", description: "Test CTA copy and design variations" },
+                    { id: 'price', title: "The price or offer doesn't feel right", description: "Test price display and anchoring" },
+                    { id: 'friction', title: "There's too much friction in the checkout", description: "Test form field and flow variations" },
+                    { id: 'trust', title: "Visitors don't trust the page enough", description: "Add trust badges and security signals" },
+                    { id: 'auto', title: "I'm not sure — you decide", description: "System picks highest-impact element" }
+                ],
+                loyalty: [
+                    { id: 'personalization', title: "The page feels generic, not personal", description: "Test personalization variations" },
+                    { id: 'incentives', title: "The reward isn't motivating enough", description: "Test incentive and offer variations" },
+                    { id: 'recognition', title: "Customers don't feel valued", description: "Test recognition and community features" },
+                    { id: 'reengagement', title: "People forget to come back", description: "Test re-engagement messaging" },
+                    { id: 'auto', title: "I'm not sure — you decide", description: "System picks highest-impact element" }
+                ]
+            };
+
+            const options = problemMap[wizardState.page] || [];
+            const container = document.getElementById('problem-cards');
+            container.innerHTML = options.map(opt => `
+                <div class="goal-card" onclick="selectProblem('${opt.id}')">
+                    <div class="goal-radio"></div>
+                    <div class="goal-content">
+                        <div class="goal-title">${opt.title}</div>
+                        <div class="goal-description">${opt.description}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateAutopilotSummary() {
+            document.getElementById('summary-page').textContent = wizardState.page.charAt(0).toUpperCase() + wizardState.page.slice(1);
+            document.getElementById('summary-testing').textContent = 'Optimized Test';
+        }
+
+        function launchExperiment(path) {
+            showToast('✓ Experiment launched! Check back for live results.');
+            hideWizard();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
