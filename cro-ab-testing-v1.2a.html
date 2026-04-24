@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRO A/B Testing V1.2 A — Revmatics</title>
+    <title>CRO A/B Testing V1.2 A (Condensed) — Revmatics</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,12 +44,12 @@
 
         /* TOP NAVIGATION */
         .topnav {
-            height: 56px;
+            height: 48px;
             background: linear-gradient(90deg, var(--primary-dark), var(--primary));
             color: white;
             display: flex;
             align-items: center;
-            padding: 0 24px;
+            padding: 0 16px;
             position: fixed;
             top: 0;
             left: 0;
@@ -101,22 +101,22 @@
         .sidebar {
             position: fixed;
             left: 0;
-            top: 56px;
-            width: 220px;
-            height: calc(100vh - 56px);
+            top: 48px;
+            width: 160px;
+            height: calc(100vh - 48px);
             background: var(--card);
             border-right: 1px solid var(--border);
-            padding: 24px 0;
+            padding: 16px 0;
             overflow-y: auto;
             z-index: 99;
         }
 
         .sidebar-item {
-            padding: 12px 20px;
+            padding: 9px 14px;
             display: block;
             color: var(--text);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             transition: all 0.2s;
             cursor: pointer;
@@ -131,15 +131,15 @@
             background: rgba(46, 80, 144, 0.1);
             color: var(--primary);
             border-left: 3px solid var(--primary);
-            padding-left: 17px;
+            padding-left: 11px;
         }
 
         /* MAIN CONTENT */
         .main-content {
-            margin-left: 220px;
-            margin-top: 56px;
-            padding: 32px;
-            min-height: calc(100vh - 56px);
+            margin-left: 160px;
+            margin-top: 48px;
+            padding: 16px;
+            min-height: calc(100vh - 48px);
         }
 
         /* SCREEN CONTAINERS */
@@ -156,55 +156,55 @@
             background: linear-gradient(135deg, var(--primary-dark), var(--primary));
             color: white;
             border-radius: var(--radius);
-            padding: 48px 40px;
-            margin-bottom: 48px;
+            padding: 20px 16px;
+            margin-bottom: 16px;
             text-align: center;
         }
 
         .hero-kpi-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             opacity: 0.95;
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .hero-kpi-amount {
-            font-size: 48px;
+            font-size: 36px;
             font-weight: 800;
             color: var(--success);
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .hero-kpi-subtitle {
-            font-size: 13px;
+            font-size: 12px;
             opacity: 0.85;
-            margin-bottom: 32px;
+            margin-bottom: 16px;
         }
 
         .hero-kpi-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
         }
 
         .hero-stat-card {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
-            padding: 20px 16px;
+            padding: 10px 8px;
             text-align: center;
         }
 
         .hero-stat-value {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .hero-stat-label {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.85;
         }
 
@@ -213,12 +213,12 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 24px;
-            margin-top: 40px;
+            margin-bottom: 14px;
+            margin-top: 20px;
         }
 
         .section-header h2 {
-            font-size: 20px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text);
         }
@@ -234,19 +234,22 @@
 
         /* RECOMMENDATION CARDS */
         .recommendations {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 48px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: stretch;
         }
 
         .recommendation-card {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 28px;
+            padding: 14px;
             transition: all 0.3s;
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
 
         .recommendation-card:hover {
@@ -259,7 +262,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         .rec-badge {
@@ -296,27 +299,27 @@
         }
 
         .rec-title {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--text);
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             line-height: 1.4;
         }
 
         .rec-description {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-light);
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             line-height: 1.5;
         }
 
         .rec-suggestion {
             background: rgba(0, 180, 216, 0.08);
             border-left: 3px solid var(--accent);
-            padding: 12px 16px;
+            padding: 8px 12px;
             border-radius: 4px;
-            margin-bottom: 16px;
-            font-size: 14px;
+            margin-bottom: 10px;
+            font-size: 13px;
             color: var(--text);
             line-height: 1.5;
         }
@@ -327,18 +330,19 @@
         }
 
         .rec-insight {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-light);
-            margin-bottom: 16px;
+            margin-bottom: 10px;
             line-height: 1.5;
         }
 
         .rec-footer {
             display: flex;
-            gap: 12px;
-            align-items: center;
+            flex-direction: column;
+            gap: 8px;
             border-top: 1px solid var(--border);
-            padding-top: 16px;
+            padding-top: 10px;
+            margin-top: auto;
         }
 
         .rec-impact {
@@ -398,110 +402,192 @@
 
         .rec-actions {
             display: flex;
-            gap: 12px;
+            gap: 8px;
+            align-items: center;
         }
 
         .rec-actions .btn-primary {
             white-space: nowrap;
         }
 
-        /* TEST SCOREBOARD */
-        .running-tests {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 48px;
-        }
-
-        .test-card {
+        /* RUNNING TESTS — LIST */
+        .running-tests-section {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 28px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .test-card:hover {
-            border-color: var(--primary-light);
-            box-shadow: 0 8px 16px rgba(46, 80, 144, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .test-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            overflow: hidden;
             margin-bottom: 20px;
         }
 
-        .test-card-title {
-            font-size: 15px;
-            font-weight: 700;
+        .running-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1.2fr 0.9fr 1.3fr 0.8fr 0.8fr;
+            gap: 16px;
+            align-items: center;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .running-row:last-child {
+            border-bottom: none;
+        }
+
+        .running-row:hover {
+            background: rgba(46, 80, 144, 0.02);
+        }
+
+        .running-row-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
             color: var(--text);
         }
 
-        .test-card-status {
+        .running-live-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            flex-shrink: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* AB BAR COMPARISON */
+        .running-row-ab {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .ab-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .ab-bar-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-light);
+            width: 14px;
+            flex-shrink: 0;
+        }
+
+        .ab-bar-track {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .ab-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+
+        .ab-bar-fill.current {
+            background: #94a3b8;
+        }
+
+        .ab-bar-fill.new-version {
+            background: #059669;
+        }
+
+        .ab-bar-pct {
+            font-size: 11px;
+            font-weight: 600;
+            width: 32px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .ab-bar-pct.current { color: var(--text-light); }
+        .ab-bar-pct.new-version { color: #059669; }
+
+        /* TEST NAME WITH WHAT'S BEING TESTED */
+        .running-row-name-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .running-row-testing {
+            font-size: 11px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .running-row-page {
             font-size: 12px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .running-row-confidence {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .running-row-conf-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
             color: var(--text-light);
         }
 
+        .running-row-winning {
+            font-size: 13px;
+            font-weight: 700;
+            color: #059669;
+            text-align: center;
+        }
+
+        .running-row-impact {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--success);
+            text-align: right;
+        }
+
+        /* OVERLAY SCOREBOARD (kept for popups) */
         .test-scoreboard {
             display: grid;
             grid-template-columns: 1fr auto 1fr;
-            gap: 20px;
+            gap: 12px;
             align-items: center;
-            margin-bottom: 24px;
-            padding-bottom: 24px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
         }
 
-        .test-version {
-            text-align: center;
-        }
-
-        .test-version-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 8px;
-        }
-
-        .test-version-rate {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text);
-        }
-
-        .test-version-desc {
-            font-size: 12px;
-            color: var(--text-light);
-            margin-top: 8px;
-        }
-
-        .test-vs {
-            text-align: center;
-            color: var(--text-light);
-            font-weight: 600;
-        }
+        .test-version { text-align: center; }
+        .test-version-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 8px; }
+        .test-version-rate { font-size: 20px; font-weight: 700; color: var(--text); }
+        .test-version-desc { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+        .test-vs { text-align: center; color: var(--text-light); font-weight: 600; }
 
         .test-result {
             background: rgba(6, 214, 160, 0.1);
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 16px;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-bottom: 10px;
             text-align: center;
         }
 
-        .test-result-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #059669;
-        }
+        .test-result-text { font-size: 14px; font-weight: 600; color: #059669; }
 
-        .test-confidence {
-            margin-bottom: 16px;
-        }
+        .test-confidence { margin-bottom: 8px; }
 
         .test-confidence-label {
             display: flex;
@@ -510,18 +596,12 @@
             margin-bottom: 8px;
         }
 
-        .test-confidence-label-text {
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .test-confidence-label-pct {
-            color: var(--text-light);
-        }
+        .test-confidence-label-text { font-weight: 600; color: var(--text); }
+        .test-confidence-label-pct { color: var(--text-light); }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: var(--border);
             border-radius: 4px;
             overflow: hidden;
@@ -534,21 +614,9 @@
             transition: width 0.3s;
         }
 
-        .test-revenue {
-            font-size: 13px;
-            color: var(--text-light);
-            margin-top: 12px;
-        }
-
-        .test-revenue-value {
-            font-weight: 700;
-            color: var(--success);
-        }
-
-        .test-timeline {
-            font-size: 13px;
-            color: var(--text-light);
-        }
+        .test-revenue { font-size: 13px; color: var(--text-light); margin-top: 6px; }
+        .test-revenue-value { font-weight: 700; color: var(--success); }
+        .test-timeline { font-size: 13px; color: var(--text-light); }
 
         /* WINS LIST */
         .wins-section {
@@ -565,10 +633,10 @@
 
         .win-row {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 160px;
-            gap: 16px;
+            grid-template-columns: 1fr 1fr 1fr 120px;
+            gap: 10px;
             align-items: center;
-            padding: 20px 28px;
+            padding: 10px 14px;
             border-bottom: 1px solid var(--border);
             cursor: pointer;
             transition: background 0.2s;
@@ -625,14 +693,14 @@
 
         .wins-total {
             background: rgba(46, 80, 144, 0.05);
-            padding: 20px 28px;
+            padding: 10px 14px;
             border-top: 2px solid var(--border);
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr 160px;
-            gap: 16px;
+            grid-template-columns: 1fr 1fr 1fr 120px;
+            gap: 10px;
             align-items: center;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .wins-total-label {
@@ -661,8 +729,8 @@
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 28px;
-            margin-bottom: 24px;
+            padding: 14px;
+            margin-bottom: 14px;
         }
 
         .approval-section-title {
@@ -777,9 +845,9 @@
             display: none;
             position: fixed;
             right: 0;
-            top: 56px;
+            top: 48px;
             bottom: 0;
-            width: 500px;
+            width: 400px;
             background: var(--card);
             z-index: 201;
             box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
@@ -795,11 +863,11 @@
         }
 
         .overlay-header {
-            padding: 20px 28px;
+            padding: 14px 16px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-shrink: 0;
         }
 
@@ -843,7 +911,7 @@
 
         .overlay-content {
             flex: 1;
-            padding: 28px;
+            padding: 16px;
             overflow-y: auto;
         }
 
@@ -1006,33 +1074,17 @@
         /* RESPONSIVE */
         @media (max-width: 1024px) {
             .main-content {
-                padding: 24px;
-            }
-
-            .hero-kpi {
-                padding: 32px 24px;
-            }
-
-            .hero-kpi-amount {
-                font-size: 36px;
-            }
-
-            .hero-stat-card {
-                padding: 16px 12px;
-            }
-
-            .hero-stat-value {
-                font-size: 20px;
+                padding: 14px;
             }
         }
 
         @media (max-width: 768px) {
             .sidebar {
-                width: 200px;
+                width: 140px;
             }
 
             .main-content {
-                margin-left: 200px;
+                margin-left: 140px;
             }
 
             .test-scoreboard {
@@ -1082,7 +1134,7 @@
 
         @media (max-width: 480px) {
             .topnav {
-                padding: 0 16px;
+                padding: 0 12px;
             }
 
             .topnav-separator {
@@ -1094,66 +1146,36 @@
             }
 
             .sidebar {
-                width: 60px;
-                padding: 12px 0;
+                width: 52px;
+                padding: 10px 0;
             }
 
             .sidebar-item {
-                padding: 12px 8px;
-                font-size: 12px;
+                padding: 10px 6px;
+                font-size: 11px;
                 text-align: center;
             }
 
             .sidebar-item.active {
                 border-left: none;
                 border-bottom: 3px solid var(--primary);
-                padding-left: 8px;
+                padding-left: 6px;
             }
 
             .main-content {
-                margin-left: 60px;
-                padding: 16px;
-            }
-
-            .hero-kpi {
-                padding: 24px 16px;
-                margin-bottom: 32px;
-            }
-
-            .hero-kpi-amount {
-                font-size: 28px;
-            }
-
-            .hero-stat-card {
-                padding: 12px 8px;
-                font-size: 11px;
-            }
-
-            .hero-stat-value {
-                font-size: 16px;
-            }
-
-            .recommendation-card {
-                padding: 20px 16px;
+                margin-left: 52px;
+                padding: 12px;
             }
 
             .rec-header {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
-            }
-
-            .test-card {
-                padding: 20px 16px;
-            }
-
-            .approval-section {
-                padding: 20px 16px;
+                gap: 6px;
             }
 
             .wins-total {
                 grid-template-columns: 1fr;
-                gap: 8px;
+                gap: 6px;
             }
         }
     </style>
@@ -1301,95 +1323,87 @@
                 <h2>Running Now</h2>
                 <div class="section-badge">2</div>
             </div>
-            <div class="running-tests">
-
-                <!-- Running Test 1 -->
-                <div class="test-card" onclick="showDetail('test-price-display')">
-                    <div class="test-card-header">
-                        <div>
-                            <div class="test-card-title">Conversion — Price Display Test</div>
-                            <div class="test-card-status">Conversion Page · Running 12 days</div>
+            <div class="running-tests-section">
+                <!-- Column headers -->
+                <div class="running-row" style="background: rgba(46,80,144,0.04); cursor: default; pointer-events: none; border-bottom: 1px solid var(--border);">
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px;">Test &amp; What's Being Tested</div>
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px;">A vs B Performance</div>
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px; text-align:center;">Page</div>
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px;">Confidence</div>
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px; text-align:center;">Winning by</div>
+                    <div style="font-size:11px; font-weight:700; color:var(--text-light); text-transform:uppercase; letter-spacing:0.4px; text-align:right;">Est. Impact</div>
+                </div>
+                <!-- Row 1 -->
+                <div class="running-row" onclick="showDetail('test-price-display')">
+                    <div class="running-row-name-block">
+                        <div class="running-row-name">
+                            <span class="running-live-dot"></span>
+                            Conversion — Price Display Test
+                        </div>
+                        <div class="running-row-testing">Testing: "Submit Order" vs "From $49.99" button</div>
+                    </div>
+                    <div class="running-row-ab">
+                        <div class="ab-bar-row">
+                            <div class="ab-bar-label">A</div>
+                            <div class="ab-bar-track"><div class="ab-bar-fill current" style="width:64%;"></div></div>
+                            <div class="ab-bar-pct current">3.2%</div>
+                        </div>
+                        <div class="ab-bar-row">
+                            <div class="ab-bar-label">B</div>
+                            <div class="ab-bar-track"><div class="ab-bar-fill new-version" style="width:76%;"></div></div>
+                            <div class="ab-bar-pct new-version">3.8%</div>
                         </div>
                     </div>
-                    <div class="test-scoreboard">
-                        <div class="test-version">
-                            <div class="test-version-label">Current</div>
-                            <div class="test-version-rate">3.2%</div>
-                            <div class="test-version-desc">$49.99</div>
-                        </div>
-                        <div class="test-vs">vs</div>
-                        <div class="test-version">
-                            <div class="test-version-label">New Version</div>
-                            <div class="test-version-rate">3.8%</div>
-                            <div class="test-version-desc">"From $49.99"</div>
-                        </div>
-                    </div>
-                    <div class="test-result">
-                        <div class="test-result-text">🏆 New version is winning by +18.3%</div>
-                    </div>
-                    <div class="test-confidence">
-                        <div class="test-confidence-label">
-                            <span class="test-confidence-label-text">Confidence</span>
-                            <span class="test-confidence-label-pct">78% sure · Need 95% to call it</span>
+                    <div class="running-row-page">Conversion · 12 days</div>
+                    <div class="running-row-confidence">
+                        <div class="running-row-conf-label">
+                            <span>78% sure</span><span>Need 95%</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 78%;"></div>
+                            <div class="progress-fill" style="width:78%;"></div>
                         </div>
                     </div>
-                    <div class="test-revenue">
-                        💰 If this wins: <span class="test-revenue-value">+$280/month estimated</span>
-                    </div>
-                    <div class="test-timeline">
-                        🤖 We're handling everything — check back in ~6 days
-                    </div>
+                    <div class="running-row-winning">+18.3%</div>
+                    <div class="running-row-impact">+$280/mo</div>
                 </div>
-
-                <!-- Running Test 2 -->
-                <div class="test-card" onclick="showDetail('test-hero-image')">
-                    <div class="test-card-header">
-                        <div>
-                            <div class="test-card-title">Awareness — Hero Image Test</div>
-                            <div class="test-card-status">Awareness Page · Running 8 days</div>
+                <!-- Row 2 -->
+                <div class="running-row" onclick="showDetail('test-hero-image')">
+                    <div class="running-row-name-block">
+                        <div class="running-row-name">
+                            <span class="running-live-dot"></span>
+                            Awareness — Hero Image Test
+                        </div>
+                        <div class="running-row-testing">Testing: Product photo vs Lifestyle photo as hero</div>
+                    </div>
+                    <div class="running-row-ab">
+                        <div class="ab-bar-row">
+                            <div class="ab-bar-label">A</div>
+                            <div class="ab-bar-track"><div class="ab-bar-fill current" style="width:82%;"></div></div>
+                            <div class="ab-bar-pct current">4.1%</div>
+                        </div>
+                        <div class="ab-bar-row">
+                            <div class="ab-bar-label">B</div>
+                            <div class="ab-bar-track"><div class="ab-bar-fill new-version" style="width:92%;"></div></div>
+                            <div class="ab-bar-pct new-version">4.6%</div>
                         </div>
                     </div>
-                    <div class="test-scoreboard">
-                        <div class="test-version">
-                            <div class="test-version-label">Current</div>
-                            <div class="test-version-rate">4.1%</div>
-                            <div class="test-version-desc">Product shot</div>
-                        </div>
-                        <div class="test-vs">vs</div>
-                        <div class="test-version">
-                            <div class="test-version-label">New Version</div>
-                            <div class="test-version-rate">4.6%</div>
-                            <div class="test-version-desc">Lifestyle photo</div>
-                        </div>
-                    </div>
-                    <div class="test-result">
-                        <div class="test-result-text">🏆 New version is winning by +11.2%</div>
-                    </div>
-                    <div class="test-confidence">
-                        <div class="test-confidence-label">
-                            <span class="test-confidence-label-text">Confidence</span>
-                            <span class="test-confidence-label-pct">65% sure · Need 95% to call it</span>
+                    <div class="running-row-page">Awareness · 8 days</div>
+                    <div class="running-row-confidence">
+                        <div class="running-row-conf-label">
+                            <span>65% sure</span><span>Need 95%</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 65%; background: #f59e0b;"></div>
+                            <div class="progress-fill" style="width:65%; background:#f59e0b;"></div>
                         </div>
                     </div>
-                    <div class="test-revenue">
-                        💰 If this wins: <span class="test-revenue-value">+$150/month estimated</span>
-                    </div>
-                    <div class="test-timeline">
-                        🤖 We're handling everything — check back in ~10 days
-                    </div>
+                    <div class="running-row-winning">+11.2%</div>
+                    <div class="running-row-impact">+$150/mo</div>
                 </div>
-
             </div>
 
-            <!-- WINS SECTION -->
+            <!-- COMPLETED EXPERIMENTS SECTION -->
             <div class="section-header">
-                <h2>Wins So Far</h2>
+                <h2>Completed Experiments</h2>
                 <div class="section-badge">5</div>
             </div>
             <div class="wins-section">
@@ -1516,49 +1530,50 @@
     <!-- Running Test 1 Detail -->
     <div class="overlay-panel" id="detail-test-price-display">
         <div class="overlay-header">
-            <div class="overlay-title">Price Display Test</div>
-            <div class="overlay-badge">Running</div>
+            <div class="overlay-title">Conversion — Price Display Test</div>
+            <div class="overlay-badge">● Live</div>
             <button class="overlay-close" onclick="closeDetailPanel()">✕</button>
         </div>
         <div class="overlay-content">
             <div class="overlay-section">
-                <div class="overlay-scoreboard">
-                    <div class="overlay-score-col">
-                        <div class="overlay-score-label">Current</div>
-                        <div class="overlay-score-value">3.2%</div>
-                        <div class="overlay-score-desc">$49.99</div>
+                <div style="font-size:12px; color:var(--text-light); margin-bottom:12px;">Conversion Page · Running 12 days</div>
+                <div class="test-scoreboard">
+                    <div class="test-version">
+                        <div class="test-version-label">Current</div>
+                        <div class="test-version-rate">3.2%</div>
+                        <div class="test-version-desc">$49.99</div>
                     </div>
-                    <div class="overlay-score-col">
-                        <div class="overlay-score-label">New Version</div>
-                        <div class="overlay-score-value">3.8%</div>
-                        <div class="overlay-score-desc">"From $49.99"</div>
+                    <div class="test-vs">vs</div>
+                    <div class="test-version">
+                        <div class="test-version-label">New Version</div>
+                        <div class="test-version-rate" style="color:#059669;">3.8%</div>
+                        <div class="test-version-desc">"From $49.99"</div>
                     </div>
                 </div>
-                <div class="overlay-result-banner">
-                    <div class="overlay-result-text">🏆 New version is winning by +18.3%</div>
+                <div class="test-result">
+                    <div class="test-result-text">🏆 New version is winning by +18.3%</div>
                 </div>
                 <div class="overlay-text">
-                    The phrase "From $49.99" creates expectation of value and pricing flexibility, which aligns with how visitors think about purchase decisions. This small change is driving real conversion gains.
+                    The phrase "From $49.99" creates expectation of value and pricing flexibility. This small copy change is driving real conversion gains.
                 </div>
             </div>
 
             <div class="overlay-section">
-                <div class="overlay-section-title">Confidence Level</div>
-                <div class="overlay-text">78% sure — We need 95% statistical confidence to declare a true winner. Your test is on track to reach that threshold in about 6 days.</div>
-                <div class="progress-bar" style="margin-bottom: 12px;">
-                    <div class="progress-fill" style="width: 78%;"></div>
+                <div class="overlay-section-title">Confidence</div>
+                <div class="test-confidence-label" style="margin-bottom:6px;">
+                    <span class="test-confidence-label-text">78% sure</span>
+                    <span class="test-confidence-label-pct">Need 95% to call it · ~6 days left</span>
                 </div>
-                <div style="font-size: 13px; color: var(--text-light);">78 / 95 confidence</div>
+                <div class="progress-bar" style="margin-bottom:8px;">
+                    <div class="progress-fill" style="width:78%;"></div>
+                </div>
             </div>
 
             <div class="overlay-section">
                 <div class="overlay-section-title">Revenue Impact</div>
                 <div class="overlay-revenue">
                     <div class="overlay-revenue-value">+$280</div>
-                    <div class="overlay-revenue-label">If this version wins, estimated monthly gain</div>
-                </div>
-                <div class="overlay-text">
-                    This estimate is based on your current traffic, conversion rate, and typical customer value. Once the test wins, the new version automatically replaces your current page.
+                    <div class="overlay-revenue-label">Estimated monthly gain if this version wins</div>
                 </div>
             </div>
 
@@ -1568,16 +1583,15 @@
                     How it works
                 </button>
                 <div class="overlay-collapsible-content" id="collapsible-1">
-                    We're splitting your traffic 50/50 between the current version and the new version. Our smart engine automatically shifts more traffic to the leader to protect your revenue. This means if the new version starts to fall behind, we reduce its exposure. If it's winning, we give it more traffic to capture the gains faster.
+                    Traffic is split 50/50. Our engine automatically shifts more traffic to whichever version leads, protecting your revenue while gathering data.
                 </div>
             </div>
 
             <div class="overlay-section">
                 <div class="overlay-section-title">Timeline</div>
                 <div class="overlay-text">
-                    <strong>Started:</strong> April 11, 2026<br>
-                    <strong>Day:</strong> 12 of ~14<br>
-                    <strong>Check back in:</strong> ~6 days for results
+                    <strong>Started:</strong> April 11, 2026 &nbsp;·&nbsp; <strong>Day 12 of ~14</strong><br>
+                    🤖 We're handling everything — check back in ~6 days
                 </div>
             </div>
         </div>
@@ -1586,49 +1600,50 @@
     <!-- Running Test 2 Detail -->
     <div class="overlay-panel" id="detail-test-hero-image">
         <div class="overlay-header">
-            <div class="overlay-title">Hero Image Test</div>
-            <div class="overlay-badge">Running</div>
+            <div class="overlay-title">Awareness — Hero Image Test</div>
+            <div class="overlay-badge">● Live</div>
             <button class="overlay-close" onclick="closeDetailPanel()">✕</button>
         </div>
         <div class="overlay-content">
             <div class="overlay-section">
-                <div class="overlay-scoreboard">
-                    <div class="overlay-score-col">
-                        <div class="overlay-score-label">Current</div>
-                        <div class="overlay-score-value">4.1%</div>
-                        <div class="overlay-score-desc">Product shot</div>
+                <div style="font-size:12px; color:var(--text-light); margin-bottom:12px;">Awareness Page · Running 8 days</div>
+                <div class="test-scoreboard">
+                    <div class="test-version">
+                        <div class="test-version-label">Current</div>
+                        <div class="test-version-rate">4.1%</div>
+                        <div class="test-version-desc">Product shot</div>
                     </div>
-                    <div class="overlay-score-col">
-                        <div class="overlay-score-label">New Version</div>
-                        <div class="overlay-score-value">4.6%</div>
-                        <div class="overlay-score-desc">Lifestyle photo</div>
+                    <div class="test-vs">vs</div>
+                    <div class="test-version">
+                        <div class="test-version-label">New Version</div>
+                        <div class="test-version-rate" style="color:#059669;">4.6%</div>
+                        <div class="test-version-desc">Lifestyle photo</div>
                     </div>
                 </div>
-                <div class="overlay-result-banner">
-                    <div class="overlay-result-text">🏆 New version is winning by +11.2%</div>
+                <div class="test-result">
+                    <div class="test-result-text">🏆 New version is winning by +11.2%</div>
                 </div>
                 <div class="overlay-text">
-                    The lifestyle image helps cold traffic visualize themselves using your product, which creates emotional connection. Product-only shots work less well with awareness-stage visitors.
+                    The lifestyle image helps cold traffic visualize themselves using your product, creating emotional connection. Product-only shots work less well with awareness-stage visitors.
                 </div>
             </div>
 
             <div class="overlay-section">
-                <div class="overlay-section-title">Confidence Level</div>
-                <div class="overlay-text">65% sure — We're still gathering data. Most tests reach the 95% confidence threshold in 2–3 weeks. Check back in about 10 days.</div>
-                <div class="progress-bar" style="margin-bottom: 12px;">
-                    <div class="progress-fill" style="width: 65%; background: #f59e0b;"></div>
+                <div class="overlay-section-title">Confidence</div>
+                <div class="test-confidence-label" style="margin-bottom:6px;">
+                    <span class="test-confidence-label-text">65% sure</span>
+                    <span class="test-confidence-label-pct">Need 95% to call it · ~10 days left</span>
                 </div>
-                <div style="font-size: 13px; color: var(--text-light);">65 / 95 confidence</div>
+                <div class="progress-bar" style="margin-bottom:8px;">
+                    <div class="progress-fill" style="width:65%; background:#f59e0b;"></div>
+                </div>
             </div>
 
             <div class="overlay-section">
                 <div class="overlay-section-title">Revenue Impact</div>
                 <div class="overlay-revenue">
                     <div class="overlay-revenue-value">+$150</div>
-                    <div class="overlay-revenue-label">If this version wins, estimated monthly gain</div>
-                </div>
-                <div class="overlay-text">
-                    This assumes the test runs its full duration and the new version remains the leader. We'll confirm when statistical significance is reached.
+                    <div class="overlay-revenue-label">Estimated monthly gain if this version wins</div>
                 </div>
             </div>
 
@@ -1638,16 +1653,15 @@
                     How it works
                 </button>
                 <div class="overlay-collapsible-content" id="collapsible-2">
-                    This test compares how your awareness-stage visitors engage with different types of hero imagery. Cold traffic from ads often connects more with lifestyle or aspirational content than product-focused photography. We're measuring which approach keeps more visitors on your page and moving toward conversion.
+                    This test compares hero imagery for awareness-stage visitors. Cold traffic from ads often connects more with lifestyle content than product-focused photography.
                 </div>
             </div>
 
             <div class="overlay-section">
                 <div class="overlay-section-title">Timeline</div>
                 <div class="overlay-text">
-                    <strong>Started:</strong> April 15, 2026<br>
-                    <strong>Day:</strong> 8 of ~21<br>
-                    <strong>Check back in:</strong> ~10 days for early results
+                    <strong>Started:</strong> April 15, 2026 &nbsp;·&nbsp; <strong>Day 8 of ~21</strong><br>
+                    🤖 We're handling everything — check back in ~10 days
                 </div>
             </div>
         </div>
