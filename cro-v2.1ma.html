@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CRO Dashboard V2.0 MA — Revmatics</title>
+<title>CRO Dashboard V2.1 MA — Revmatics</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -182,7 +182,152 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 .dp-prog-fill{height:100%;border-radius:4px;background:var(--success-dark);}
 .dp-timeline{font-size:13px;color:var(--text-light);line-height:1.7;}
 
-/* WIZARD */
+/* PROMINENT NEW EXPERIMENT BUTTON */
+.btn-new-exp{
+  background:linear-gradient(135deg,#06D6A0 0%,#059669 100%);
+  color:white;border:none;border-radius:10px;
+  padding:12px 22px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  display:inline-flex;align-items:center;gap:8px;
+  box-shadow:0 4px 14px rgba(6,214,160,.35);
+  transition:all .2s;position:relative;overflow:hidden;
+  letter-spacing:.2px;
+}
+.btn-new-exp::before{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.25) 0%,transparent 60%);
+  opacity:0;transition:opacity .2s;
+}
+.btn-new-exp:hover{
+  transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(6,214,160,.45);
+}
+.btn-new-exp:hover::before{opacity:1;}
+.btn-new-exp:active{transform:translateY(0);}
+.btn-new-exp .plus{
+  font-size:18px;font-weight:800;line-height:1;
+  background:rgba(255,255,255,.2);
+  width:22px;height:22px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.btn-new-exp.pulse::after{
+  content:"";position:absolute;inset:-2px;border-radius:12px;
+  border:2px solid #06D6A0;
+  animation:pulseRing 2s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes pulseRing{
+  0%{opacity:.8;transform:scale(1);}
+  100%{opacity:0;transform:scale(1.15);}
+}
+.sb-new-btn{
+  margin:8px 12px 0;display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px;
+  background:linear-gradient(135deg,#06D6A0 0%,#059669 100%);
+  color:white;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 3px 10px rgba(6,214,160,.3);
+}
+.sb-new-btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 5px 14px rgba(6,214,160,.4);
+}
+
+/* ── V1.5 M WIZARD (ported) ───────────────────── */
+.wizard-overlay{
+  display:none;position:fixed;inset:0;
+  background-color:rgba(0,0,0,0.45);
+  z-index:300;justify-content:center;align-items:center;
+}
+.wizard-overlay.active{display:flex;}
+.wizard-panel{
+  background-color:var(--card);border-radius:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.2);
+  max-width:620px;width:90%;max-height:90vh;
+  overflow-y:auto;position:relative;
+}
+.wizard-close{
+  position:absolute;top:18px;right:18px;width:32px;height:32px;
+  border:none;background-color:transparent;cursor:pointer;
+  font-size:18px;color:var(--text-light);
+  display:flex;align-items:center;justify-content:center;
+  border-radius:6px;transition:background-color 0.2s;z-index:10;
+}
+.wizard-close:hover{background-color:var(--bg);}
+.wizard-content{padding:32px 36px;}
+.wizard-header{margin-bottom:22px;}
+.wizard-step{display:none;}
+.wizard-step.active{display:block;}
+.wizard-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.wizard-subtitle{font-size:13px;color:var(--text-light);}
+.wizard-step-indicator{
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  color:var(--primary);margin-bottom:14px;
+}
+
+.page-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:6px;}
+.page-card{
+  padding:16px;border:2px solid var(--border);border-radius:var(--radius);
+  cursor:pointer;transition:all 0.2s;
+}
+.page-card:hover{border-color:var(--primary-light);background-color:rgba(46,80,144,.03);}
+.page-card.selected{border-color:var(--primary);background-color:rgba(46,80,144,.06);}
+.page-card-icon{font-size:22px;margin-bottom:8px;}
+.page-card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.page-card-traffic{font-size:11px;color:var(--text-light);}
+
+.path-cards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:6px;}
+.path-card{
+  padding:18px;border:2px solid var(--border);border-radius:var(--radius);
+  cursor:pointer;transition:all 0.2s;text-align:center;
+}
+.path-card:hover{border-color:var(--primary-light);background-color:rgba(46,80,144,.03);}
+.path-card.selected{border-color:var(--primary);background-color:rgba(46,80,144,.06);}
+.path-icon{font-size:28px;margin-bottom:10px;}
+.path-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px;}
+.path-description{font-size:12px;color:var(--text-light);margin-bottom:10px;line-height:1.5;}
+.path-best-for{font-size:11px;color:var(--primary);font-weight:600;margin-bottom:6px;padding:6px 0;border-top:1px solid var(--border);}
+.path-time{font-size:11px;color:var(--text-light);}
+
+.goal-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:6px;}
+.goal-card{
+  padding:13px;border:2px solid var(--border);border-radius:var(--radius);
+  cursor:pointer;transition:all 0.2s;
+  display:flex;align-items:center;gap:12px;
+}
+.goal-card:hover{border-color:var(--primary-light);background-color:rgba(46,80,144,.03);}
+.goal-card.selected{border-color:var(--primary);background-color:rgba(46,80,144,.06);}
+.goal-radio{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;flex-shrink:0;}
+.goal-card.selected .goal-radio{border-color:var(--primary);background-color:var(--primary);box-shadow:inset 0 0 0 3px var(--card);}
+.goal-content{flex:1;}
+.goal-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.goal-description{font-size:12px;color:var(--text-light);}
+
+.aggression-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:6px;}
+.aggression-card{
+  padding:13px;border:2px solid var(--border);border-radius:var(--radius);
+  cursor:pointer;transition:all 0.2s;
+}
+.aggression-card:hover{border-color:var(--primary-light);background-color:rgba(46,80,144,.03);}
+.aggression-card.selected{border-color:var(--primary);background-color:rgba(46,80,144,.06);}
+.aggression-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.aggression-description{font-size:12px;color:var(--text-light);}
+
+.autopilot-summary{background-color:var(--bg);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.summary-row{display:flex;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);}
+.summary-row:last-child{border-bottom:none;}
+.summary-label{min-width:110px;font-size:11px;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:.5px;}
+.summary-value{flex:1;font-size:13px;color:var(--text);}
+.summary-value-bold{font-weight:700;}
+.summary-note{font-size:11px;color:var(--text-muted);font-style:italic;}
+
+.wizard-footer{display:flex;gap:10px;justify-content:flex-end;padding-top:18px;border-top:1px solid var(--border);margin-top:20px;}
+
+.btn-secondary{background:transparent;color:var(--text-light);border:1px solid var(--border);border-radius:8px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-secondary:hover{background:var(--bg);color:var(--text);}
+.btn:disabled,.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+
+/* LEGACY WIZARD (unused, kept for safety) */
 .wiz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:center;justify-content:center;}
 .wiz-overlay.active{display:flex;}
 .wiz-modal{background:var(--card);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.2);width:560px;max-height:90vh;overflow-y:auto;position:relative;}
@@ -274,23 +419,31 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:600;transition:transform .3s;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 
-/* RECOMMENDATION CARDS */
+/* SIMPLIFIED RECOMMENDATION CARDS */
 .rec-section{margin-bottom:0;}
 .rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;align-items:stretch;}
-.rec-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;transition:all .2s;cursor:default;}
+.rec-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:16px 18px;
+  display:flex;flex-direction:column;gap:12px;
+  transition:all .2s;cursor:default;
+}
 .rec-card:hover{border-color:var(--primary-light);box-shadow:0 4px 14px rgba(46,80,144,.09);}
-.rec-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;}
-.impact-badge{padding:3px 9px;border-radius:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;}
-.impact-high{background:rgba(6,214,160,.15);color:var(--success-dark);}
-.impact-mid{background:rgba(245,158,11,.15);color:#92400e;}
-.impact-low{background:rgba(74,123,199,.15);color:var(--primary);}
-.rec-title{font-size:13px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:6px;}
-.rec-desc{font-size:12px;color:var(--text-light);line-height:1.5;margin-bottom:10px;}
-.rec-suggestion{background:rgba(0,180,216,.06);border-left:3px solid var(--accent);padding:8px 12px;border-radius:4px;font-size:12px;color:var(--text);line-height:1.5;margin-bottom:10px;}
-.rec-suggestion strong{color:var(--accent);}
-.rec-footer{margin-top:auto;padding-top:10px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
-.rec-impact{font-size:12px;color:var(--text-light);}
-.rec-impact strong{color:var(--success-dark);font-weight:700;}
+.rec-row{display:flex;align-items:center;gap:8px;font-size:12px;}
+.rec-row .rec-k{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--text-muted);min-width:60px;}
+.rec-change{
+  font-size:14px;font-weight:700;color:var(--text);
+  line-height:1.35;
+}
+.rec-revenue-box{
+  background:rgba(6,214,160,.08);
+  border-radius:8px;padding:10px 12px;
+  display:flex;align-items:baseline;gap:6px;
+}
+.rec-rev-val{font-size:18px;font-weight:800;color:var(--success-dark);}
+.rec-rev-lbl{font-size:11px;color:var(--text-light);font-weight:500;}
+.rec-footer-simple{margin-top:auto;}
+.rec-footer-simple .btn{width:100%;justify-content:center;}
 </style>
 
 </head>
@@ -310,7 +463,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-  <div class="sb-new-btn" onclick="openWizard()">＋ New Experiment</div>
+  <div class="sb-new-btn" onclick="showWizard()">＋ New Experiment</div>
   <div style="margin-top:16px;">
     <div class="sb-label">Overview</div>
     <div class="sb-item active" onclick="showScreen('dash',this)"><span class="sb-icon">📊</span> Dashboard</div>
@@ -332,7 +485,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
   <div id="dash" class="screen active">
     <div class="pg-header">
       <div><div class="pg-title" id="tour-title">Your Revenue Dashboard</div><div class="pg-sub">Every number here is money your pages are making — or leaving on the table.</div></div>
-      <button class="btn btn-outline btn-sm" onclick="openWizard()">＋ New Experiment</button>
+      <button class="btn-new-exp pulse" id="tour-new-btn" onclick="showWizard()"><span class="plus">＋</span>New Experiment</button>
     </div>
 
     <!-- Revenue Hero -->
@@ -375,45 +528,57 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 
       <!-- Rec 1 -->
       <div class="rec-card">
-        <div class="rec-card-top">
-          <span class="impact-badge impact-high">High Impact</span>
+        <div class="rec-row">
+          <span class="rec-k">Page</span>
           <span class="page-badge badge-conversion">Conversion</span>
         </div>
-        <div class="rec-title">Your checkout button says "Submit Order" — that's costing you sales.</div>
-        <div class="rec-desc">Weak CTAs create hesitation. Visitors need to feel what they're getting, not what they're doing.</div>
-        <div class="rec-suggestion"><strong>We suggest testing:</strong> "Get Yours Now — Free Shipping"</div>
-        <div class="rec-footer">
-          <div class="rec-impact">Est. impact: <strong>+$320–$640/mo</strong> &nbsp;·&nbsp; ~2 weeks</div>
+        <div>
+          <div class="rec-row"><span class="rec-k">Change</span></div>
+          <div class="rec-change">Rewrite CTA: "Submit Order" → "Get Yours Now — Free Shipping"</div>
+        </div>
+        <div class="rec-revenue-box">
+          <span class="rec-rev-val">+$320–$640</span>
+          <span class="rec-rev-lbl">/month</span>
+        </div>
+        <div class="rec-footer-simple">
           <button class="btn btn-success btn-sm" onclick="openWizardFor('conversion')">Run This Test</button>
         </div>
       </div>
 
       <!-- Rec 2 -->
       <div class="rec-card">
-        <div class="rec-card-top">
-          <span class="impact-badge impact-mid">Medium Impact</span>
+        <div class="rec-row">
+          <span class="rec-k">Page</span>
           <span class="page-badge badge-awareness">Awareness</span>
         </div>
-        <div class="rec-title">Your headline talks about features. Cold traffic needs benefits first.</div>
-        <div class="rec-desc">People clicking your ads want to know "what's in it for me?" — not a list of product specs.</div>
-        <div class="rec-suggestion"><strong>We suggest testing:</strong> Benefit-first headline with social proof</div>
-        <div class="rec-footer">
-          <div class="rec-impact">Est. impact: <strong>+$180–$350/mo</strong> &nbsp;·&nbsp; ~3 weeks</div>
+        <div>
+          <div class="rec-row"><span class="rec-k">Change</span></div>
+          <div class="rec-change">Swap feature headline for benefit-first headline with social proof</div>
+        </div>
+        <div class="rec-revenue-box">
+          <span class="rec-rev-val">+$180–$350</span>
+          <span class="rec-rev-lbl">/month</span>
+        </div>
+        <div class="rec-footer-simple">
           <button class="btn btn-success btn-sm" onclick="openWizardFor('awareness')">Run This Test</button>
         </div>
       </div>
 
       <!-- Rec 3 -->
       <div class="rec-card">
-        <div class="rec-card-top">
-          <span class="impact-badge impact-low">Worth Trying</span>
+        <div class="rec-row">
+          <span class="rec-k">Page</span>
           <span class="page-badge badge-consideration">Consideration</span>
         </div>
-        <div class="rec-title">Your comparison section is text only. Buyers need to see, not read.</div>
-        <div class="rec-desc">Side-by-side visual comparisons reduce decision friction and help visitors choose faster.</div>
-        <div class="rec-suggestion"><strong>We suggest testing:</strong> Visual comparison table vs text list</div>
-        <div class="rec-footer">
-          <div class="rec-impact">Est. impact: <strong>+$90–$200/mo</strong> &nbsp;·&nbsp; ~3 weeks</div>
+        <div>
+          <div class="rec-row"><span class="rec-k">Change</span></div>
+          <div class="rec-change">Replace text comparison list with side-by-side visual comparison table</div>
+        </div>
+        <div class="rec-revenue-box">
+          <span class="rec-rev-val">+$90–$200</span>
+          <span class="rec-rev-lbl">/month</span>
+        </div>
+        <div class="rec-footer-simple">
           <button class="btn btn-success btn-sm" onclick="openWizardFor('consideration')">Run This Test</button>
         </div>
       </div>
@@ -540,7 +705,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
   <div id="experiments" class="screen">
     <div class="pg-header">
       <div><div class="pg-title">All Experiments</div><div class="pg-sub">Every test you've run — active and completed.</div></div>
-      <button class="btn btn-primary" onclick="openWizard()">＋ New Experiment</button>
+      <button class="btn-new-exp" onclick="showWizard()"><span class="plus">＋</span>New Experiment</button>
     </div>
     <p style="color:var(--text-light);font-size:13px;">Full experiment list with filters coming soon. For now, all active and completed experiments are visible on your Dashboard.</p>
   </div>
@@ -572,97 +737,190 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
   <div class="dp-body" id="dp-body"></div>
 </div>
 
-<!-- WIZARD MODAL -->
-<div class="wiz-overlay" id="wiz-overlay">
-  <div class="wiz-modal">
-    <div class="wiz-header">
-      <div class="wiz-steps">
-        <div class="wz-dot active" id="wdot-1"></div>
-        <div class="wz-dot" id="wdot-2"></div>
-        <div class="wz-dot" id="wdot-3"></div>
+<!-- NEW EXPERIMENT WIZARD (V1.5 M mechanic) -->
+<div class="wizard-overlay" id="wizard-overlay">
+  <div class="wizard-panel">
+    <button class="wizard-close" onclick="hideWizard()">✕</button>
+    <div class="wizard-content">
+      <div class="wizard-header">
+        <div class="wizard-title">Create New Experiment</div>
+        <div class="wizard-subtitle">Optimise your funnel with guided testing</div>
       </div>
-      <div class="wiz-step-label" id="wiz-step-label">Step 1 of 3 — Choose a page</div>
-      <button class="wiz-close" onclick="closeWizard()">✕</button>
-    </div>
-    <div class="wiz-body">
 
-      <!-- Step 1: Page picker -->
-      <div class="wiz-step active" id="ws1">
-        <div class="wiz-title">Which page do you want to improve?</div>
-        <div class="wiz-sub">Each page has a different job. Pick the one you want to work on — we'll find the best opportunity.</div>
-        <div class="page-picker">
-          <div class="page-opt" onclick="selectPage(this,'awareness')" data-page="awareness">
-            <div class="po-icon">📢</div>
-            <div class="po-name">Awareness Page</div>
-            <div class="po-desc">Cold traffic from ads sees this first. Goal: get them interested enough to keep reading.</div>
+      <!-- STEP 0: PICK A PAGE -->
+      <div class="wizard-step active" id="wizard-step-0">
+        <div class="wizard-step-indicator">Step 1 of 2</div>
+        <h3 class="wizard-title" style="font-size:18px;">Which page are you testing?</h3>
+        <div class="page-cards" style="margin-top:18px;">
+          <div class="page-card" onclick="selectPage('awareness')">
+            <div class="page-card-icon">🎯</div>
+            <div class="page-card-title">Awareness</div>
+            <div class="page-card-traffic">~12k daily</div>
           </div>
-          <div class="page-opt" onclick="selectPage(this,'consideration')" data-page="consideration">
-            <div class="po-icon">🔍</div>
-            <div class="po-name">Consideration Page</div>
-            <div class="po-desc">Visitors comparing you to others. Goal: give them reasons to choose you.</div>
+          <div class="page-card" onclick="selectPage('consideration')">
+            <div class="page-card-icon">🔍</div>
+            <div class="page-card-title">Consideration</div>
+            <div class="page-card-traffic">~8k daily</div>
           </div>
-          <div class="page-opt" onclick="selectPage(this,'conversion')" data-page="conversion">
-            <div class="po-icon">💳</div>
-            <div class="po-name">Conversion Page</div>
-            <div class="po-desc">Your product or checkout page. Goal: remove friction and close the sale.</div>
+          <div class="page-card" onclick="selectPage('conversion')">
+            <div class="page-card-icon">💰</div>
+            <div class="page-card-title">Conversion</div>
+            <div class="page-card-traffic">~5k daily</div>
           </div>
-          <div class="page-opt" onclick="selectPage(this,'loyalty')" data-page="loyalty">
-            <div class="po-icon">🔄</div>
-            <div class="po-name">Loyalty Page</div>
-            <div class="po-desc">For customers who already bought. Goal: bring them back for a second purchase.</div>
+          <div class="page-card" onclick="selectPage('loyalty')">
+            <div class="page-card-icon">❤️</div>
+            <div class="page-card-title">Loyalty</div>
+            <div class="page-card-traffic">~3k daily</div>
           </div>
         </div>
-        <div class="wiz-actions">
-          <button class="btn btn-outline" onclick="closeWizard()">Cancel</button>
-          <button class="btn btn-primary" onclick="wizNext(2)" id="ws1-next" disabled style="opacity:.5">Next: See the opportunity →</button>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="hideWizard()">Cancel</button>
+          <button class="btn btn-primary" onclick="wizardStep(1)" disabled id="btn-page-next">Next</button>
         </div>
       </div>
 
-      <!-- Step 2: AI Recommendation -->
-      <div class="wiz-step" id="ws2">
-        <div class="wiz-title">Here's what we found 🔍</div>
-        <div class="wiz-sub" id="ws2-sub">We analysed your page and spotted something worth testing.</div>
-        <div class="ai-card">
-          <div class="ai-header">
-            <div class="ai-icon">🤖</div>
-            <div><div class="ai-title" id="ai-title"></div><div class="ai-subtitle" id="ai-subtitle"></div></div>
+      <!-- STEP 1: CHOOSE PATH -->
+      <div class="wizard-step" id="wizard-step-1">
+        <div class="wizard-step-indicator">Step 2 of 2</div>
+        <h3 class="wizard-title" style="font-size:18px;">How do you want to set up your test?</h3>
+        <div class="path-cards" style="margin-top:18px;">
+          <div class="path-card" onclick="selectPath('autopilot')">
+            <div class="path-icon">🚀</div>
+            <div class="path-title">Autopilot</div>
+            <div class="path-description">Answer 3 quick questions. We'll set up the best test for your page automatically.</div>
+            <div class="path-best-for">Best for: Most merchants</div>
+            <div class="path-time">⏱ Takes ~1 minute</div>
           </div>
-          <div class="ai-compare">
-            <div class="ai-ver"><div class="ai-ver-lbl">Current (A)</div><div class="ai-ver-val" id="ai-ver-a"></div></div>
-            <div class="ai-arrow">→</div>
-            <div class="ai-ver challenger"><div class="ai-ver-lbl">We suggest (B)</div><div class="ai-ver-val ch" id="ai-ver-b"></div></div>
-          </div>
-          <div class="ai-why">
-            <div class="ai-why-lbl">💡 Why this could be better</div>
-            <div class="ai-why-text" id="ai-why-text"></div>
-          </div>
-          <div class="ai-chips">
-            <div class="ai-chip"><div class="ai-chip-val" id="ai-impact"></div><div class="ai-chip-lbl">Est. monthly impact</div></div>
-            <div class="ai-chip"><div class="ai-chip-val" id="ai-duration"></div><div class="ai-chip-lbl">Test duration</div></div>
-            <div class="ai-chip"><div class="ai-chip-val" id="ai-effort">Zero</div><div class="ai-chip-lbl">Work needed from you</div></div>
+          <div class="path-card" onclick="selectPath('custom')">
+            <div class="path-icon">🔧</div>
+            <div class="path-title">Custom Setup</div>
+            <div class="path-description">Full control over every setting. Choose your test type, elements, model, traffic split.</div>
+            <div class="path-best-for">Best for: Marketing teams</div>
+            <div class="path-time">⏱ Takes ~5 minutes</div>
           </div>
         </div>
-        <div class="wiz-actions">
-          <button class="btn btn-outline" onclick="wizBack(1)">← Back</button>
-          <button class="btn btn-primary" onclick="wizNext(3)">Looks good — review it →</button>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(0)">Back</button>
+          <button class="btn btn-primary" onclick="wizardStep(2)" disabled id="btn-path-next">Next</button>
         </div>
       </div>
 
-      <!-- Step 3: Confirm -->
-      <div class="wiz-step" id="ws3">
-        <div class="wiz-title">Ready to launch? 🚀</div>
-        <div class="wiz-sub">We handle everything from here. You'll get a notification when there's a winner.</div>
-        <div class="confirm-sum">
-          <div class="cs-row"><span class="cs-lbl">Page type</span><span class="cs-val" id="cs-page"></span></div>
-          <div class="cs-row"><span class="cs-lbl">What we're testing</span><span class="cs-val" id="cs-test"></span></div>
-          <div class="cs-row"><span class="cs-lbl">Estimated impact</span><span class="cs-val green" id="cs-impact"></span></div>
-          <div class="cs-row"><span class="cs-lbl">Duration</span><span class="cs-val" id="cs-duration"></span></div>
-          <div class="cs-row"><span class="cs-lbl">Traffic split</span><span class="cs-val">50% see current · 50% see new version</span></div>
+      <!-- AUTOPILOT Q1: GOAL -->
+      <div class="wizard-step" id="wizard-step-autopilot-1">
+        <div class="wizard-step-indicator">Autopilot Setup</div>
+        <h3 class="wizard-title" style="font-size:18px;">What's your main goal for this page?</h3>
+        <div class="goal-cards" style="margin-top:18px;">
+          <div class="goal-card" onclick="selectGoal('signups')">
+            <div class="goal-radio"></div>
+            <div class="goal-content">
+              <div class="goal-title">Get more signups / leads</div>
+              <div class="goal-description">Increase form submissions and lead generation</div>
+            </div>
+          </div>
+          <div class="goal-card" onclick="selectGoal('cta')">
+            <div class="goal-radio"></div>
+            <div class="goal-content">
+              <div class="goal-title">Get more people to click through to product</div>
+              <div class="goal-description">Increase CTR and product page visits</div>
+            </div>
+          </div>
+          <div class="goal-card" onclick="selectGoal('purchases')">
+            <div class="goal-radio"></div>
+            <div class="goal-content">
+              <div class="goal-title">Get more purchases</div>
+              <div class="goal-description">Increase revenue and order conversions</div>
+            </div>
+          </div>
+          <div class="goal-card" onclick="selectGoal('retention')">
+            <div class="goal-radio"></div>
+            <div class="goal-content">
+              <div class="goal-title">Bring back returning customers</div>
+              <div class="goal-description">Increase repeat purchases and loyalty</div>
+            </div>
+          </div>
         </div>
-        <div class="confirm-warn">⚠️ Keep your ad budget stable during the test. Changing spend or targeting mid-test will skew the results.</div>
-        <div class="wiz-actions">
-          <button class="btn btn-outline" onclick="wizBack(2)">← Back</button>
-          <button class="btn btn-success" onclick="launchExperiment()">🚀 Launch Experiment</button>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(1)">Back</button>
+          <button class="btn btn-primary" onclick="wizardStep(3)" disabled id="btn-goal-next">Next</button>
+        </div>
+      </div>
+
+      <!-- AUTOPILOT Q2: PROBLEM -->
+      <div class="wizard-step" id="wizard-step-autopilot-2">
+        <div class="wizard-step-indicator">Autopilot Setup</div>
+        <h3 class="wizard-title" style="font-size:18px;">What do you think is holding visitors back?</h3>
+        <div class="goal-cards" id="problem-cards" style="margin-top:18px;"></div>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(2)">Back</button>
+          <button class="btn btn-primary" onclick="wizardStep(4)" disabled id="btn-problem-next">Next</button>
+        </div>
+      </div>
+
+      <!-- AUTOPILOT Q3: AGGRESSION -->
+      <div class="wizard-step" id="wizard-step-autopilot-3">
+        <div class="wizard-step-indicator">Autopilot Setup</div>
+        <h3 class="wizard-title" style="font-size:18px;">How aggressive do you want to be?</h3>
+        <div class="aggression-cards" style="margin-top:18px;">
+          <div class="aggression-card" onclick="selectAggression('safe')">
+            <div class="aggression-title">Play it safe — minimise risk</div>
+            <div class="aggression-description">80/20 split, conservative approach, maximum certainty</div>
+          </div>
+          <div class="aggression-card selected" onclick="selectAggression('balanced')">
+            <div class="aggression-title">Balanced — good speed, moderate risk</div>
+            <div class="aggression-description">50/50 split, Bayesian approach (recommended)</div>
+          </div>
+          <div class="aggression-card" onclick="selectAggression('aggressive')">
+            <div class="aggression-title">Move fast — I want answers quickly</div>
+            <div class="aggression-description">50/50 split, aggressive approach, fastest results</div>
+          </div>
+        </div>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(3)">Back</button>
+          <button class="btn btn-primary" onclick="wizardStep(5)">Next</button>
+        </div>
+      </div>
+
+      <!-- AUTOPILOT SUMMARY -->
+      <div class="wizard-step" id="wizard-step-autopilot-summary">
+        <h3 class="wizard-title" style="font-size:18px;">Your Experiment Setup</h3>
+        <div class="autopilot-summary" style="margin-top:18px;">
+          <div class="summary-row">
+            <span class="summary-label">Page</span>
+            <span class="summary-value"><span class="summary-value-bold" id="summary-page">Awareness</span></span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Testing</span>
+            <span class="summary-value"><span class="summary-value-bold" id="summary-testing">Headline Copy</span> — We'll test variations to lift the metric your goal targets</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">AI Suggestion</span>
+            <span class="summary-value"><span class="summary-value-bold">Version B:</span> <span id="summary-suggestion">"Grow your store 3× faster with Revmatics"</span></span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">How it Works</span>
+            <span class="summary-value">We'll split your traffic <span class="summary-value-bold" id="summary-split">50/50</span> and run for <span class="summary-value-bold" id="summary-duration">~2 weeks</span></span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-label">Under the Hood</span>
+            <span class="summary-value"><span class="summary-note" id="summary-engine">Bayesian approach, A/B test, 95% confidence target</span></span>
+          </div>
+        </div>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(4)">Back</button>
+          <button class="btn btn-success" onclick="launchExperiment('autopilot')">🚀 Launch Experiment</button>
+        </div>
+      </div>
+
+      <!-- CUSTOM PATH -->
+      <div class="wizard-step" id="wizard-step-custom">
+        <div class="wizard-step-indicator">Custom Setup</div>
+        <h3 class="wizard-title" style="font-size:18px;">Custom Test Configuration</h3>
+        <div style="margin-top:18px;padding:30px;background:var(--bg);border-radius:var(--radius);text-align:center;">
+          <p style="color:var(--text-light);font-size:13px;">Custom setup is available for advanced users. This interface guides you through selecting test type, elements, statistical model, traffic split, and metrics.</p>
+          <p style="color:var(--text-muted);margin-top:12px;font-size:12px;font-style:italic;">Full custom flow ships in the next build — for this mock-up, please use Autopilot.</p>
+        </div>
+        <div class="wizard-footer">
+          <button class="btn-secondary" onclick="wizardStep(1)">Back</button>
         </div>
       </div>
     </div>
@@ -680,7 +938,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
     <div class="cp-msg">Hi Alex! You have 4 live experiments running. B is winning in all of them — things are looking good. Want a quick tour of the dashboard?</div>
     <div class="cp-actions">
       <button class="cp-action" onclick="startTour()">🗺️ Take me on a quick tour</button>
-      <button class="cp-action" onclick="openWizard();toggleCopilot()">＋ Start a new experiment</button>
+      <button class="cp-action" onclick="showWizard();toggleCopilot()">＋ Start a new experiment</button>
       <button class="cp-action" onclick="showTip('confidence')">❓ What does "confidence" mean?</button>
       <button class="cp-action" onclick="showTip('ab')">❓ What is A/B testing?</button>
     </div>
@@ -791,71 +1049,165 @@ function closeDetail() {
   document.getElementById('detail-panel').classList.remove('active');
 }
 
-// ── WIZARD ───────────────────────────────────────────────
-const recData = {
-  awareness:{ sub:'We scanned your Awareness page and found a quick win.',title:'Your headline talks about features. Cold traffic needs benefits.',subtitle:'Awareness Page · CTA copy test',verA:'"Advanced analytics for your store"',verB:'"Track every sale & grow faster — 4,000+ shops use Revmatics"',why:'Cold visitors have never heard of you. A feature headline makes them think — a benefit headline makes them feel. Leading with what they get (faster growth) and backing it with social proof (4,000+ shops) answers both "why should I care?" and "can I trust this?" in one sentence. Stores that made this switch saw 12–20% more sign-ups.',impact:'+$180–$350/mo',duration:'~3 weeks'},
-  consideration:{sub:'We found an opportunity on your Consideration page.',title:'Your comparison section is text only — buyers need visual proof.',subtitle:'Consideration Page · Comparison layout test',verA:'Bullet-point list of features',verB:'Visual comparison table with competitor columns',why:'When someone is comparing you to alternatives, friction is fatal. A visual table lets them scan — no reading required. Side-by-side comparisons have reduced decision time and increased conversions by 8–12% for similar stores, because they make the choice feel obvious rather than effortful.',impact:'+$90–$200/mo',duration:'~3 weeks'},
-  conversion:{sub:'We found a high-impact opportunity on your Conversion page.',title:'Your checkout button says "Submit Order" — that\'s costing you sales.',subtitle:'Conversion Page · CTA copy test',verA:'"Submit Order" button',verB:'"Get Yours Now — Free Shipping" button',why:'"Submit" is a form word — it creates mental effort and commitment anxiety. Rewriting it with urgency ("Now") and removing the #1 objection ("Free Shipping") eliminates two friction points at once. Stores with this type of CTA typically see 15–25% more completions. It\'s the highest-leverage single change you can make to a checkout page.',impact:'+$320–$640/mo',duration:'~2 weeks'},
-  loyalty:{sub:'We spotted an opportunity to bring customers back more often.',title:'Your re-engagement email uses the same CTA for everyone.',subtitle:'Loyalty Page · Personalisation test',verA:'Generic "Check out what\'s new" button',verB:'Personalised offer based on last purchase',why:"Returning customers already trust you — they don't need to be convinced. They need to feel remembered. Personalising the re-engagement message based on what they bought last (\"We thought you'd like this…\") generates a response rate 20–30% higher than a generic nudge, because it feels like a recommendation from a friend rather than a mass email.",impact:'+$100–$220/mo',duration:'~3 weeks'}
-};
-let selectedPage = null;
+// ── WIZARD (V1.5 M mechanic) ──────────────────────────────
+let wizardState = { page:null, path:null, goal:null, problem:null, aggression:'balanced' };
 
-function selectPage(el, page) {
-  document.querySelectorAll('.page-opt').forEach(o => o.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedPage = page;
-  const btn = document.getElementById('ws1-next');
-  btn.disabled = false; btn.style.opacity = '1';
+function showWizard() {
+  document.getElementById('wizard-overlay').classList.add('active');
+  wizardState = { page:null, path:null, goal:null, problem:null, aggression:'balanced' };
+  // reset UI
+  document.querySelectorAll('.page-card,.path-card,.goal-card,.aggression-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector('.aggression-card:nth-child(2)')?.classList.add('selected');
+  document.getElementById('btn-page-next').disabled = true;
+  document.getElementById('btn-path-next').disabled = true;
+  document.getElementById('btn-goal-next').disabled = true;
+  document.getElementById('btn-problem-next').disabled = true;
+  wizardStep(0);
+}
+function hideWizard() {
+  document.getElementById('wizard-overlay').classList.remove('active');
 }
 
-function openWizard() {
-  selectedPage = null;
-  document.querySelectorAll('.page-opt').forEach(o => o.classList.remove('selected'));
-  wizGoTo(1);
-  document.getElementById('wiz-overlay').classList.add('active');
-  const btn = document.getElementById('ws1-next');
-  btn.disabled = true; btn.style.opacity = '.5';
-}
-function closeWizard() { document.getElementById('wiz-overlay').classList.remove('active'); }
-
-function wizGoTo(step) {
-  [1,2,3].forEach(n => {
-    document.getElementById('ws'+n).classList.toggle('active', n===step);
-    const dot = document.getElementById('wdot-'+n);
-    dot.className = 'wz-dot' + (n<step?' done':n===step?' active':'');
-  });
-  const labels = ['','Step 1 of 3 — Choose a page','Step 2 of 3 — See the opportunity','Step 3 of 3 — Review & launch'];
-  document.getElementById('wiz-step-label').textContent = labels[step];
-}
-
-function wizNext(step) {
-  if (step === 2 && selectedPage) {
-    const r = recData[selectedPage];
-    document.getElementById('ws2-sub').textContent = r.sub;
-    document.getElementById('ai-title').textContent = r.title;
-    document.getElementById('ai-subtitle').textContent = r.subtitle;
-    document.getElementById('ai-ver-a').textContent = r.verA;
-    document.getElementById('ai-ver-b').textContent = r.verB;
-    document.getElementById('ai-why-text').textContent = r.why;
-    document.getElementById('ai-impact').textContent = r.impact;
-    document.getElementById('ai-duration').textContent = r.duration;
+function wizardStep(step) {
+  document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+  if (step === 0) {
+    document.getElementById('wizard-step-0').classList.add('active');
+  } else if (step === 1) {
+    document.getElementById('wizard-step-1').classList.add('active');
+  } else if (step === 2) {
+    if (wizardState.path === 'autopilot') {
+      document.getElementById('wizard-step-autopilot-1').classList.add('active');
+    } else {
+      document.getElementById('wizard-step-custom').classList.add('active');
+    }
+  } else if (step === 3) {
+    renderProblemOptions();
+    document.getElementById('wizard-step-autopilot-2').classList.add('active');
+  } else if (step === 4) {
+    document.getElementById('wizard-step-autopilot-3').classList.add('active');
+  } else if (step === 5) {
+    updateAutopilotSummary();
+    document.getElementById('wizard-step-autopilot-summary').classList.add('active');
   }
-  if (step === 3 && selectedPage) {
-    const r = recData[selectedPage];
-    const names = {awareness:'Awareness Page',consideration:'Consideration Page',conversion:'Conversion Page',loyalty:'Loyalty Page'};
-    document.getElementById('cs-page').textContent = names[selectedPage];
-    document.getElementById('cs-test').textContent = r.subtitle.split(' · ')[1];
-    document.getElementById('cs-impact').textContent = r.impact;
-    document.getElementById('cs-duration').textContent = r.duration;
-  }
-  wizGoTo(step);
 }
-function wizBack(step) { wizGoTo(step); }
 
-function launchExperiment() {
-  closeWizard();
+function selectPage(page) {
+  wizardState.page = page;
+  document.querySelectorAll('.page-card').forEach(c => c.classList.remove('selected'));
+  event.target.closest('.page-card').classList.add('selected');
+  document.getElementById('btn-page-next').disabled = false;
+}
+
+function selectPath(path) {
+  wizardState.path = path;
+  document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+  event.target.closest('.path-card').classList.add('selected');
+  document.getElementById('btn-path-next').disabled = false;
+}
+
+function selectGoal(goal) {
+  wizardState.goal = goal;
+  document.querySelectorAll('#wizard-step-autopilot-1 .goal-card').forEach(c => c.classList.remove('selected'));
+  event.target.closest('.goal-card').classList.add('selected');
+  document.getElementById('btn-goal-next').disabled = false;
+}
+
+function selectProblem(problem) {
+  wizardState.problem = problem;
+  document.querySelectorAll('#problem-cards .goal-card').forEach(c => c.classList.remove('selected'));
+  event.target.closest('.goal-card').classList.add('selected');
+  document.getElementById('btn-problem-next').disabled = false;
+}
+
+function selectAggression(agg) {
+  wizardState.aggression = agg;
+  document.querySelectorAll('.aggression-card').forEach(c => c.classList.remove('selected'));
+  event.target.closest('.aggression-card').classList.add('selected');
+}
+
+function renderProblemOptions() {
+  const problemMap = {
+    awareness: [
+      { id:'headline', title:"The headline doesn't grab attention", description:"Improve headline impact and clarity" },
+      { id:'visual', title:"The page doesn't look professional enough", description:"Enhance visual design and layout" },
+      { id:'proof', title:"People don't believe our claims", description:"Add social proof and testimonials" },
+      { id:'offer', title:"The offer isn't interesting enough", description:"Test lead magnet or CTA variations" },
+      { id:'auto', title:"I'm not sure — you decide", description:"System picks highest-impact element" }
+    ],
+    consideration: [
+      { id:'comparison', title:"We don't stand out from competitors", description:"Test comparison format variations" },
+      { id:'trust', title:"People don't trust us enough", description:"Add trust and authority signals" },
+      { id:'demo', title:"The proof isn't convincing", description:"Test demo/evidence variations" },
+      { id:'guarantee', title:"The guarantee doesn't feel strong enough", description:"Test risk reversal approaches" },
+      { id:'auto', title:"I'm not sure — you decide", description:"System picks highest-impact element" }
+    ],
+    conversion: [
+      { id:'cta', title:"The call-to-action isn't compelling enough", description:"Test CTA copy and design variations" },
+      { id:'price', title:"The price or offer doesn't feel right", description:"Test price display and anchoring" },
+      { id:'friction', title:"There's too much friction in the checkout", description:"Test form field and flow variations" },
+      { id:'trust', title:"Visitors don't trust the page enough", description:"Add trust badges and security signals" },
+      { id:'auto', title:"I'm not sure — you decide", description:"System picks highest-impact element" }
+    ],
+    loyalty: [
+      { id:'personalization', title:"The page feels generic, not personal", description:"Test personalisation variations" },
+      { id:'incentives', title:"The reward isn't motivating enough", description:"Test incentive and offer variations" },
+      { id:'recognition', title:"Customers don't feel valued", description:"Test recognition and community features" },
+      { id:'reengagement', title:"People forget to come back", description:"Test re-engagement messaging" },
+      { id:'auto', title:"I'm not sure — you decide", description:"System picks highest-impact element" }
+    ]
+  };
+  const options = problemMap[wizardState.page] || [];
+  const container = document.getElementById('problem-cards');
+  container.innerHTML = options.map(opt => `
+    <div class="goal-card" onclick="selectProblem('${opt.id}')">
+      <div class="goal-radio"></div>
+      <div class="goal-content">
+        <div class="goal-title">${opt.title}</div>
+        <div class="goal-description">${opt.description}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('btn-problem-next').disabled = true;
+}
+
+function updateAutopilotSummary() {
+  const pageNames = {awareness:'Awareness',consideration:'Consideration',conversion:'Conversion',loyalty:'Loyalty'};
+  const testingByGoal = {
+    signups: 'Lead Form & CTA',
+    cta: 'CTA Copy & Placement',
+    purchases: 'Checkout Flow',
+    retention: 'Re-engagement Copy'
+  };
+  const suggestionByPage = {
+    awareness: '"Grow your store 3× faster — join 4,000+ Shopify shops"',
+    consideration: 'Visual comparison table vs current bullet list',
+    conversion: '"Get Yours Now — Free Shipping" (vs "Submit Order")',
+    loyalty: 'Personalised offer based on last purchase'
+  };
+  const splitMap = {safe:'80/20',balanced:'50/50',aggressive:'50/50'};
+  const engineMap = {
+    safe:'Conservative Bayesian, 95% confidence target, slow-and-steady',
+    balanced:'Bayesian approach, A/B test, 95% confidence target',
+    aggressive:'Bayesian approach, aggressive priors, 90% confidence target'
+  };
+  const durMap = {safe:'~3–4 weeks',balanced:'~2 weeks',aggressive:'~1 week'};
+
+  document.getElementById('summary-page').textContent = pageNames[wizardState.page] || '—';
+  document.getElementById('summary-testing').textContent = testingByGoal[wizardState.goal] || 'Optimised Test';
+  document.getElementById('summary-suggestion').textContent = suggestionByPage[wizardState.page] || '—';
+  document.getElementById('summary-split').textContent = splitMap[wizardState.aggression];
+  document.getElementById('summary-duration').textContent = durMap[wizardState.aggression];
+  document.getElementById('summary-engine').textContent = engineMap[wizardState.aggression];
+}
+
+function launchExperiment(path) {
+  hideWizard();
   showToast('🚀 Experiment launched! We\'ll handle everything — you\'ll be notified when there\'s a winner.');
 }
+
+// Back-compat for any stale handlers
+function openWizard() { showWizard(); }
+function closeWizard() { hideWizard(); }
 
 // ── COPILOT ──────────────────────────────────────────────
 function toggleCopilot() {
@@ -873,7 +1225,7 @@ function showTip(topic) {
 }
 function resetCopilot() {
   const body = document.getElementById('copilot-panel').querySelector('.cp-body');
-  body.innerHTML = `<div class="cp-msg">Hi Alex! You have 4 live experiments running. B is winning in all of them — things are looking good. Want a quick tour of the dashboard?</div><div class="cp-actions"><button class="cp-action" onclick="startTour()">🗺️ Take me on a quick tour</button><button class="cp-action" onclick="openWizard();toggleCopilot()">＋ Start a new experiment</button><button class="cp-action" onclick="showTip('confidence')">❓ What does "confidence" mean?</button><button class="cp-action" onclick="showTip('ab')">❓ What is A/B testing?</button></div>`;
+  body.innerHTML = `<div class="cp-msg">Hi Alex! You have 4 live experiments running. B is winning in all of them — things are looking good. Want a quick tour of the dashboard?</div><div class="cp-actions"><button class="cp-action" onclick="startTour()">🗺️ Take me on a quick tour</button><button class="cp-action" onclick="showWizard();toggleCopilot()">＋ Start a new experiment</button><button class="cp-action" onclick="showTip('confidence')">❓ What does "confidence" mean?</button><button class="cp-action" onclick="showTip('ab')">❓ What is A/B testing?</button></div>`;
 }
 
 // ── GUIDED TOUR ──────────────────────────────────────────
@@ -882,7 +1234,7 @@ const tourSteps = [
   {selector:'#tour-live',title:'Live Experiments 🧪',text:'These are the A/B tests running on your pages right now. Each card shows two versions head-to-head — your current page (A) vs a challenger (B). The green bar and number tell you who\'s winning.',pos:'below'},
   {selector:'.exp-card',title:'What each card shows 📊',text:'The green box shows estimated monthly revenue if B wins. The two bars compare A vs B conversion rates. The confidence bar shows how sure we are — we wait for 95% before declaring a winner.',pos:'right'},
   {selector:'#tour-completed',title:'Your Track Record ✅',text:'Every experiment you\'ve finished lives here. Winners get locked in as your permanent page automatically. Each row shows what you tested, the result, and how much it added to your monthly revenue.',pos:'above'},
-  {selector:'.sb-new-btn',title:'Start a new experiment 🚀',text:"Whenever you're ready to test something new, click here. We'll analyse your pages, suggest what to test, and explain why it could work better. Three steps, plain English, no jargon.",pos:'right'}
+  {selector:'#tour-new-btn',title:'Start a new experiment 🚀',text:"Pick a page, then let Autopilot ask you 3 quick questions — goal, what's holding visitors back, and how aggressive. We set up the test automatically. Marketing teams can switch to Custom Setup for full control.",pos:'below'}
 ];
 let tourStep = 0;
 
@@ -944,21 +1296,24 @@ function showToast(msg) {
 
 
 function openWizardFor(page) {
-  openWizard();
-  // Pre-select the page after a short delay so DOM is ready
+  showWizard();
+  // Pre-select the page and advance to path selection
   setTimeout(function() {
-    var opts = document.querySelectorAll('.page-opt');
-    opts.forEach(function(o) {
-      if (o.getAttribute('data-page') === page) {
-        selectPage(o, page);
+    wizardState.page = page;
+    document.querySelectorAll('.page-card').forEach(function(c) {
+      c.classList.remove('selected');
+      const title = c.querySelector('.page-card-title');
+      if (title && title.textContent.toLowerCase() === page.toLowerCase()) {
+        c.classList.add('selected');
       }
     });
+    document.getElementById('btn-page-next').disabled = false;
   }, 50);
 }
 
 // Close on ESC
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { closeDetail(); closeWizard(); endTour(); document.getElementById('copilot-panel').classList.remove('active'); }
+  if (e.key === 'Escape') { closeDetail(); hideWizard(); endTour(); document.getElementById('copilot-panel').classList.remove('active'); }
 });
 </script>
 </body>
